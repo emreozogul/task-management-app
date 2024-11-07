@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useDocumentStore } from '@/stores/documentStore';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
 import {
     Select,
     SelectContent,
@@ -11,7 +12,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Search } from 'lucide-react';
+import { Plus } from 'lucide-react';
 
 const Documents = () => {
     const { documents } = useDocumentStore();
@@ -28,52 +29,48 @@ const Documents = () => {
     });
 
     return (
-        <div className="container mx-auto p-6">
-            <div className="flex items-center justify-between mb-6">
-                <h1 className="text-2xl font-bold">Documents</h1>
+        <div className="p-6 space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <h1 className="text-2xl font-bold text-white">Documents</h1>
                 <Link to="/documents/new">
-                    <Button>
+                    <Button className="bg-[#6775bc] hover:bg-[#7983c4] text-white w-full sm:w-auto">
                         <Plus className="w-4 h-4 mr-2" />
                         New Document
                     </Button>
                 </Link>
             </div>
 
-            <div className="flex gap-4 mb-6">
-                <div className="flex-1 relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500" />
+            <div className="flex flex-col sm:flex-row gap-4">
+                <div className="w-full sm:w-64">
                     <Input
                         placeholder="Search documents..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="w-full pl-10"
+                        className="bg-[#383844] border-[#4e4e59] text-white w-full"
                     />
                 </div>
-                <Select
-                    value={statusFilter}
-                    onValueChange={setStatusFilter}
-                >
-                    <SelectTrigger className="w-[180px]">
+                <Select value={statusFilter} onValueChange={setStatusFilter}>
+                    <SelectTrigger className="w-full sm:w-40 bg-[#383844] border-[#4e4e59] text-white">
                         <SelectValue placeholder="Filter by status" />
                     </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="all">All</SelectItem>
-                        <SelectItem value="draft">Drafts</SelectItem>
-                        <SelectItem value="published">Published</SelectItem>
-                        <SelectItem value="archived">Archived</SelectItem>
+                    <SelectContent className="bg-[#383844] border-[#4e4e59]">
+                        <SelectItem value="all" className="text-white hover:bg-[#4e4e59]">All</SelectItem>
+                        <SelectItem value="draft" className="text-white hover:bg-[#4e4e59]">Draft</SelectItem>
+                        <SelectItem value="published" className="text-white hover:bg-[#4e4e59]">Published</SelectItem>
+                        <SelectItem value="archived" className="text-white hover:bg-[#4e4e59]">Archived</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
                 {filteredDocuments.map((doc) => (
                     <Link
                         key={doc.id}
                         to={`/documents/${doc.id}`}
-                        className="block p-4 rounded-lg border border-[#383844] bg-[#232430] hover:bg-[#383844] transition-colors"
+                        className="flex flex-col p-4 rounded-lg border border-[#383844] bg-[#232430] hover:bg-[#383844] transition-colors"
                     >
                         <div className="flex items-center justify-between mb-2">
-                            <h3 className="font-semibold text-white">{doc.title}</h3>
+                            <h3 className="font-semibold text-white truncate pr-2">{doc.title}</h3>
                             <Badge
                                 variant={
                                     doc.status === 'published'
@@ -82,13 +79,14 @@ const Documents = () => {
                                             ? 'secondary'
                                             : 'outline'
                                 }
-                                className={
+                                className={cn(
+                                    'shrink-0',
                                     doc.status === 'published'
                                         ? 'bg-[#6775bc] text-white'
                                         : doc.status === 'draft'
                                             ? 'bg-[#383844] text-white'
                                             : 'border-[#383844] text-white'
-                                }
+                                )}
                             >
                                 {doc.status}
                             </Badge>

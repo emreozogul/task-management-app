@@ -16,7 +16,7 @@ const navItems: NavItem[] = [
         icon: <LayoutDashboard className="w-6 h-6" />,
     },
     {
-        path: '/boards/main',
+        path: '/boards',
         label: 'Kanban Board',
         icon: <Trello className="w-6 h-6" />,
     },

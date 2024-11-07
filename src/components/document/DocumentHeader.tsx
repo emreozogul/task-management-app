@@ -20,7 +20,7 @@ export const DocumentHeader = ({
     onPublish,
     onArchive,
 }: DocumentHeaderProps) => (
-    <div className="flex items-center justify-between bg-[#232430] p-4 rounded-lg">
+    <div className="flex items-center justify-between rounded-lg">
         <Input
             ref={titleInputRef}
             value={title}

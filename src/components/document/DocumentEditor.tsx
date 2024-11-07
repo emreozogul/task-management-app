@@ -1,4 +1,3 @@
-import React from 'react';
 import { EditorContent, Editor } from '@tiptap/react';
 
 interface DocumentEditorProps {
