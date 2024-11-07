@@ -6,6 +6,7 @@ import { useDocumentStore } from '@/stores/documentStore';
 import { DocumentHeader } from '@/components/document/DocumentHeader';
 import { TagList } from '@/components/document/TagList';
 import { DocumentStatus } from '@/components/document/DocumentStatus';
+import debounce from 'lodash/debounce';
 
 const DocumentEditor = () => {
     const { documentId } = useParams();
@@ -20,21 +21,28 @@ const DocumentEditor = () => {
     const titleInputRef = useRef<HTMLInputElement>(null);
     const isInitializedRef = useRef(false);
 
-    // Debounced update function
+    // Create a debounced update function
     const debouncedUpdate = useCallback(
-        (content: string) => {
+        debounce((content: string) => {
             if (activeDocument) {
                 updateDocument(activeDocument.id, {
                     content,
                     updatedAt: new Date(),
                 });
             }
-        },
+        }, 1000), // 1 second delay
         [activeDocument, updateDocument]
     );
 
     const editor = useEditor({
-        extensions: [StarterKit],
+        extensions: [
+            StarterKit,
+        ],
+        editorProps: {
+            attributes: {
+                class: 'prose prose-invert prose-lg max-w-none focus:outline-none',
+            },
+        },
         content: activeDocument?.content || '<p>Start writing...</p>',
         onUpdate: ({ editor }) => {
             const content = editor.getHTML();
@@ -121,6 +129,23 @@ const DocumentEditor = () => {
         }
     };
 
+    // Update the editor content change handler
+    const handleContentChange = useCallback(() => {
+        const content = editor?.getHTML();
+        if (content) {
+            debouncedUpdate(content);
+        }
+    }, [editor, debouncedUpdate]);
+
+    useEffect(() => {
+        if (editor) {
+            editor.on('update', handleContentChange);
+            return () => {
+                editor.off('update', handleContentChange);
+            };
+        }
+    }, [editor, handleContentChange]);
+
     if (!activeDocument) {
         return (
             <div className="flex items-center justify-center h-screen">
@@ -139,20 +164,21 @@ const DocumentEditor = () => {
                 onPublish={handlePublish}
                 onArchive={handleArchive}
             />
-
+            <DocumentStatus
+                status={activeDocument.status}
+                updatedAt={activeDocument.updatedAt}
+            />
             <TagList
                 tags={activeDocument.tags}
                 onAddTag={handleAddTag}
             />
 
-            <div className="prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto bg-[#232430] border-[#383844] rounded-lg p-4 prose-invert">
-                <EditorContent editor={editor} />
+            <div className="prose-container">
+                <EditorContent
+                    editor={editor}
+                    className="prose prose-invert prose-lg max-w-none min-h-[500px] bg-[#232430] rounded-lg p-6 text-white focus:outline-none"
+                />
             </div>
-
-            <DocumentStatus
-                status={activeDocument.status}
-                updatedAt={activeDocument.updatedAt}
-            />
         </div>
     );
 };

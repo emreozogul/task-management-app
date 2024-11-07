@@ -5,6 +5,8 @@ import KanbanBoard from '../pages/KanbanBoard';
 import Documents from '../pages/Documents';
 import DocumentEditor from '../pages/DocumentEditor';
 import Settings from '../pages/Settings';
+import NewBoard from '../pages/NewBoard';
+import BoardList from '../pages/BoardList';
 
 export const router = createBrowserRouter([
     {
@@ -14,6 +16,14 @@ export const router = createBrowserRouter([
             {
                 index: true,
                 element: <Dashboard />,
+            },
+            {
+                path: 'boards',
+                element: <BoardList />,
+            },
+            {
+                path: 'boards/new',
+                element: <NewBoard />,
             },
             {
                 path: 'boards/:boardId',

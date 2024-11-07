@@ -1,22 +1,42 @@
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Board } from '../components/kanban/Board';
 import { useKanbanStore } from '../stores/kanbanStore';
+import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react';
 
 const KanbanBoard = () => {
     const { boardId } = useParams();
-    const { boards, setActiveBoard } = useKanbanStore();
+    const navigate = useNavigate();
+    const { boards, activeBoard, setActiveBoard } = useKanbanStore();
 
     useEffect(() => {
         const board = boards.find(b => b.id === boardId);
         if (board) {
             setActiveBoard(board);
+        } else {
+            navigate('/boards/new');
         }
-    }, [boardId, boards]);
+    }, [boardId, boards, setActiveBoard, navigate]);
+
+    if (!activeBoard) {
+        return (
+            <div className="p-6 text-center">
+                <p className="text-[#95959c] mb-4">No board selected</p>
+                <Button
+                    onClick={() => navigate('/boards/new')}
+                    className="bg-[#6775bc] hover:bg-[#7983c4] text-white"
+                >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Create New Board
+                </Button>
+            </div>
+        );
+    }
 
     return (
         <div className="p-6">
-            <h1 className="text-2xl font-bold mb-6">Kanban Board</h1>
+            <h1 className="text-2xl font-bold mb-6 text-white">{activeBoard.title}</h1>
             <Board />
         </div>
     );
