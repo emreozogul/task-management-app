@@ -6,7 +6,7 @@ import { KanbanTask } from '@/stores/kanbanStore';
 import { useKanbanStore } from '@/stores/kanbanStore';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Plus, X } from 'lucide-react';
+import { Plus, X, Minus } from 'lucide-react';
 
 interface ColumnProps {
     id: string;
@@ -18,7 +18,7 @@ export const Column = ({ id, title, tasks }: ColumnProps) => {
     const { setNodeRef } = useDroppable({
         id: id
     });
-    const { addTask } = useKanbanStore();
+    const { addTask, deleteColumn } = useKanbanStore();
     const [isAddingTask, setIsAddingTask] = useState(false);
     const [newTaskTitle, setNewTaskTitle] = useState('');
 
@@ -35,9 +35,19 @@ export const Column = ({ id, title, tasks }: ColumnProps) => {
 
     return (
         <div className="bg-[#232430] p-4 rounded-lg w-80 min-w-[240px] flex flex-col h-[calc(100vh-200px)]">
-            <h2 className="font-bold mb-4 text-white">{title}</h2>
+            <div className="flex items-center justify-between mb-4">
+                <h2 className="font-bold text-white">{title}</h2>
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => deleteColumn(id)}
+                    className="p-1 hover:bg-red-500/10"
+                >
+                    <Minus className="w-4 h-4 text-red-500" />
+                </Button>
+            </div>
 
-            <div ref={setNodeRef} className="flex-1 overflow-y-auto min-h-0 space-y-2">
+            <div ref={setNodeRef} className="flex-1 overflow-y-auto min-h-0 space-y-3">
                 <SortableContext items={tasks.map(task => task.id)} strategy={verticalListSortingStrategy}>
                     {tasks.map((task) => (
                         <Card
@@ -49,6 +59,8 @@ export const Column = ({ id, title, tasks }: ColumnProps) => {
                             columnId={id}
                             createdAt={task.createdAt}
                             updatedAt={task.updatedAt}
+                            completed={task.completed ?? false}
+                            labels={task.labels ?? []}
                         />
                     ))}
                 </SortableContext>

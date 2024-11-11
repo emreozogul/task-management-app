@@ -50,7 +50,26 @@ export default {
 					'4': 'hsl(var(--chart-4))',
 					'5': 'hsl(var(--chart-5))'
 				}
-			}
+			},
+			keyframes: {
+				'sound-wave-1': {
+					'0%, 100%': { height: '0.5rem' },
+					'50%': { height: '1rem' },
+				},
+				'sound-wave-2': {
+					'0%, 100%': { height: '1rem' },
+					'50%': { height: '0.5rem' },
+				},
+				'sound-wave-3': {
+					'0%, 100%': { height: '0.75rem' },
+					'50%': { height: '1.25rem' },
+				},
+			},
+			animation: {
+				'sound-wave-1': 'sound-wave-1 1s ease-in-out infinite',
+				'sound-wave-2': 'sound-wave-2 1s ease-in-out infinite',
+				'sound-wave-3': 'sound-wave-3 1s ease-in-out infinite',
+			},
 		}
 	},
 	plugins: [require("tailwindcss-animate"), require('@tailwindcss/typography')],

@@ -7,6 +7,7 @@ import DocumentEditor from '../pages/DocumentEditor';
 import Settings from '../pages/Settings';
 import NewBoard from '../pages/NewBoard';
 import BoardList from '../pages/BoardList';
+import Widgets from '../pages/Widgets';
 
 export const router = createBrowserRouter([
     {
@@ -36,6 +37,11 @@ export const router = createBrowserRouter([
             {
                 path: 'documents/:documentId',
                 element: <DocumentEditor />,
+            },
+
+            {
+                path: 'widgets',
+                element: <Widgets />,
             },
             {
                 path: 'settings',

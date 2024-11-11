@@ -5,9 +5,7 @@ const MainLayout = () => {
     return (
         <div className="flex h-screen">
             <Sidebar />
-            {/* Main Content */}
             <main className="flex-1 overflow-auto">
-
                 <Outlet />
             </main>
         </div>

@@ -3,8 +3,9 @@ export interface Task {
     title: string;
     description?: string;
     documentId?: string;  // Reference to linked document
+    completed: boolean;  // Added checkbox state
     labels: string[];
-    dueDate?: Date;
+    dueDate?: string | Date;  // Making it optional with '?'
     createdAt: Date;
     updatedAt: Date;
 }
