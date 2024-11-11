@@ -28,18 +28,22 @@ const Dashboard = () => {
                 <div className="bg-[#232430] p-6 rounded-lg shadow mb-6 lg:col-span-1 h-full">
                     <h2 className="text-xl font-semibold mb-4 text-white">Quick Actions</h2>
                     <div className="grid grid-cols-2 gap-4">
-                        <Link to="/documents/new">
-                            <Button className="w-full bg-[#383844] hover:bg-[#4e4e59] text-white h-24 flex flex-col items-center justify-center space-y-2">
-                                <FileText className="w-6 h-6" />
-                                <span>New Document</span>
-                            </Button>
-                        </Link>
-                        <Link to="/boards/new">
-                            <Button className="w-full bg-[#383844] hover:bg-[#4e4e59] text-white h-24 flex flex-col items-center justify-center space-y-2">
-                                <Trello className="w-6 h-6" />
-                                <span>New Board</span>
-                            </Button>
-                        </Link>
+                        <div className='col-span-2 xl:col-span-1'>
+                            <Link to="/documents/new">
+                                <Button className="w-full bg-[#383844] hover:bg-[#4e4e59] text-white h-24 flex flex-col items-center justify-center space-y-2">
+                                    <FileText className="w-6 h-6" />
+                                    <span>New Document</span>
+                                </Button>
+                            </Link>
+                        </div>
+                        <div className='col-span-2 xl:col-span-1'>
+                            <Link to="/boards/new">
+                                <Button className="w-full bg-[#383844] hover:bg-[#4e4e59] text-white h-24 flex flex-col items-center justify-center space-y-2">
+                                    <Trello className="w-6 h-6" />
+                                    <span>New Board</span>
+                                </Button>
+                            </Link>
+                        </div>
                     </div>
                 </div>
                 <div className="bg-[#232430] p-6 rounded-lg shadow lg:col-span-2">
