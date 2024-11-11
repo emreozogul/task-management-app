@@ -20,9 +20,12 @@ const Dashboard = () => {
         <div className="p-6">
             <h1 className="text-2xl font-bold mb-6 text-white">Dashboard</h1>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Quick Actions */}
-                <div className="bg-[#232430] p-6 rounded-lg shadow">
+            {/* Quick Actions */}
+
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Recent Documents */}
+                <div className="bg-[#232430] p-6 rounded-lg shadow mb-6 lg:col-span-1 h-full">
                     <h2 className="text-xl font-semibold mb-4 text-white">Quick Actions</h2>
                     <div className="grid grid-cols-2 gap-4">
                         <Link to="/documents/new">
@@ -39,11 +42,9 @@ const Dashboard = () => {
                         </Link>
                     </div>
                 </div>
-
-                {/* Recent Documents */}
-                <div className="bg-[#232430] p-6 rounded-lg shadow col-span-1 md:col-span-2 lg:col-span-1">
+                <div className="bg-[#232430] p-6 rounded-lg shadow lg:col-span-2">
                     <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-xl font-semibold text-white">Recent Documents</h2>
+                        <h2 className="text-lg font-semibold text-white truncate max-w-xs">Recent Documents</h2>
                         <Link to="/documents" className="text-[#6775bc] hover:text-[#7983c4]">
                             View All
                         </Link>
@@ -55,18 +56,19 @@ const Dashboard = () => {
                                 to={`/documents/${doc.id}`}
                                 className="flex items-center justify-between p-3 bg-[#383844] hover:bg-[#4e4e59] rounded-lg transition-colors"
                             >
-                                <div className="flex items-center space-x-3">
-                                    <FileText className="w-4 h-4 text-[#95959c]" />
-                                    <span className="text-white truncate ">{doc.title}</span>
+                                <div className="flex items-center max-w-[70%] space-x-3">
+                                    <FileText className="w-4 h-4 text-[#95959c] flex-shrink-0" />
+                                    <span className="text-white truncate">{doc.title}</span>
                                 </div>
-                                <div className="">
-                                    <Badge
-                                        variant={doc.status === 'published' ? 'default' : 'secondary'}
-                                        className={cn(doc.status === 'published' ? 'bg-[#6775bc] text-white' : 'bg-[#383844] text-white', "w-full")}
-                                    >
-                                        {doc.status}
-                                    </Badge>
-                                </div>
+                                <Badge
+                                    variant={doc.status === 'published' ? 'default' : 'secondary'}
+                                    className={cn(
+                                        doc.status === 'published' ? 'bg-[#6775bc] text-white' : 'bg-[#383844] text-white',
+                                        "overflow-hidden"
+                                    )}
+                                >
+                                    {doc.status}
+                                </Badge>
                             </Link>
                         ))}
                         {recentDocuments.length === 0 && (
@@ -75,8 +77,9 @@ const Dashboard = () => {
                     </div>
                 </div>
 
+
                 {/* Active Boards */}
-                <div className="bg-[#232430] p-6 rounded-lg shadow md:col-span-2">
+                <div className="bg-[#232430] p-6 rounded-lg shadow lg:col-span-3">
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-xl font-semibold text-white">Active Boards</h2>
                         <Link to="/boards/new">
@@ -108,7 +111,7 @@ const Dashboard = () => {
                                         <FileText className="w-4 h-4 mr-1" />
                                         <span>{board.columns?.reduce((acc, col) =>
                                             acc + (col.tasks?.filter(task => task.documentId)?.length || 0), 0
-                                        )} linked docs</span>
+                                        )} docs</span>
                                     </div>
                                 </div>
                             </Link>

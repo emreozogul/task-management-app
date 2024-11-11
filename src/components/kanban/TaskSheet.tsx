@@ -6,6 +6,8 @@ import { KanbanTask, useKanbanStore } from "@/stores/kanbanStore";
 import { FileText, Trash } from "lucide-react";
 import { useState } from 'react';
 import DatePickerWithRange from "./DeadlineSelector";
+import { TagManager } from "@/components/TagManager";
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface TaskSheetProps {
     open: boolean;
@@ -34,14 +36,19 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, column
         onOpenChange(false);
     };
 
-    const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.target.value);
-        updateTask(columnId, task.id, { title: e.target.value });
-    };
-
     const handleDeadlineChange = (date: Date | null) => {
         setDeadline(date);
         updateTask(columnId, task.id, { deadline: date ? date.toISOString() : undefined });
+    };
+
+    const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setTitle(e.target.value);
+    };
+
+    const handleTitleBlur = () => {
+        if (title !== task.title) {
+            updateTask(columnId, task.id, { title });
+        }
     };
 
     return (
@@ -51,10 +58,11 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, column
                     <div className="flex justify-between items-center">
                         <input
                             type="text"
-                            value={task.title}
-                            onChange={handleTitleChange}
+                            value={title}
                             className="text-lg font-bold w-full bg-transparent border-b border-gray-300 focus:outline-none"
                             placeholder="Task Title"
+                            onChange={handleTitleChange}
+                            onBlur={handleTitleBlur}
                         />
                     </div>
                 </SheetHeader>
@@ -99,6 +107,44 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, column
                                 ))}
                             </SelectContent>
                         </Select>
+                    </div>
+
+                    <div>
+                        <label className="text-sm font-medium mb-1 block">Tags</label>
+                        <TagManager
+                            tags={task.labels}
+                            onAddTag={() => {
+                                const dialog = window.prompt('Enter tag name:');
+                                const newTag = dialog?.trim();
+                                if (newTag) {
+                                    const currentLabels = task.labels || [];
+                                    if (!currentLabels.includes(newTag)) {
+                                        updateTask(columnId, task.id, {
+                                            labels: [...currentLabels, newTag]
+                                        });
+                                    }
+                                }
+                            }}
+                            onRemoveTag={(tag) => {
+                                const currentLabels = task.labels || [];
+                                updateTask(columnId, task.id, {
+                                    labels: currentLabels.filter(t => t !== tag)
+                                });
+                            }}
+                        />
+                    </div>
+
+                    <div>
+                        <label className="text-sm font-medium mb-1 block">Status</label>
+                        <div className="flex items-center space-x-2">
+                            <Checkbox
+                                checked={task.completed}
+                                onCheckedChange={(checked) => {
+                                    updateTask(columnId, task.id, { completed: checked as boolean });
+                                }}
+                            />
+                            <span>Mark as completed</span>
+                        </div>
                     </div>
 
                     <Button

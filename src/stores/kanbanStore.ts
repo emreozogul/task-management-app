@@ -11,6 +11,8 @@ export interface KanbanTask {
     updatedAt: Date;
     columnId: string;
     deadline?: string;
+    completed: boolean;
+    labels: string[];
 }
 
 export interface KanbanColumn {
@@ -40,6 +42,7 @@ interface KanbanStore {
     addColumn: (boardId: string, title: string) => void;
     updateTask: (columnId: string, taskId: string, updates: Partial<KanbanTask>) => void;
     deleteTask: (columnId: string, taskId: string) => void;
+    deleteColumn: (columnId: string) => void;
 }
 
 export const useKanbanStore = create<KanbanStore>()(
@@ -129,6 +132,8 @@ export const useKanbanStore = create<KanbanStore>()(
                         createdAt: new Date(),
                         updatedAt: new Date(),
                         columnId: columnId,
+                        completed: false,
+                        labels: [],
                     };
 
                     const updatedColumns = state.activeBoard.columns.map((col) =>
@@ -211,33 +216,37 @@ export const useKanbanStore = create<KanbanStore>()(
                     };
                 }),
             deleteTask: (columnId: string, taskId: string) =>
-                set((state) => {
-                    if (!state.activeBoard) return state;
-
-                    const updatedColumns = state.activeBoard.columns.map(col => {
-                        if (col.id === columnId) {
+                set((state) => ({
+                    boards: state.boards.map(board => {
+                        if (board.id === state.activeBoard?.id) {
                             return {
-                                ...col,
-                                tasks: col.tasks.filter(task => task.id !== taskId)
+                                ...board,
+                                columns: board.columns.map(col => {
+                                    if (col.id === columnId) {
+                                        return {
+                                            ...col,
+                                            tasks: col.tasks.filter(task => task.id !== taskId)
+                                        };
+                                    }
+                                    return col;
+                                })
                             };
                         }
-                        return col;
-                    });
-
-                    const updatedBoard = {
-                        ...state.activeBoard,
-                        columns: updatedColumns,
-                        updatedAt: new Date(),
-                    };
-
-                    return {
-                        ...state,
-                        boards: state.boards.map(board =>
-                            board.id === updatedBoard.id ? updatedBoard : board
-                        ),
-                        activeBoard: updatedBoard,
-                    };
-                }),
+                        return board;
+                    })
+                })),
+            deleteColumn: (columnId: string) =>
+                set((state) => ({
+                    boards: state.boards.map(board => {
+                        if (board.id === state.activeBoard?.id) {
+                            return {
+                                ...board,
+                                columns: board.columns.filter(col => col.id !== columnId)
+                            };
+                        }
+                        return board;
+                    })
+                })),
         }),
         {
             name: 'kanban-store',

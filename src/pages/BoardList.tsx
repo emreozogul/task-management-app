@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useKanbanStore } from '@/stores/kanbanStore';
 import { Button } from '@/components/ui/button';
-import { Plus, FileText, ListTodo } from 'lucide-react';
+import { Plus, ListTodo } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 const BoardList = () => {
@@ -20,7 +20,7 @@ const BoardList = () => {
                 </Link>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 xl:grid-cols-3 gap-4">
                 {activeBoards.map((board) => (
                     <Link
                         key={board.id}

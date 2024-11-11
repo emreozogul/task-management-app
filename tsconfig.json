@@ -26,7 +26,11 @@
       "@/*": [
         "./src/*"
       ]
-    }
+    },
+    "types": [
+      "react",
+      "node"
+    ]
   },
   "include": [
     "src"

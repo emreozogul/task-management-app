@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Trello, Settings, ChevronLeft, ChevronRight, FileText } from 'lucide-react';
+import { LayoutDashboard, Trello, Settings, ChevronLeft, ChevronRight, FileText, Gauge } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -21,7 +21,12 @@ const navItems: NavItem[] = [
         icon: <Trello className="w-6 h-6" />,
     },
     {
-        path: '/documents/main',
+        path: '/widgets',
+        label: 'Widgets',
+        icon: <Gauge className="w-6 h-6" />,
+    },
+    {
+        path: '/documents',
         label: 'Document Editor',
         icon: <FileText className="w-6 h-6" />,
     },
@@ -44,15 +49,15 @@ export const Sidebar = () => {
             )}
         >
 
-            <nav className="space-y-2 p-4 relative">
+            <nav className="space-y-2 py-4 relative">
                 {navItems.map((item) => (
                     <Link
                         key={item.path}
                         to={item.path}
                         className={cn(
-                            "flex items-center gap-3 p-2 rounded transition-colors",
+                            "flex items-center gap-3 p-3 px-6 border-r-2 border-transparent transition-colors",
                             location.pathname === item.path
-                                ? "bg-[#383844] text-white"
+                                ? "border-r-white text-white"
                                 : "text-gray-300 hover:bg-[#383844] hover:text-white",
                             isCollapsed && "justify-center"
                         )}
