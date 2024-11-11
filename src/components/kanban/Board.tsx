@@ -149,7 +149,7 @@ export const Board = () => {
                         <Button
                             onClick={() => setIsAddingColumn(true)}
                             variant="ghost"
-                            className="w-full h-[calc(100vh-200px)] bg-[#232430] hover:bg-[#383844] text-[#95959c] hover:text-white"
+                            className="w-full h-[calc(100vh-150px)] bg-[#232430] hover:bg-[#383844] text-[#95959c] hover:text-white"
                         >
                             <Plus className="h-4 w-4 mr-2" />
                             Add Column

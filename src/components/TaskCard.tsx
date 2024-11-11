@@ -21,13 +21,14 @@ export default function TaskCard({ task, onUpdate }: TaskCardProps) {
     const linkedDocument = documents.find(doc => doc.id === task.documentId);
 
     const handleCheckboxChange = (checked: boolean) => {
-        onUpdate({ completed: checked });
+        onUpdate({ completed: checked === true });
     };
 
     return (
         <div className="bg-[#232430] p-3 rounded-lg shadow-sm">
             <div className="flex items-center gap-2 mb-2">
                 <Checkbox
+                    id={`task-${task.id}`}
                     checked={task.completed}
                     onCheckedChange={handleCheckboxChange}
                     className="border-[#6775bc]"

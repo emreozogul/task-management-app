@@ -34,7 +34,7 @@ export const Column = ({ id, title, tasks }: ColumnProps) => {
     };
 
     return (
-        <div className="bg-[#232430] p-4 rounded-lg w-80 min-w-[240px] flex flex-col h-[calc(100vh-200px)]">
+        <div className="bg-[#232430] p-4 rounded-lg w-80 min-w-[300px] flex flex-col h-[calc(100vh-160px)]">
             <div className="flex items-center justify-between mb-4">
                 <h2 className="font-bold text-white">{title}</h2>
                 <Button
@@ -47,7 +47,7 @@ export const Column = ({ id, title, tasks }: ColumnProps) => {
                 </Button>
             </div>
 
-            <div ref={setNodeRef} className="flex-1 overflow-y-auto min-h-0 space-y-3">
+            <div ref={setNodeRef} className="flex-1 overflow-y-auto min-h-0 space-y-3 ">
                 <SortableContext items={tasks.map(task => task.id)} strategy={verticalListSortingStrategy}>
                     {tasks.map((task) => (
                         <Card
