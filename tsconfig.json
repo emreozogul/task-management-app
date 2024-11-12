@@ -29,7 +29,8 @@
     },
     "types": [
       "react",
-      "node"
+      "node",
+      "@tauri-apps/api"
     ]
   },
   "include": [

@@ -4,6 +4,7 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
+    DialogDescription,
     DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -30,7 +31,10 @@ export const PomodoroSettings = () => {
             </DialogTrigger>
             <DialogContent className="bg-[#232430] border-[#383844] text-white">
                 <DialogHeader>
-                    <DialogTitle>Timer Settings</DialogTitle>
+                    <DialogTitle className="text-lg font-semibold text-white">Timer Settings</DialogTitle>
+                    <DialogDescription className="text-sm text-gray-400">
+                        Customize your Pomodoro timer settings.
+                    </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">

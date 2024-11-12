@@ -43,7 +43,7 @@ export const useDocumentStore = create<DocumentStore>()(
                 const newDocument: Document = {
                     id: crypto.randomUUID(),
                     title: newTitle,
-                    content: '<p>Start writing...</p>',
+                    content: '',
                     createdAt: new Date(),
                     updatedAt: new Date(),
                     tags: [],
