@@ -19,7 +19,9 @@
         "fullscreen": false,
         "minWidth": 1024,
         "minHeight": 700,
-        "center": true
+        "center": true,
+        "decorations": true,
+        "transparent": false
       }
     ],
     "security": {
