@@ -1,7 +1,74 @@
-# Tauri + React + Typescript
+# Document Editor with Pomodoro Timer
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+A modern document management and productivity application built with Tauri, React, and TypeScript.
 
-## Recommended IDE Setup
+## Features
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+### Document Management
+- Rich text editor powered by TipTap/Novel
+- Real-time auto-saving
+- Document status management (draft, published, archived)
+- Tag and category organization
+- Word count tracking
+- Global drag and drop functionality for content blocks
+
+### Editor Capabilities
+- Text formatting (bold, italic, underline)
+- Headings and lists
+- Code blocks with syntax highlighting
+- Image upload and management
+- YouTube and Twitter embeds
+- Mathematical equations support
+- Custom slash commands
+- Color selection for text
+- Link management
+- Task lists and checkboxes
+
+### Pomodoro Timer
+- Configurable work and break durations
+- Session tracking and statistics
+- Visual and audio notifications
+- Session type indication (work/break)
+
+## Technical Stack
+
+- **Frontend Framework**: React with TypeScript
+- **Desktop Framework**: Tauri (Rust)
+- **Editor Framework**: TipTap/Novel
+- **Styling**: Tailwind CSS + shadcn/ui
+- **State Management**: Zustand
+- **Database**: SQLite (via Rusqlite)
+
+## Getting Started
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Run the development server:
+   ```bash
+   npm run tauri dev
+   ```
+
+## Building for Production
+
+To create a production build:
+```bash
+npm run tauri build
+```
+
+
+## Development Requirements
+
+- Node.js 18+
+- Rust toolchain
+- Tauri system dependencies
+
+## Project Structure
+
+- `/src` - React frontend code
+- `/src-tauri` - Rust backend code
+- `/src/components` - Reusable React components
+- `/src/stores` - Zustand state management
+- `/src/styles` - Global styles and Tailwind configuration
