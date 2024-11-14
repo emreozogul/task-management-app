@@ -10,7 +10,7 @@ export interface KanbanTask {
     createdAt: Date;
     updatedAt: Date;
     columnId: string;
-    deadline?: string;
+    deadline: string | null;
     completed: boolean;
     labels: string[];
 }
@@ -134,6 +134,7 @@ export const useKanbanStore = create<KanbanStore>()(
                         columnId: columnId,
                         completed: false,
                         labels: [],
+                        deadline: null,
                     };
 
                     const updatedColumns = state.activeBoard.columns.map((col) =>
@@ -183,7 +184,8 @@ export const useKanbanStore = create<KanbanStore>()(
                     };
                 });
             },
-            updateTask: (columnId: string, taskId: string, updates: Partial<KanbanTask>) =>
+            updateTask: (columnId: string, taskId: string, updates: Partial<KanbanTask>) => {
+                console.log('Updating task with:', updates);
                 set((state) => {
                     if (!state.activeBoard) return state;
 
@@ -191,11 +193,18 @@ export const useKanbanStore = create<KanbanStore>()(
                         if (col.id === columnId) {
                             return {
                                 ...col,
-                                tasks: col.tasks.map(task =>
-                                    task.id === taskId
-                                        ? { ...task, ...updates, updatedAt: new Date() }
-                                        : task
-                                )
+                                tasks: col.tasks.map(task => {
+                                    if (task.id === taskId) {
+                                        const updatedTask = {
+                                            ...task,
+                                            ...updates,
+                                            updatedAt: new Date()
+                                        };
+                                        console.log('Updated task:', updatedTask);
+                                        return updatedTask;
+                                    }
+                                    return task;
+                                })
                             };
                         }
                         return col;
@@ -214,7 +223,8 @@ export const useKanbanStore = create<KanbanStore>()(
                         ),
                         activeBoard: updatedBoard,
                     };
-                }),
+                });
+            },
             deleteTask: (columnId: string, taskId: string) =>
                 set((state) => ({
                     boards: state.boards.map(board => {

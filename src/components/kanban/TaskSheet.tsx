@@ -4,10 +4,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useDocumentStore } from "@/stores/documentStore";
 import { KanbanTask, useKanbanStore } from "@/stores/kanbanStore";
 import { FileText, Trash } from "lucide-react";
-import { useState } from 'react';
-import DatePickerWithRange from "./DeadlineSelector";
+import { useState, useEffect } from 'react';
 import { TagManager } from "@/components/TagManager";
 import { Checkbox } from '@/components/ui/checkbox';
+import DeadlineSelector from "./DeadlineSelector";
 
 interface TaskSheetProps {
     open: boolean;
@@ -21,7 +21,14 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, column
     const { documents } = useDocumentStore();
     const { updateTask, deleteTask } = useKanbanStore();
     const [title, setTitle] = useState(task.title);
-    const [deadline, setDeadline] = useState(task.deadline ? new Date(task.deadline) : null);
+    const [deadline, setDeadline] = useState<Date | null>(
+        task.deadline ? new Date(task.deadline) : null
+    );
+
+    useEffect(() => {
+        setTitle(task.title);
+        setDeadline(task.deadline ? new Date(task.deadline) : null);
+    }, [task]);
 
     const handlePriorityChange = (value: string) => {
         updateTask(columnId, task.id, { priority: value as 'low' | 'medium' | 'high' });
@@ -37,8 +44,11 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, column
     };
 
     const handleDeadlineChange = (date: Date | null) => {
+        console.log('Handling deadline change:', date);
         setDeadline(date);
-        updateTask(columnId, task.id, { deadline: date ? date.toISOString() : undefined });
+        updateTask(columnId, task.id, {
+            deadline: date ? date.toISOString() : null
+        });
     };
 
     const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,6 +60,8 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, column
             updateTask(columnId, task.id, { title });
         }
     };
+
+    console.log('TaskSheet deadline:', deadline);
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
@@ -69,8 +81,8 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, column
 
                 <div className="space-y-4 mt-4">
                     <div>
-                        <label className="text-sm font-medium mb-1 block">Deadline</label>
-                        <DatePickerWithRange
+                        <label className="text-sm font-medium mb-1 block text-white">Deadline</label>
+                        <DeadlineSelector
                             deadline={deadline}
                             onDeadlineChange={handleDeadlineChange}
                         />

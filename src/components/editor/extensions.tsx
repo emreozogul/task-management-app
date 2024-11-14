@@ -151,7 +151,15 @@ const dragHandle = GlobalDragHandle.configure({
     dragHandleWidth: 24,
     scrollTreshold: 50,
     customNodes: ['heading', 'paragraph', 'image', 'codeBlock', 'blockquote'],
-    dragHandleSelector: ".novel-drag-handle"
+    dragHandleSelector: ".novel-drag-handle",
+    onDragStart: (props: any) => {
+        props.event.preventDefault();
+        const element = props.event.target as HTMLElement;
+        element.style.cursor = 'grabbing';
+    },
+    onDragEnd: () => {
+        document.body.style.cursor = '';
+    }
 });
 
 const autoJoiner = AutoJoiner.configure({

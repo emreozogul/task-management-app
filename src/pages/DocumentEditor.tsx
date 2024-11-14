@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDocumentStore } from '@/stores/documentStore';
-import { DocumentHeader } from '@/components/document/DocumentHeader';
-import { TagList } from '@/components/document/TagList';
-import { DocumentStatus } from '@/components/document/DocumentStatus';
-import TailwindAdvancedEditor from '@/components/editor/Editor';
+import { DocumentHeader } from '@/components/editor/DocumentHeader';
+import { TagList } from '@/components/editor/TagList';
+import { DocumentStatus } from '@/components/editor/DocumentStatus';
+import Editor from '@/components/editor/Editor';
 
 const DocumentEditor = () => {
     const { documentId } = useParams();
@@ -114,7 +114,7 @@ const DocumentEditor = () => {
             />
 
             <div className="prose-container bg-[#232430] rounded-lg w-full">
-                <TailwindAdvancedEditor
+                <Editor
                     initialDocumentContent={activeDocument.content}
                     onUpdate={handleEditorUpdate}
                 />
