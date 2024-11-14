@@ -2,7 +2,6 @@ import { usePomodoroStore } from '@/stores/pomodoroStore';
 import { Button } from '@/components/ui/button';
 import { Timer, Pause, Play, RotateCcw } from 'lucide-react';
 import { PomodoroSettings } from './PomodoroSettings';
-import { useEffect } from 'react';
 import { CollapsibleCard } from '@/components/ui/collapsible-card';
 
 export const PomodoroTimer = () => {
@@ -14,7 +13,6 @@ export const PomodoroTimer = () => {
         startTimer,
         pauseTimer,
         resetTimer,
-        completeSession,
     } = usePomodoroStore();
 
     const formatTime = (seconds: number): string => {
@@ -33,37 +31,6 @@ export const PomodoroTimer = () => {
         const minutes = Math.floor((seconds % 3600) / 60);
         return `${hours}h ${minutes}m`;
     };
-
-    useEffect(() => {
-        let interval: NodeJS.Timeout;
-
-        if (isRunning && timeLeft > 0) {
-            interval = setInterval(() => {
-                usePomodoroStore.setState((state) => ({
-                    timeLeft: state.timeLeft - 1,
-                }));
-            }, 1000);
-        } else if (timeLeft === 0) {
-            completeSession();
-            new Audio('/notification.mp3').play().catch(() => {
-                console.log('Failed to play notification sound');
-            });
-
-            const settings = usePomodoroStore.getState().settings;
-            usePomodoroStore.setState((state) => ({
-                isRunning: state.settings.autoStartPomodoros,
-                timeLeft: state.isWorkSession ?
-                    settings.breakDuration * 60 :
-                    settings.workDuration * 60,
-                isWorkSession: !state.isWorkSession,
-                sessionCount: state.isWorkSession ?
-                    state.sessionCount + 1 :
-                    state.sessionCount,
-            }));
-        }
-
-        return () => clearInterval(interval);
-    }, [isRunning, timeLeft, isWorkSession, completeSession]);
 
     const settingsButton = (
         <div onClick={(e) => e.stopPropagation()}>

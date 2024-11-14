@@ -74,6 +74,21 @@ export const Card = ({ id, title, priority, documentId, columnId, createdAt, upd
         }
     };
 
+    const formatDeadline = (dateString?: string) => {
+        if (!dateString) return null;
+        try {
+            const date = new Date(dateString);
+            return format(date, 'MMM dd');
+        } catch (error) {
+            console.error('Error formatting deadline:', error);
+            return null;
+        }
+    };
+
+    useEffect(() => {
+        console.log('Card deadline:', deadline);
+    }, [deadline]);
+
     useEffect(() => {
         if (isEditing && inputRef.current) {
             inputRef.current.focus();
@@ -161,7 +176,7 @@ export const Card = ({ id, title, priority, documentId, columnId, createdAt, upd
                             {deadline && (
                                 <div className="flex items-center gap-1">
                                     <Calendar className="w-3.5 h-3.5" />
-                                    <span>{format(new Date(deadline), 'MMM dd')}</span>
+                                    <span>{formatDeadline(deadline)}</span>
                                 </div>
                             )}
                         </div>
@@ -174,7 +189,7 @@ export const Card = ({ id, title, priority, documentId, columnId, createdAt, upd
                 onOpenChange={setIsSheetOpen}
                 taskId={id}
                 columnId={columnId}
-                task={{ id, title, priority, documentId, columnId, createdAt, updatedAt, completed, labels, deadline }}
+                task={{ id, title, priority, documentId, columnId, createdAt, updatedAt, completed, labels, deadline: deadline || null }}
             />
         </>
     );

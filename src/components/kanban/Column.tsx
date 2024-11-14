@@ -34,7 +34,7 @@ export const Column = ({ id, title, tasks }: ColumnProps) => {
     };
 
     return (
-        <div className="bg-[#232430] p-4 rounded-lg w-80 min-w-[300px] flex flex-col h-[calc(100vh-160px)]">
+        <div className="bg-[#232430] p-4 rounded-lg w-80 min-w-[300px] flex flex-col h-[calc(100vh-150px)]">
             <div className="flex items-center justify-between mb-4">
                 <h2 className="font-bold text-white">{title}</h2>
                 <Button
@@ -61,6 +61,7 @@ export const Column = ({ id, title, tasks }: ColumnProps) => {
                             updatedAt={task.updatedAt}
                             completed={task.completed ?? false}
                             labels={task.labels ?? []}
+                            deadline={task.deadline ?? undefined}
                         />
                     ))}
                 </SortableContext>

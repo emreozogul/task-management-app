@@ -31,7 +31,7 @@ const extensions = [
     slashCommand,
 ];
 
-const TailwindAdvancedEditor = ({
+const Editor = ({
     initialDocumentContent,
     onUpdate
 }: {
@@ -82,9 +82,9 @@ const TailwindAdvancedEditor = ({
     return (
 
         <div className="relative w-full">
-            <div className="flex absolute right-2 sm:right-5 top-2 sm:top-5 z-10 mb-5 gap-2">
-                <div className="rounded-lg bg-[#383844] px-2 py-1 text-xs sm:text-sm text-[#95959c]">{saveStatus}</div>
-                <div className={charsCount ? "rounded-lg bg-[#383844] px-2 py-1 text-xs sm:text-sm text-[#95959c]" : "hidden"}>
+            <div className="flex absolute right-0  top-0  z-10 mb-5 gap-2 -mt-2 -mr-2">
+                <div className="rounded-lg bg-[#383844] shadow-md border border-[#383844] px-2 py-1 text-xs sm:text-sm text-[#95959c]">{saveStatus}</div>
+                <div className={charsCount ? "rounded-lg bg-[#383844] shadow-md border border-[#383844] px-2 py-1 text-xs sm:text-sm text-[#95959c]" : "hidden"}>
                     {charsCount} Words
                 </div>
             </div>
@@ -92,15 +92,39 @@ const TailwindAdvancedEditor = ({
                 <EditorContent
                     initialContent={initialContent}
                     extensions={defaultExtensions}
-                    className="relative h-[80vh] overflow-y-auto w-full border-[#383844] bg-[#232430] rounded-md sm:border sm:shadow-lg p-2 sm:p-4 "
+                    className="relative h-[80vh] overflow-y-auto w-full border-[#383844] bg-[#232430] rounded-md sm:border sm:shadow-lg p-2 sm:p-4"
                     editorProps={{
                         handleDOMEvents: {
                             keydown: (_view, event) => handleCommandNavigation(event),
+                            mousedown: (view, event) => {
+                                if (event.target instanceof HTMLElement) {
+                                    const isDragHandle = event.target.closest('.drag-handle');
+                                    if (isDragHandle) {
+                                        event.stopPropagation();
+                                        if ((event as DragEvent).dataTransfer!) {
+                                            (event as DragEvent).dataTransfer!.effectAllowed = 'move';
+                                        }
+                                        return true;
+                                    }
+                                }
+                                return false;
+                            },
+                            dragstart: (_view, event) => {
+                                if (event.target instanceof HTMLElement) {
+                                    const isDragHandle = event.target.closest('.drag-handle');
+                                    if (isDragHandle) {
+                                        event.stopPropagation();
+                                        return true;
+                                    }
+                                }
+                                return false;
+                            }
                         },
                         handlePaste: (view, event) => handleImagePaste(view, event, uploadFn),
                         handleDrop: (view, event, _slice, moved) => handleImageDrop(view, event, moved, uploadFn),
                         attributes: {
-                            class: "prose prose-lg prose-invert prose-headings:font-title font-default focus:outline-none max-w-full",
+                            class: "prose prose-lg prose-invert prose-headings:font-title font-default focus:outline-none max-w-full leading-relaxed px-4",
+                            style: " line-height: 1.3;"
                         },
                     }}
                     onUpdate={({ editor }) => {
@@ -155,4 +179,4 @@ const TailwindAdvancedEditor = ({
     );
 };
 
-export default TailwindAdvancedEditor;
+export default Editor;

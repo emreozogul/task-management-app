@@ -28,6 +28,7 @@ interface PomodoroState {
     settings: PomodoroSettings;
     activeTaskId: string | null;
     sessions: PomodoroSession[];
+    lastTickTime: number | null;
     statistics: {
         totalWorkTime: number;
         totalSessions: number;
@@ -41,6 +42,7 @@ interface PomodoroState {
     resetTimer: () => void;
     setActiveTask: (taskId: string | null) => void;
     completeSession: () => void;
+    tick: () => void;
     getTaskStatistics: (taskId: string) => {
         totalTime: number;
         completedSessions: number;
@@ -56,6 +58,7 @@ export const usePomodoroStore = create<PomodoroState>()(
             sessionCount: 0,
             activeTaskId: null,
             sessions: [],
+            lastTickTime: null,
             statistics: {
                 totalWorkTime: 0,
                 totalSessions: 0,
@@ -71,14 +74,32 @@ export const usePomodoroStore = create<PomodoroState>()(
                 notifications: true,
             },
 
-            updateSettings: (newSettings) => {
-                set((state) => ({
-                    settings: { ...state.settings, ...newSettings },
-                }));
+            tick: () => {
+                const state = get();
+                const now = Date.now();
+
+                if (!state.isRunning || !state.lastTickTime) return;
+
+                const deltaTime = Math.floor((now - state.lastTickTime) / 1000);
+                if (deltaTime >= 1) {
+                    set((state) => ({
+                        timeLeft: Math.max(0, state.timeLeft - deltaTime),
+                        lastTickTime: now,
+                    }));
+
+                    // Check if timer completed
+                    if (state.timeLeft <= deltaTime) {
+                        get().completeSession();
+                    }
+                }
             },
 
-            startTimer: () => set({ isRunning: true }),
-            pauseTimer: () => set({ isRunning: false }),
+            startTimer: () => set((state) => ({
+                isRunning: true,
+                lastTickTime: Date.now()
+            })),
+
+            pauseTimer: () => set({ isRunning: false, lastTickTime: null }),
 
             resetTimer: () => {
                 const { settings } = get();
@@ -86,18 +107,29 @@ export const usePomodoroStore = create<PomodoroState>()(
                     isRunning: false,
                     timeLeft: settings.workDuration * 60,
                     isWorkSession: true,
+                    lastTickTime: null,
                 });
+            },
+
+            updateSettings: (newSettings) => {
+                set((state) => ({
+                    settings: { ...state.settings, ...newSettings },
+                }));
             },
 
             setActiveTask: (taskId) => set({ activeTaskId: taskId }),
 
             completeSession: () => {
                 const state = get();
+                const sessionDuration = state.isWorkSession
+                    ? state.settings.workDuration * 60
+                    : state.settings.breakDuration * 60;
+
                 const newSession: PomodoroSession = {
                     taskId: state.activeTaskId,
-                    startTime: new Date(Date.now() - state.timeLeft * 1000),
+                    startTime: new Date(Date.now() - sessionDuration * 1000),
                     endTime: new Date(),
-                    duration: state.settings.workDuration * 60 - state.timeLeft,
+                    duration: sessionDuration,
                     type: state.isWorkSession ? 'work' : 'break',
                     completed: true,
                 };
@@ -105,10 +137,19 @@ export const usePomodoroStore = create<PomodoroState>()(
                 set((state) => ({
                     sessions: [...state.sessions, newSession],
                     statistics: {
-                        totalWorkTime: state.statistics.totalWorkTime + newSession.duration,
-                        totalSessions: state.statistics.totalSessions + 1,
+                        ...state.statistics,
+                        totalWorkTime: state.isWorkSession
+                            ? state.statistics.totalWorkTime + sessionDuration
+                            : state.statistics.totalWorkTime,
+                        totalSessions: state.isWorkSession
+                            ? state.statistics.totalSessions + 1
+                            : state.statistics.totalSessions,
                         completedTasks: state.statistics.completedTasks + (newSession.taskId ? 1 : 0),
                     },
+                    isWorkSession: !state.isWorkSession,
+                    timeLeft: !state.isWorkSession
+                        ? state.settings.workDuration * 60
+                        : state.settings.breakDuration * 60,
                 }));
             },
 
@@ -127,4 +168,32 @@ export const usePomodoroStore = create<PomodoroState>()(
             name: 'pomodoro-store',
         }
     )
-); 
+);
+
+// Add a global interval for the timer
+let globalInterval: number | null = null;
+
+// Start the global timer
+function startGlobalTimer() {
+    if (globalInterval) return;
+
+    globalInterval = window.setInterval(() => {
+        usePomodoroStore.getState().tick();
+    }, 100); // Check more frequently for better accuracy
+}
+
+// Stop the global timer
+function stopGlobalTimer() {
+    if (globalInterval) {
+        clearInterval(globalInterval);
+        globalInterval = null;
+    }
+}
+
+// Initialize the global timer
+startGlobalTimer();
+
+// Optional: Clean up on window unload
+window.addEventListener('unload', stopGlobalTimer);
+
+export { startGlobalTimer, stopGlobalTimer }; 
