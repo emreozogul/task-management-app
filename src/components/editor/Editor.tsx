@@ -7,11 +7,11 @@ import {
     EditorContent,
     type EditorInstance,
     EditorRoot,
-    type JSONContent,
     EditorBubble,
+    JSONContent,
 } from "novel";
 import { ImageResizer, handleCommandNavigation } from "novel/extensions";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { handleImageDrop, handleImagePaste } from "novel/plugins";
 import { ColorSelector } from "./selectors/color-selector";
@@ -21,24 +21,17 @@ import { NodeSelector } from "./selectors/node-selector";
 import { TextButtons } from "./selectors/text-buttons";
 import { defaultExtensions } from "./extensions";
 import { uploadFn } from "./image-upload";
-import { slashCommand, suggestionItems } from "./slash-command";
+import { suggestionItems } from "./slash-command";
 
 import 'highlight.js/styles/github-dark.css';
 import '@/styles/prosemirror.css';
 
-const extensions = [
-    ...defaultExtensions,
-    slashCommand,
-];
+interface EditorProps {
+    onUpdate: (content: JSONContent) => void;
+    initialContent?: JSONContent;
+}
 
-const Editor = ({
-    initialDocumentContent,
-    onUpdate
-}: {
-    initialDocumentContent: string,
-    onUpdate: (content: string) => void
-}) => {
-    const [initialContent, setInitialContent] = useState<null | JSONContent>(null);
+const Editor = ({ onUpdate, initialContent }: EditorProps) => {
     const [saveStatus, setSaveStatus] = useState("Saved");
     const [charsCount, setCharsCount] = useState();
 
@@ -47,40 +40,13 @@ const Editor = ({
     const [openLink, setOpenLink] = useState(false);
 
     const debouncedUpdates = useDebouncedCallback(async (editor: EditorInstance) => {
-        const json = editor.getJSON(); // TODO : save json to database
-        const html = editor.getHTML();
+        const json = editor.getJSON();
         setCharsCount(editor.storage.characterCount.words());
-        onUpdate(html);
+        onUpdate(json);
         setSaveStatus("Saved");
-    }, 500);
-
-    useEffect(() => {
-        if (initialDocumentContent) {
-            try {
-                setInitialContent(JSON.parse(initialDocumentContent));
-            } catch {
-                setInitialContent({
-                    type: 'doc',
-                    content: [{ type: 'paragraph' }]
-                });
-            }
-        } else {
-            setInitialContent({
-                type: 'doc',
-                content: [{ type: 'paragraph' }]
-            });
-        }
-    }, [initialDocumentContent]);
-
-
-
-    if (!initialContent) return null;
-
-    console.log('Extensions loaded:', extensions);
-
+    }, 1000);
 
     return (
-
         <div className="relative w-full">
             <div className="flex absolute right-0  top-0  z-10 mb-5 gap-2 -mt-2 -mr-2">
                 <div className="rounded-lg bg-[#383844] shadow-md border border-[#383844] px-2 py-1 text-xs sm:text-sm text-[#95959c]">{saveStatus}</div>
@@ -96,7 +62,7 @@ const Editor = ({
                     editorProps={{
                         handleDOMEvents: {
                             keydown: (_view, event) => handleCommandNavigation(event),
-                            mousedown: (view, event) => {
+                            mousedown: (_view, event) => {
                                 if (event.target instanceof HTMLElement) {
                                     const isDragHandle = event.target.closest('.drag-handle');
                                     if (isDragHandle) {

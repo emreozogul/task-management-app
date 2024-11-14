@@ -1,55 +1,19 @@
-import React, { useEffect, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDocumentStore } from '@/stores/documentStore';
 import { DocumentHeader } from '@/components/editor/DocumentHeader';
 import { TagList } from '@/components/editor/TagList';
 import { DocumentStatus } from '@/components/editor/DocumentStatus';
 import Editor from '@/components/editor/Editor';
+import { JSONContent } from 'novel';
 
 const DocumentEditor = () => {
-    const { documentId } = useParams();
     const navigate = useNavigate();
     const {
-        documents,
         activeDocument,
-        createDocument,
         updateDocument,
-        setActiveDocument,
     } = useDocumentStore();
     const titleInputRef = useRef<HTMLInputElement>(null);
-    const isInitializedRef = useRef(false);
-
-    useEffect(() => {
-        isInitializedRef.current = false;
-    }, [documentId]);
-
-    useEffect(() => {
-        const initializeDocument = async () => {
-            if (isInitializedRef.current) return;
-
-            if (documentId === 'new') {
-                const timestamp = new Date().toLocaleString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
-                const newDoc = createDocument(`Document - ${timestamp}`, 'general');
-                navigate(`/documents/${newDoc.id}`, { replace: true });
-                setActiveDocument(newDoc);
-            } else if (documentId) {
-                const doc = documents.find((d) => d.id === documentId);
-                if (doc) {
-                    setActiveDocument(doc);
-                } else {
-                    navigate('/documents', { replace: true });
-                }
-            }
-            isInitializedRef.current = true;
-        };
-
-        initializeDocument();
-    }, [documentId, documents, createDocument, navigate, setActiveDocument]);
 
     const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (activeDocument) {
@@ -70,7 +34,7 @@ const DocumentEditor = () => {
         }
     };
 
-    const handleEditorUpdate = (content: string) => {
+    const handleEditorUpdate = (content: JSONContent) => {
         if (activeDocument) {
             updateDocument(activeDocument.id, {
                 content,
@@ -88,6 +52,7 @@ const DocumentEditor = () => {
             <DocumentHeader
                 title={activeDocument.title}
                 status={activeDocument.status}
+                document={activeDocument}
                 titleInputRef={titleInputRef}
                 onTitleChange={handleTitleChange}
                 onPublish={() => {
@@ -115,8 +80,8 @@ const DocumentEditor = () => {
 
             <div className="prose-container bg-[#232430] rounded-lg w-full">
                 <Editor
-                    initialDocumentContent={activeDocument.content}
                     onUpdate={handleEditorUpdate}
+                    initialContent={activeDocument.content}
                 />
             </div>
         </div>
