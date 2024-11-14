@@ -63,39 +63,49 @@
 }
 
 
-ul[data-type="taskList"] li>label {
-    margin-right: 0.2rem;
-    -webkit-user-select: none;
-    user-select: none;
+ul[data-type="taskList"] {
+    list-style: none;
+    padding: 0;
 }
 
-@media screen and (max-width: 768px) {
-    ul[data-type="taskList"] li>label {
-        margin-right: 0.5rem;
-    }
+ul[data-type="taskList"] li {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 0.5em;
+}
+
+ul[data-type="taskList"] li>label {
+    display: flex;
+    align-items: center;
+}
+
+ul[data-type="taskList"] li>div {
+    flex: 1;
+    margin-top: 0.1rem;
 }
 
 ul[data-type="taskList"] li>label input[type="checkbox"] {
     -webkit-appearance: none;
     appearance: none;
-    background-color: hsl(var(--background));
+    background-color: #232430;
     margin: 0;
     cursor: pointer;
     width: 1.2em;
     height: 1.2em;
     position: relative;
-    top: 5px;
-    border: 2px solid hsl(var(--border));
-    margin-right: 0.3rem;
+    border: 2px solid #383844;
     display: grid;
     place-content: center;
+    border-radius: 4px;
+    margin-right: 0.5rem;
+    margin-top: 0.2rem;
 
     &:hover {
-        background-color: hsl(var(--accent));
+        background-color: #383844;
     }
 
     &:active {
-        background-color: hsl(var(--accent));
+        background-color: #383844;
     }
 
     &::before {

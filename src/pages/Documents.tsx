@@ -13,9 +13,11 @@ import {
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Plus } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Documents = () => {
-    const { documents } = useDocumentStore();
+    const { documents, createDocument } = useDocumentStore();
+    const navigate = useNavigate();
     const [search, setSearch] = useState('');
     const [statusFilter, setStatusFilter] = useState<string>('all');
 
@@ -28,16 +30,24 @@ const Documents = () => {
         return matchesSearch && matchesStatus;
     });
 
+    const handleNewDocument = () => {
+        const timestamp = Date.now().toString(16);
+        const newDoc = createDocument(`Document - ${timestamp}`, 'general');
+        navigate(`/documents/${newDoc.id}`, { replace: true });
+    }
+
     return (
         <div className="p-6 space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <h1 className="text-2xl font-bold text-white">Documents</h1>
-                <Link to="/documents/new">
-                    <Button className="bg-[#6775bc] hover:bg-[#7983c4] text-white w-full sm:w-auto">
-                        <Plus className="w-4 h-4 mr-2" />
-                        New Document
-                    </Button>
-                </Link>
+
+                <Button className="bg-[#6775bc] hover:bg-[#7983c4] text-white w-full sm:w-auto"
+                    onClick={handleNewDocument}
+                >
+                    <Plus className="w-4 h-4 mr-2" />
+                    New Document
+                </Button>
+
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">

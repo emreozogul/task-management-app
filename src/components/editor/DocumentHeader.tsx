@@ -1,11 +1,16 @@
 import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Save, Archive } from 'lucide-react';
+import { Save, Archive, Download } from 'lucide-react';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import DocumentPDF from '../document/DocumentPDF';
+import { Document } from '@/stores/documentStore';
+import { exportToDocx } from '@/utils/docxExport';
 
 interface DocumentHeaderProps {
     title: string;
     status: string;
+    document: Document;
     titleInputRef: React.RefObject<HTMLInputElement>;
     onTitleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onPublish: () => void;
@@ -15,11 +20,13 @@ interface DocumentHeaderProps {
 export const DocumentHeader = ({
     title,
     status,
+    document,
     titleInputRef,
     onTitleChange,
     onPublish,
     onArchive,
 }: DocumentHeaderProps) => (
+
     <div className="flex items-center justify-between rounded-lg">
         <Input
             ref={titleInputRef}
@@ -29,6 +36,20 @@ export const DocumentHeader = ({
             placeholder="Document Title"
         />
         <div className="space-x-2">
+            <PDFDownloadLink
+                document={<DocumentPDF document={document} />}
+                fileName={`${document.title}.pdf`}
+            >
+                <Button
+                    variant="outline"
+                    className="border-[#383844] text-white hover:bg-[#383844]"
+                >
+
+
+                    Export PDF
+
+                </Button>
+            </PDFDownloadLink>
             <Button
                 onClick={onPublish}
                 variant="secondary"
@@ -47,6 +68,14 @@ export const DocumentHeader = ({
                 <Archive className="w-4 h-4 mr-2" />
                 Archive
             </Button>
+            <Button
+                variant="outline"
+                className="border-[#383844] text-white hover:bg-[#383844]"
+                onClick={() => exportToDocx(document)}
+            >
+                <Download className="w-4 h-4 mr-2" />
+                Export DOCX
+            </Button>
         </div>
-    </div>
+    </div >
 );

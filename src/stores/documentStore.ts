@@ -1,10 +1,11 @@
+import { JSONContent } from '@tiptap/react';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export interface Document {
     id: string;
     title: string;
-    content: string;
+    content: JSONContent;
     createdAt: Date;
     updatedAt: Date;
     tags: string[];
@@ -43,7 +44,15 @@ export const useDocumentStore = create<DocumentStore>()(
                 const newDocument: Document = {
                     id: crypto.randomUUID(),
                     title: newTitle,
-                    content: '',
+                    content: {
+                        type: 'doc',
+                        content: [
+                            {
+                                type: 'paragraph',
+                                content: []
+                            }
+                        ]
+                    },
                     createdAt: new Date(),
                     updatedAt: new Date(),
                     tags: [],
