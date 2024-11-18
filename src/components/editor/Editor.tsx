@@ -11,7 +11,7 @@ import {
     JSONContent,
 } from "novel";
 import { ImageResizer, handleCommandNavigation } from "novel/extensions";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { handleImageDrop, handleImagePaste } from "novel/plugins";
 import { ColorSelector } from "./selectors/color-selector";
@@ -29,9 +29,10 @@ import '@/styles/prosemirror.css';
 interface EditorProps {
     onUpdate: (content: JSONContent) => void;
     initialContent?: JSONContent;
+    documentId: string;
 }
 
-const Editor = ({ onUpdate, initialContent }: EditorProps) => {
+const Editor = ({ onUpdate, initialContent, documentId }: EditorProps) => {
     const [saveStatus, setSaveStatus] = useState("Saved");
     const [charsCount, setCharsCount] = useState();
 
@@ -41,10 +42,18 @@ const Editor = ({ onUpdate, initialContent }: EditorProps) => {
 
     const debouncedUpdates = useDebouncedCallback(async (editor: EditorInstance) => {
         const json = editor.getJSON();
-        setCharsCount(editor.storage.characterCount.words());
-        onUpdate(json);
+
+        const newContent = {
+            type: 'doc',
+            content: json.content || []
+        };
+
+        onUpdate(newContent);
         setSaveStatus("Saved");
+        setCharsCount(editor.storage.characterCount.words());
+
     }, 1000);
+
 
     return (
         <div className="relative w-full">
@@ -56,6 +65,7 @@ const Editor = ({ onUpdate, initialContent }: EditorProps) => {
             </div>
             <EditorRoot>
                 <EditorContent
+                    key={documentId}
                     initialContent={initialContent}
                     extensions={defaultExtensions}
                     className="relative h-[80vh] overflow-y-auto w-full border-[#383844] bg-[#232430] rounded-md sm:border sm:shadow-lg p-2 sm:p-4"

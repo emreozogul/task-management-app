@@ -9,15 +9,16 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { format } from 'date-fns';
 import { Textarea } from '../ui/textarea';
+import { TaskPriority } from '@/types/task';
 
 interface CardProps {
     id: string;
     title: string;
-    priority: 'low' | 'medium' | 'high';
+    priority: TaskPriority;
     documentId?: string;
     columnId: string;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: string;
+    updatedAt: string;
     completed: boolean;
     labels: string[];
     deadline?: string;

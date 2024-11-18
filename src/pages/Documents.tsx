@@ -39,7 +39,6 @@ const Documents = () => {
     return (
         <div className="p-6 space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <h1 className="text-2xl font-bold text-white">Documents</h1>
 
                 <Button className="bg-[#6775bc] hover:bg-[#7983c4] text-white w-full sm:w-auto"
                     onClick={handleNewDocument}

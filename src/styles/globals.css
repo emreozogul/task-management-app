@@ -54,7 +54,7 @@
 
 body {
     color: rgb(var(--foreground-rgb));
-    background: rgb(var(--background-rgb));
+    background-color: #1a1b23;
 }
 
 

@@ -1,13 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
-import Dashboard from '../pages/Dashboard';
-import KanbanBoard from '../pages/KanbanBoard';
-import Documents from '../pages/Documents';
-import DocumentEditor from '../pages/DocumentEditor';
-import Settings from '../pages/Settings';
-import NewBoard from '../pages/NewBoard';
-import BoardList from '../pages/BoardList';
-import Widgets from '../pages/Widgets';
+import { BoardList, Calendar, Dashboard, Documents, DocumentEditor, KanbanBoard, NewBoard, Settings, Widgets } from '@/pages';
 
 export const router = createBrowserRouter([
     {
@@ -46,6 +39,10 @@ export const router = createBrowserRouter([
             {
                 path: 'settings',
                 element: <Settings />,
+            },
+            {
+                path: 'calendar',
+                element: <Calendar />,
             },
         ],
     },

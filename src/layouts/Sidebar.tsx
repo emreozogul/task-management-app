@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Trello, Settings, ChevronLeft, ChevronRight, FileText, Gauge } from 'lucide-react';
+import { LayoutDashboard, Trello, Settings, ChevronLeft, ChevronRight, FileText, Gauge, Calendar } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -17,8 +17,13 @@ const navItems: NavItem[] = [
     },
     {
         path: '/boards',
-        label: 'Kanban Board',
+        label: 'Kanbans',
         icon: <Trello className="w-6 h-6" />,
+    },
+    {
+        path: '/calendar',
+        label: 'Calendar',
+        icon: <Calendar className="w-6 h-6" />,
     },
     {
         path: '/widgets',
@@ -27,7 +32,7 @@ const navItems: NavItem[] = [
     },
     {
         path: '/documents',
-        label: 'Document Editor',
+        label: 'Documents',
         icon: <FileText className="w-6 h-6" />,
     },
     {
@@ -44,8 +49,8 @@ export const Sidebar = () => {
     return (
         <aside
             className={cn(
-                "h-full bg-[#232430] text-white transition-all duration-300 relative",
-                isCollapsed ? "w-16" : "w-64"
+                "h-full bg-[#232430] text-white transition-all duration-500 relative",
+                isCollapsed ? "w-16" : "w-48"
             )}
         >
 
@@ -64,13 +69,22 @@ export const Sidebar = () => {
                         title={isCollapsed ? item.label : undefined}
                     >
                         <div className="flex items-center gap-3">
-                            {item.icon}
-                            {!isCollapsed && <span>{item.label}</span>}
+                            <span className={cn("min-w-[24px]", isCollapsed ? "ml-3" : "ml-0")}>
+                                {item.icon}
+                            </span>
+                            <span
+                                className={cn(
+                                    "transition-all duration-300 delay-150",
+                                    isCollapsed
+                                        ? "w-0 opacity-0 overflow-hidden translate-x-[-10px]"
+                                        : "w-auto opacity-100 translate-x-0"
+                                )}
+                            >
+                                {item.label}
+                            </span>
                         </div>
                     </Link>
-
                 ))}
-
             </nav>
             <button
                 type="button"

@@ -1,8 +1,8 @@
 import { Document, Packer, Paragraph, TextRun } from 'docx';
-import { Document as DocType } from '@/stores/documentStore';
+import { IDocument } from '@/stores/documentStore';
 import DOMPurify from 'dompurify';
 
-export const exportToDocx = async (doc: DocType) => {
+export const exportToDocx = async (doc: IDocument) => {
     // Clean HTML content
     const cleanContent = DOMPurify.sanitize(doc.content.toString(), { ALLOWED_TAGS: [] });
 

@@ -94,7 +94,7 @@ export const usePomodoroStore = create<PomodoroState>()(
                 }
             },
 
-            startTimer: () => set((state) => ({
+            startTimer: () => set(() => ({
                 isRunning: true,
                 lastTickTime: Date.now()
             })),

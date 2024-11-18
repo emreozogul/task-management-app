@@ -1,24 +1,15 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-
-export interface KanbanTask {
-    id: string;
-    title: string;
-    description?: string;
-    documentId?: string;
-    priority: 'low' | 'medium' | 'high';
-    createdAt: Date;
-    updatedAt: Date;
-    columnId: string;
-    deadline: string | null;
-    completed: boolean;
-    labels: string[];
-}
+import { Task, TaskPriority } from '@/types/task';
+import { TaskValidationService } from '@/services/taskValidation';
+import { TaskNotificationService } from '@/services/taskNotification';
+import { TaskAnalyticsService } from '@/services/taskAnalytics';
+import { TaskScheduler } from '@/services/taskScheduler';
 
 export interface KanbanColumn {
     id: string;
     title: string;
-    tasks: KanbanTask[];
+    tasks: Task[];
 }
 
 export interface KanbanBoard {
@@ -32,24 +23,52 @@ export interface KanbanBoard {
 }
 
 interface KanbanStore {
+    kanbanServices: KanbanServices;
     boards: KanbanBoard[];
     activeBoard: KanbanBoard | null;
     createBoard: (title: string) => KanbanBoard;
     updateBoard: (id: string, updates: Partial<KanbanBoard>) => void;
     setActiveBoard: (board: KanbanBoard) => void;
     moveTask: (taskId: string, sourceColumnId: string, targetColumnId: string) => void;
-    addTask: (columnId: string, taskData: Partial<KanbanTask>) => void;
-    addColumn: (boardId: string, title: string) => void;
-    updateTask: (columnId: string, taskId: string, updates: Partial<KanbanTask>) => void;
+    addTask: (columnId: string, taskData: Partial<Task>) => void;
+    updateTask: (columnId: string, taskId: string, updates: Partial<Task>) => void;
     deleteTask: (columnId: string, taskId: string) => void;
-    deleteColumn: (columnId: string) => void;
+    getTaskAnalytics: () => {
+        completionMetrics: ReturnType<TaskAnalyticsService['getCompletionMetrics']>;
+        priorityDistribution: ReturnType<TaskAnalyticsService['getTaskDistributionByPriority']>;
+    };
+    generateTaskSchedule: () => Task[];
+    initializeBoard: () => void;
 }
+
+class KanbanServices {
+    public validation: TaskValidationService;
+    public notification: TaskNotificationService;
+    public analytics: TaskAnalyticsService;
+    public scheduler: TaskScheduler;
+
+    constructor(tasks: Task[] = []) {
+        this.validation = new TaskValidationService(tasks);
+        this.notification = new TaskNotificationService();
+        this.analytics = new TaskAnalyticsService(tasks);
+        this.scheduler = new TaskScheduler(tasks);
+    }
+
+    updateTasks(tasks: Task[]) {
+        this.validation = new TaskValidationService(tasks);
+        this.analytics = new TaskAnalyticsService(tasks);
+        this.scheduler = new TaskScheduler(tasks);
+    }
+}
+
+const kanbanServices = new KanbanServices();
 
 export const useKanbanStore = create<KanbanStore>()(
     persist(
-        (set) => ({
+        (set, get) => ({
             boards: [],
             activeBoard: null,
+            kanbanServices: kanbanServices,
             createBoard: (title) => {
                 const newBoard: KanbanBoard = {
                     id: crypto.randomUUID(),
@@ -82,6 +101,12 @@ export const useKanbanStore = create<KanbanStore>()(
                 set((state) => {
                     if (!state.activeBoard) return state;
 
+                    const validation = kanbanServices.validation.validateColumnTransition(sourceColumnId, targetColumnId);
+                    if (!validation.valid) {
+                        console.error(validation.message);
+                        return state;
+                    }
+
                     const sourceColumn = state.activeBoard.columns.find(
                         (col) => col.id === sourceColumnId
                     );
@@ -97,9 +122,11 @@ export const useKanbanStore = create<KanbanStore>()(
                             };
                         }
                         if (col.id === targetColumnId) {
+                            const movedTask = { ...task, columnId: targetColumnId };
+                            kanbanServices.notification.notifyTaskUpdate(movedTask, 'moved');
                             return {
                                 ...col,
-                                tasks: [...col.tasks, task],
+                                tasks: [...col.tasks, movedTask],
                             };
                         }
                         return col;
@@ -111,9 +138,12 @@ export const useKanbanStore = create<KanbanStore>()(
                         updatedAt: new Date(),
                     };
 
+                    const allTasks = updatedBoard.columns.flatMap(col => col.tasks);
+                    kanbanServices.updateTasks(allTasks);
+
                     return {
                         ...state,
-                        boards: state.boards.map((board) =>
+                        boards: state.boards.map(board =>
                             board.id === updatedBoard.id ? updatedBoard : board
                         ),
                         activeBoard: updatedBoard,
@@ -123,18 +153,18 @@ export const useKanbanStore = create<KanbanStore>()(
                 set((state) => {
                     if (!state.activeBoard) return state;
 
-                    const newTask: KanbanTask = {
+                    const newTask: Task = {
                         id: crypto.randomUUID(),
                         title: taskData.title || 'New Task',
-                        description: taskData.description,
+                        description: taskData.description || '',
                         documentId: taskData.documentId,
-                        priority: taskData.priority || 'low',
-                        createdAt: new Date(),
-                        updatedAt: new Date(),
+                        priority: taskData.priority || TaskPriority.LOW,
+                        createdAt: taskData.createdAt || new Date().toISOString(),
+                        updatedAt: taskData.updatedAt || new Date().toISOString(),
                         columnId: columnId,
-                        completed: false,
-                        labels: [],
-                        deadline: null,
+                        completed: taskData.completed || false,
+                        labels: taskData.labels || [],
+                        deadline: taskData.deadline,
                     };
 
                     const updatedColumns = state.activeBoard.columns.map((col) =>
@@ -149,6 +179,13 @@ export const useKanbanStore = create<KanbanStore>()(
                         updatedAt: new Date(),
                     };
 
+                    // Update services with new task list
+                    const allTasks = updatedBoard.columns.flatMap(col => col.tasks);
+                    kanbanServices.updateTasks(allTasks);
+
+                    // Send notification
+                    kanbanServices.notification.notifyTaskUpdate(newTask, 'created');
+
                     return {
                         boards: state.boards.map((board) =>
                             board.id === updatedBoard.id ? updatedBoard : board
@@ -157,37 +194,21 @@ export const useKanbanStore = create<KanbanStore>()(
                     };
                 });
             },
-            addColumn: (boardId, title) => {
-                set((state) => {
-                    const newColumn = {
-                        id: crypto.randomUUID(),
-                        title,
-                        tasks: [],
-                    };
-
-                    return {
-                        boards: state.boards.map((board) =>
-                            board.id === boardId
-                                ? {
-                                    ...board,
-                                    columns: [...board.columns, newColumn],
-                                    updatedAt: new Date(),
-                                }
-                                : board
-                        ),
-                        activeBoard: state.activeBoard?.id === boardId
-                            ? {
-                                ...state.activeBoard,
-                                columns: [...state.activeBoard.columns, newColumn],
-                            }
-                            : state.activeBoard,
-                    };
-                });
-            },
-            updateTask: (columnId: string, taskId: string, updates: Partial<KanbanTask>) => {
-                console.log('Updating task with:', updates);
+            updateTask: (columnId: string, taskId: string, updates: Partial<Task>) => {
                 set((state) => {
                     if (!state.activeBoard) return state;
+
+                    const currentTask = state.activeBoard.columns
+                        .find(col => col.id === columnId)
+                        ?.tasks.find(task => task.id === taskId);
+
+                    if (!currentTask) return state;
+
+                    const validation = kanbanServices.validation.validateTaskUpdate(currentTask, updates);
+                    if (!validation.valid) {
+                        console.error(validation.message);
+                        return state;
+                    }
 
                     const updatedColumns = state.activeBoard.columns.map(col => {
                         if (col.id === columnId) {
@@ -198,9 +219,13 @@ export const useKanbanStore = create<KanbanStore>()(
                                         const updatedTask = {
                                             ...task,
                                             ...updates,
-                                            updatedAt: new Date()
+                                            updatedAt: new Date().toISOString()
                                         };
-                                        console.log('Updated task:', updatedTask);
+
+                                        // Notify about task update
+                                        const updateType = updates.completed ? 'completed' : 'updated';
+                                        kanbanServices.notification.notifyTaskUpdate(updatedTask, updateType);
+
                                         return updatedTask;
                                     }
                                     return task;
@@ -215,6 +240,9 @@ export const useKanbanStore = create<KanbanStore>()(
                         columns: updatedColumns,
                         updatedAt: new Date(),
                     };
+
+                    const allTasks = updatedBoard.columns.flatMap(col => col.tasks);
+                    kanbanServices.updateTasks(allTasks);
 
                     return {
                         ...state,
@@ -245,18 +273,73 @@ export const useKanbanStore = create<KanbanStore>()(
                         return board;
                     })
                 })),
-            deleteColumn: (columnId: string) =>
-                set((state) => ({
-                    boards: state.boards.map(board => {
-                        if (board.id === state.activeBoard?.id) {
-                            return {
-                                ...board,
-                                columns: board.columns.filter(col => col.id !== columnId)
-                            };
-                        }
-                        return board;
-                    })
-                })),
+            getTaskAnalytics: () => {
+                const state = get();
+                if (!state.activeBoard) return {
+                    completionMetrics: {
+                        completionRate: 0,
+                        averageCompletionTime: 0,
+                        overdueTasks: []
+                    },
+                    priorityDistribution: {
+                        high: 0,
+                        medium: 0,
+                        low: 0
+                    }
+                };
+
+                const allTasks = state.activeBoard.columns.flatMap(col => col.tasks);
+                kanbanServices.updateTasks(allTasks);
+
+                return {
+                    completionMetrics: kanbanServices.analytics.getCompletionMetrics(),
+                    priorityDistribution: kanbanServices.analytics.getTaskDistributionByPriority()
+                };
+            },
+            generateTaskSchedule: () => {
+                const state = get();
+                if (!state.activeBoard) return [];
+
+                const allTasks = state.activeBoard.columns.flatMap(col => col.tasks);
+                kanbanServices.updateTasks(allTasks);
+                return kanbanServices.scheduler.generateSchedule();
+            },
+            initializeBoard: () => {
+                set((state) => {
+                    if (!state.activeBoard) {
+                        const defaultBoard: KanbanBoard = {
+                            id: crypto.randomUUID(),
+                            title: 'Default Board',
+                            status: 'active',
+                            columns: [
+                                {
+                                    id: crypto.randomUUID(),
+                                    title: 'To Do',
+                                    tasks: []
+                                },
+                                {
+                                    id: crypto.randomUUID(),
+                                    title: 'In Progress',
+                                    tasks: []
+                                },
+                                {
+                                    id: crypto.randomUUID(),
+                                    title: 'Done',
+                                    tasks: []
+                                }
+                            ],
+                            createdAt: new Date(),
+                            updatedAt: new Date()
+                        };
+
+                        return {
+                            boards: [defaultBoard],
+                            activeBoard: defaultBoard
+                        };
+                    }
+                    return state;
+                });
+            }
         }),
         {
             name: 'kanban-store',
