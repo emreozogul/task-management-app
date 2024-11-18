@@ -9,7 +9,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Task } from '@/types/kanban';
+import { Task } from '@/types/task';
 
 interface TaskCardProps {
     task: Task;

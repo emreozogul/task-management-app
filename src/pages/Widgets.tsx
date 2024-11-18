@@ -5,10 +5,6 @@ import { TimeTracker } from '@/components/utilities/TimeTracker';
 const Widgets = () => {
     return (
         <div className="p-6">
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-bold text-white">Widgets</h1>
-            </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <PomodoroTimer />
                 <QuickNotes />

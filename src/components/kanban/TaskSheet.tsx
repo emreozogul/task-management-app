@@ -2,19 +2,21 @@ import { Sheet, SheetContent, SheetHeader } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useDocumentStore } from "@/stores/documentStore";
-import { KanbanTask, useKanbanStore } from "@/stores/kanbanStore";
+import { useKanbanStore } from "@/stores/kanbanStore";
 import { FileText, Trash } from "lucide-react";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { TagManager } from "@/components/TagManager";
 import { Checkbox } from '@/components/ui/checkbox';
 import DeadlineSelector from "./DeadlineSelector";
+import { Task, TaskPriority } from "@/types/task";
+
 
 interface TaskSheetProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     taskId: string;
     columnId: string;
-    task: KanbanTask;
+    task: Task;
 }
 
 export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, columnId, task }) => {
@@ -26,12 +28,16 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, column
     );
 
     useEffect(() => {
-        setTitle(task.title);
-        setDeadline(task.deadline ? new Date(task.deadline) : null);
-    }, [task]);
+        if (task.deadline !== deadline?.toISOString()) {
+            setDeadline(task.deadline ? new Date(task.deadline) : null);
+        }
+        if (task.title !== title) {
+            setTitle(task.title);
+        }
+    }, [task.deadline, task.title]);
 
     const handlePriorityChange = (value: string) => {
-        updateTask(columnId, task.id, { priority: value as 'low' | 'medium' | 'high' });
+        updateTask(columnId, task.id, { priority: value as TaskPriority });
     };
 
     const handleDocumentChange = (documentId: string) => {
@@ -43,25 +49,22 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, column
         onOpenChange(false);
     };
 
-    const handleDeadlineChange = (date: Date | null) => {
-        console.log('Handling deadline change:', date);
+    const handleDeadlineChange = useCallback((date: Date | null) => {
         setDeadline(date);
         updateTask(columnId, task.id, {
-            deadline: date ? date.toISOString() : null
+            deadline: date ? date.toISOString() : undefined
         });
-    };
+    }, [columnId, task.id, updateTask]);
 
-    const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleTitleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value);
-    };
+    }, []);
 
-    const handleTitleBlur = () => {
+    const handleTitleBlur = useCallback(() => {
         if (title !== task.title) {
             updateTask(columnId, task.id, { title });
         }
-    };
-
-    console.log('TaskSheet deadline:', deadline);
+    }, [columnId, task.id, title, task.title, updateTask]);
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>

@@ -2,7 +2,6 @@ import { Extension } from '@tiptap/core';
 import Suggestion from '@tiptap/suggestion';
 import { ReactRenderer } from '@tiptap/react';
 import tippy from 'tippy.js';
-import CommandList from '@/components/document/CommandList';
 import { Editor } from '@tiptap/core';
 import {
     Heading1,
@@ -253,22 +252,7 @@ export default Extension.create({
                     let popup: any = null;
 
                     return {
-                        onStart: (props: any) => {
-                            component = new ReactRenderer(CommandList, {
-                                props,
-                                editor: props.editor,
-                            });
 
-                            popup = tippy('body', {
-                                getReferenceClientRect: props.clientRect,
-                                appendTo: () => document.body,
-                                content: component.element,
-                                showOnCreate: true,
-                                interactive: true,
-                                trigger: 'manual',
-                                placement: 'bottom-start',
-                            })[0];
-                        },
 
                         onUpdate: (props: any) => {
                             if (props.clientRect !== popup?.getBoundingClientRect()) {
