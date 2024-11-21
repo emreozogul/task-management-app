@@ -1,7 +1,6 @@
-import { useState, useMemo, useEffect } from 'react';
-import { useKanbanStore } from '@/stores/kanbanStore';
-import { CalendarIcon, FileText, ChevronLeft, ChevronRight } from 'lucide-react';
-import { TaskSheet } from '@/components/kanban/TaskSheet';
+import { useState, useMemo } from 'react';
+import { useTaskStore } from '@/stores/taskStore';
+import { CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import {
     format,
     startOfMonth,
@@ -18,72 +17,35 @@ import { DndContext, DragEndEvent, DragOverlay, DragStartEvent } from '@dnd-kit/
 import { CalendarCell } from '@/components/calendar/CalendarCell';
 import { CalendarTask } from '@/components/calendar/CalendarTask';
 import { Task, TaskPriority } from '@/types/task';
+import { toast } from 'sonner';
+import { TaskSheet } from '@/components/kanban/TaskSheet';
 
 export default function CalendarPage() {
-    const [selectedTask, setSelectedTask] = useState<Task | null>(null);
-    const [isSheetOpen, setIsSheetOpen] = useState(false);
     const [currentMonth, setCurrentMonth] = useState(new Date());
-    const { activeBoard, updateTask, kanbanServices, addTask, initializeBoard } = useKanbanStore();
+    const { tasks, updateTask, createTask } = useTaskStore();
     const [activeId, setActiveId] = useState<string | null>(null);
     const [activeTask, setActiveTask] = useState<Task | null>(null);
+    const [isSheetOpen, setIsSheetOpen] = useState(false);
 
-    // Initialize board if needed
-    useEffect(() => {
-        if (!activeBoard) {
-            initializeBoard();
-        }
-    }, [activeBoard, initializeBoard]);
-
-    // Calculate calendar days including padding for complete weeks
     const calendarDays = useMemo(() => {
         const start = startOfWeek(startOfMonth(currentMonth), { weekStartsOn: 1 });
         const end = endOfWeek(endOfMonth(currentMonth), { weekStartsOn: 1 });
         return eachDayOfInterval({ start, end });
     }, [currentMonth]);
 
-    // Calculate number of weeks for grid template
-    const numberOfWeeks = Math.ceil(calendarDays.length / 7);
-
     const getTasksForDate = (date: Date) => {
-        if (!date || !activeBoard) return [];
-        return activeBoard.columns
-            .flatMap(col => col.tasks.map(task => ({
-                ...task,
-                columnId: col.id,
-                columnTitle: col.title
-            })))
-            .filter(task => {
-                if (!task.deadline) return false;
-                const taskDate = new Date(task.deadline);
-                return isSameDay(taskDate, date);
-            });
-    };
-
-    const handleTaskClick = (task: Task) => {
-        const column = activeBoard?.columns.find(col =>
-            col.tasks.some(t => t.id === task.id)
-        );
-
-        if (column) {
-            const completeTask = {
-                ...task,
-                columnId: column.id
-            };
-
-            setSelectedTask(completeTask);
-            setIsSheetOpen(true);
-        }
+        return tasks.filter(task => {
+            if (!task.startDate) return false;
+            const taskDate = new Date(task.startDate);
+            return isSameDay(taskDate, date);
+        });
     };
 
     const handleDragStart = (event: DragStartEvent) => {
         const { active } = event;
         setActiveId(active.id as string);
 
-        // Find the task being dragged
-        const draggedTask = activeBoard?.columns
-            .flatMap(col => col.tasks)
-            .find(task => task.id === active.id);
-
+        const draggedTask = tasks.find(task => task.id === active.id);
         setActiveTask(draggedTask || null);
     };
 
@@ -92,57 +54,55 @@ export default function CalendarPage() {
         setActiveTask(null);
         const { active, over } = event;
 
-        if (!over || !activeBoard) return;
+        if (!over || !tasks) return;
 
         const taskId = active.id as string;
         const newDate = new Date(over.id);
+        const task = tasks.find(task => task.id === taskId);
 
-        // Find the task and its column
-        const column = activeBoard.columns.find(col =>
-            col.tasks.some(task => task.id === taskId)
-        );
+        if (task) {
+            const originalStart = task.startDate ? new Date(task.startDate) : new Date();
+            const originalEnd = task.endDate ? new Date(task.endDate) : new Date();
+            const duration = originalEnd.getTime() - originalStart.getTime();
 
-        if (column && column.tasks) {
-            const task = column.tasks.find(task => task.id === taskId);
-            if (task) {
-                // Only update the deadline, not the entire task
-                updateTask(column.id, taskId, {
-                    deadline: newDate.toISOString()
-                });
+            const newStartDate = new Date(newDate);
+            newStartDate.setHours(0, 0, 0, 0);
 
-                // Notify about the update
-                kanbanServices.notification.notifyTaskUpdate(
-                    { ...task, deadline: newDate.toISOString() },
-                    'updated'
-                );
-            }
+            const newEndDate = new Date(newStartDate.getTime() + duration);
+            newEndDate.setHours(23, 59, 59, 999);
+
+            updateTask(taskId, {
+                startDate: newStartDate.toISOString(),
+                endDate: newEndDate.toISOString()
+            });
+
+            toast.success(`Task "${task.title}" moved to ${format(newDate, 'MMM dd')}`);
         }
     };
 
     const handleAddTask = (date: Date) => {
-        if (!activeBoard?.columns[0]) return;
+        const startDate = new Date(date);
+        startDate.setHours(0, 0, 0, 0);
 
-        const deadlineDate = new Date(date);
-        deadlineDate.setHours(23, 59, 59, 999);
+        const endDate = new Date(date);
+        endDate.setHours(23, 59, 59, 999);
 
-        const newTask = {
-            id: crypto.randomUUID(),
+        createTask({
             title: "New Task",
-            deadline: deadlineDate.toISOString(),
+            startDate: startDate.toISOString(),
+            endDate: endDate.toISOString(),
             priority: TaskPriority.LOW,
-            completed: false,
-            labels: [],
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-            columnId: activeBoard.columns[0].id
-        };
+        });
+    };
 
-        addTask(activeBoard.columns[0].id, newTask);
+    const handleTaskClick = (task: Task) => {
+        setActiveTask(task);
+        setIsSheetOpen(true);
     };
 
     return (
-        <div className="p-4 h-full flex flex-col  overflow-hidden">
-            <Card className="p-4  mb-4 bg-[#232430] border-none">
+        <div className="p-4 h-full flex flex-col overflow-hidden">
+            <Card className="p-4 mb-4 bg-[#232430] border-none">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div className="flex items-center">
                         <CalendarIcon className="w-7 h-7 mr-3 text-[#6775bc]" />
@@ -187,7 +147,7 @@ export default function CalendarPage() {
                         </div>
 
                         {/* Calendar Grid */}
-                        <div className="flex-1 grid grid-cols-7 gap-2 overflow-y-auto min-h-0">
+                        <div className="flex-1 grid grid-cols-7 gap-2 pt-2 overflow-y-auto min-h-0">
                             {calendarDays.map((day) => (
                                 <CalendarCell
                                     key={day.toISOString()}
@@ -195,8 +155,8 @@ export default function CalendarPage() {
                                     tasks={getTasksForDate(day)}
                                     isToday={isSameDay(day, new Date())}
                                     isCurrentMonth={isSameMonth(day, currentMonth)}
-                                    onTaskClick={handleTaskClick}
                                     onAddTask={handleAddTask}
+                                    setActiveTask={handleTaskClick}
                                 />
                             ))}
                         </div>
@@ -206,7 +166,7 @@ export default function CalendarPage() {
                             <div className="opacity-80">
                                 <CalendarTask
                                     task={activeTask}
-                                    onClick={() => { }}
+                                    setActiveTask={handleTaskClick}
                                 />
                             </div>
                         ) : null}
@@ -214,13 +174,12 @@ export default function CalendarPage() {
                 </DndContext>
             </Card>
 
-            {selectedTask && (
+            {activeTask && (
                 <TaskSheet
                     open={isSheetOpen}
                     onOpenChange={setIsSheetOpen}
-                    taskId={selectedTask.id}
-                    columnId={selectedTask.columnId}
-                    task={selectedTask}
+                    taskId={activeTask.id}
+                    task={activeTask}
                 />
             )}
         </div>

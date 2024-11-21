@@ -1,14 +1,16 @@
-import { DndContext, DragEndEvent, DragOverlay, useSensor, useSensors, PointerSensor, DragStartEvent } from '@dnd-kit/core';
+import { DndContext, DragEndEvent, DragOverlay, useSensor, useSensors, PointerSensor, DragStartEvent, closestCorners } from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
 import { Column } from './Column';
 import { useKanbanStore } from '@/stores/kanbanStore';
+import { useTaskStore } from '@/stores/taskStore';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Plus, X } from 'lucide-react';
 
 export const Board = () => {
-    const { activeBoard, moveTask, addColumn } = useKanbanStore();
+    const { boards, activeBoard, addColumn, moveTask } = useKanbanStore();
+    const { getTaskById } = useTaskStore();
     const [activeId, setActiveId] = useState<string | null>(null);
     const [isAddingColumn, setIsAddingColumn] = useState(false);
     const [newColumnTitle, setNewColumnTitle] = useState('');
@@ -21,8 +23,19 @@ export const Board = () => {
         })
     );
 
+    const findContainer = (id: string) => {
+        if (!activeBoard) return null;
+        const column = activeBoard.columns.find(col =>
+            col.taskIds.includes(id)
+        );
+        if (column) return column.id;
+
+        return activeBoard.columns.find(col => col.id === id)?.id || null;
+    };
+
     const handleDragStart = (event: DragStartEvent) => {
-        setActiveId(event.active.id.toString());
+        const { active } = event;
+        setActiveId(active.id.toString());
     };
 
     const handleDragEnd = (event: DragEndEvent) => {
@@ -31,54 +44,42 @@ export const Board = () => {
 
         if (!over || !activeBoard) return;
 
-        const taskId = active.id as string;
-        const overId = over.id as string;
+        const activeId = active.id.toString();
+        const overId = over.id.toString();
 
-        // Find source column
-        const sourceColumn = activeBoard.columns.find(col =>
-            col.tasks.some(task => task.id === taskId)
-        );
+        const activeContainer = findContainer(activeId);
+        const overContainer = findContainer(overId);
 
-        if (!sourceColumn) return;
+        if (!activeContainer || !overContainer) return;
 
-        // Find target column and task indices
-        const targetColumn = activeBoard.columns.find(col =>
-            col.tasks.some(task => task.id === overId) || col.id === overId
-        );
-
-        if (!targetColumn) return;
-
-        const isSameColumn = sourceColumn.id === targetColumn.id;
-        const overTask = targetColumn.tasks.find(task => task.id === overId);
-
-        if (isSameColumn) {
-            // Reordering within the same column
-            const oldIndex = sourceColumn.tasks.findIndex(task => task.id === taskId);
-            const newIndex = overTask
-                ? targetColumn.tasks.findIndex(task => task.id === overId)
-                : targetColumn.tasks.length;
-
-            const newTasks = arrayMove(sourceColumn.tasks, oldIndex, newIndex);
-
-            const updatedColumns = activeBoard.columns.map(col =>
-                col.id === sourceColumn.id ? { ...col, tasks: newTasks } : col
-            );
-
-            useKanbanStore.setState({
-                ...useKanbanStore.getState(),
-                activeBoard: {
-                    ...activeBoard,
-                    columns: updatedColumns,
-                },
-                boards: useKanbanStore.getState().boards.map(board =>
-                    board.id === activeBoard.id
-                        ? { ...board, columns: updatedColumns }
-                        : board
-                ),
-            });
+        if (activeContainer !== overContainer) {
+            moveTask(activeId, activeBoard.id, activeContainer, overContainer);
         } else {
-            // Moving to a different column
-            moveTask(taskId, sourceColumn.id, targetColumn.id);
+            const column = activeBoard.columns.find(col => col.id === activeContainer);
+            if (!column) return;
+
+            const oldIndex = column.taskIds.indexOf(activeId);
+            const newIndex = column.taskIds.indexOf(overId);
+
+            if (oldIndex !== newIndex) {
+                const newTaskIds = arrayMove(column.taskIds, oldIndex, newIndex);
+                const updatedColumns = activeBoard.columns.map(col =>
+                    col.id === activeContainer ? { ...col, taskIds: newTaskIds } : col
+                );
+
+                useKanbanStore.setState({
+                    ...useKanbanStore.getState(),
+                    boards: boards.map(board =>
+                        board.id === activeBoard.id
+                            ? { ...board, columns: updatedColumns }
+                            : board
+                    ),
+                    activeBoard: {
+                        ...activeBoard,
+                        columns: updatedColumns,
+                    },
+                });
+            }
         }
     };
 
@@ -93,23 +94,23 @@ export const Board = () => {
 
     if (!activeBoard) return null;
 
-    const activeTask = activeId ? activeBoard.columns
-        .flatMap(col => col.tasks)
-        .find(task => task.id === activeId) : null;
+    const activeTask = activeId ? getTaskById(activeId) : null;
 
     return (
         <DndContext
             sensors={sensors}
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
+            collisionDetection={closestCorners}
         >
-            <div className="flex gap-4 p-4 overflow-x-auto">
+            <div className="flex gap-4 p-4 overflow-x-auto min-h-[calc(100vh-150px)]">
                 {activeBoard.columns.map((column) => (
                     <Column
                         key={column.id}
                         id={column.id}
+                        boardId={activeBoard.id}
                         title={column.title}
-                        tasks={column.tasks}
+                        taskIds={column.taskIds}
                     />
                 ))}
 

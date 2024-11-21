@@ -53,7 +53,7 @@ const DocumentEditor = () => {
     };
 
     return (
-        <div className="container mx-auto px-2 sm:px-6 py-4 sm:py-6 space-y-4">
+        <div className=" px-2 sm:px-6 py-4 sm:py-6 space-y-4">
             <DocumentHeader
                 titleInputRef={titleInputRef}
                 title={activeDocument.title}

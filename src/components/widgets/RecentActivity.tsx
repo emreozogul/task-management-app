@@ -32,7 +32,7 @@ export const RecentActivity = () => {
                 <h2 className="text-lg font-semibold text-white">Recent Activity</h2>
             </div>
 
-            <ScrollArea className="h-[200px]">
+            <ScrollArea className="">
                 {activities.map((activity, index) => (
                     <div
                         key={index}
