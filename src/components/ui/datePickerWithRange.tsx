@@ -22,8 +22,8 @@ interface DatePickerWithRangeProps {
 
 const DatePickerWithRange: React.FC<DatePickerWithRangeProps> = ({ onChange, initialDate, ...props }) => {
     const [date, setDate] = React.useState<DateRange | undefined>({
-        from: initialDate || new Date(2022, 0, 20),
-        to: addDays(new Date(2022, 0, 20), 20),
+        from: initialDate || new Date(),
+        to: addDays(initialDate || new Date(), 7),
     })
 
     return (
@@ -34,11 +34,11 @@ const DatePickerWithRange: React.FC<DatePickerWithRangeProps> = ({ onChange, ini
                         id="date"
                         variant={"outline"}
                         className={cn(
-                            "w-[300px] justify-start text-left font-normal bg-[#383844] text-white",
+                            "w-[300px] justify-start text-left font-normal bg-[#383844] border-[#4e4e59] text-white",
                             !date && "text-muted-foreground"
                         )}
                     >
-                        <CalendarIcon />
+                        <CalendarIcon className="mr-2 h-4 w-4" />
                         {date?.from ? (
                             date.to ? (
                                 <>
@@ -53,14 +53,23 @@ const DatePickerWithRange: React.FC<DatePickerWithRangeProps> = ({ onChange, ini
                         )}
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
+                <PopoverContent
+                    className="w-auto p-0 bg-[#232430] border-[#383844]"
+                    align="start"
+                >
                     <Calendar
                         initialFocus
                         mode="range"
                         defaultMonth={date?.from}
                         selected={date}
-                        onSelect={setDate}
+                        onSelect={(newDate) => {
+                            setDate(newDate)
+                            if (newDate?.from && newDate?.to) {
+                                onChange({ from: newDate.from, to: newDate.to })
+                            }
+                        }}
                         numberOfMonths={2}
+                        className="text-white"
                     />
                 </PopoverContent>
             </Popover>

@@ -1,12 +1,18 @@
 import { Link } from 'react-router-dom';
 import { useKanbanStore } from '@/stores/kanbanStore';
 import { Button } from '@/components/ui/button';
-import { Plus, ListTodo } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { Plus, ListTodo, Trash2, MoreVertical } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 const BoardList = () => {
-    const { boards } = useKanbanStore();
+    const { boards, deleteBoard } = useKanbanStore();
     const activeBoards = boards.filter(board => board.status !== 'archived');
+
+    const handleDeleteBoard = (e: React.MouseEvent, boardId: string) => {
+        e.preventDefault();
+        e.stopPropagation();
+        deleteBoard(boardId);
+    };
 
     return (
         <div className="p-6">
@@ -29,9 +35,22 @@ const BoardList = () => {
                     >
                         <div className="flex items-center justify-between mb-2">
                             <h3 className="font-semibold text-white truncate pr-2">{board.title}</h3>
-                            <Badge variant="outline" className="border-[#4e4e59] text-white">
-                                {board.columns?.length || 0} columns
-                            </Badge>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild onClick={(e) => e.preventDefault()}>
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-[#383844]">
+                                        <MoreVertical className="h-4 w-4" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end" className="bg-[#232430] border-[#383844]">
+                                    <DropdownMenuItem
+                                        className="text-red-500 hover:text-red-400 hover:bg-[#383844] cursor-pointer"
+                                        onClick={(e) => handleDeleteBoard(e, board.id)}
+                                    >
+                                        <Trash2 className="mr-2 h-4 w-4" />
+                                        Delete Board
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </div>
                         <div className="flex items-center space-x-4 text-sm text-[#959c]">
                             <ListTodo className="w-4 h-4" />

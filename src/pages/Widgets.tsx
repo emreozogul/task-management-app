@@ -1,7 +1,7 @@
-import { PomodoroTimer } from '@/components/utilities/PomodoroTimer';
-import { QuickNotes } from '@/components/utilities/QuickNotes';
-import { AmbientSoundPlayer } from '@/components/utilities/AmbientSoundPlayer';
-import { TimeTracker } from '@/components/utilities/TimeTracker';
+import { PomodoroTimer } from '@/components/widgets/PomodoroTimer';
+import { QuickNotes } from '@/components/widgets/QuickNotes';
+import { AmbientSoundPlayer } from '@/components/widgets/AmbientSoundPlayer';
+import { TimeTracker } from '@/components/widgets/TimeTracker';
 const Widgets = () => {
     return (
         <div className="p-6">

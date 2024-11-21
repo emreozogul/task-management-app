@@ -14,12 +14,12 @@ export interface Task {
     id: string;
     title: string;
     description?: string;
+    startDate?: string;
+    endDate?: string;
     priority: TaskPriority;
-    documentId?: string;
-    columnId: string;
     completed: boolean;
+    documentId?: string;
     labels: string[];
     createdAt: string;
     updatedAt: string;
-    deadline?: string | null;
 }

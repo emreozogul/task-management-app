@@ -68,7 +68,7 @@ const Editor = ({ onUpdate, initialContent, documentId }: EditorProps) => {
                     key={documentId}
                     initialContent={initialContent}
                     extensions={defaultExtensions}
-                    className="relative h-[80vh] overflow-y-auto w-full border-[#383844] bg-[#232430] rounded-md sm:border sm:shadow-lg p-2 sm:p-4"
+                    className="relative h-[85vh] overflow-y-auto w-full border-[#383844] bg-[#232430] rounded-md sm:border sm:shadow-lg p-2 sm:p-4"
                     editorProps={{
                         handleDOMEvents: {
                             keydown: (_view, event) => handleCommandNavigation(event),
