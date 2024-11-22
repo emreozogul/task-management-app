@@ -13,19 +13,17 @@ import {
 } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { DndContext, DragEndEvent, DragOverlay, DragStartEvent } from '@dnd-kit/core';
+import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, useSensor, useSensors, PointerSensor } from '@dnd-kit/core';
 import { CalendarCell } from '@/components/calendar/CalendarCell';
 import { CalendarTask } from '@/components/calendar/CalendarTask';
 import { Task, TaskPriority } from '@/types/task';
 import { toast } from 'sonner';
-import { TaskSheet } from '@/components/kanban/TaskSheet';
 
 export default function CalendarPage() {
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const { tasks, updateTask, createTask } = useTaskStore();
     const [activeId, setActiveId] = useState<string | null>(null);
     const [activeTask, setActiveTask] = useState<Task | null>(null);
-    const [isSheetOpen, setIsSheetOpen] = useState(false);
 
     const calendarDays = useMemo(() => {
         const start = startOfWeek(startOfMonth(currentMonth), { weekStartsOn: 1 });
@@ -50,9 +48,9 @@ export default function CalendarPage() {
     };
 
     const handleDragEnd = (event: DragEndEvent) => {
+        const { active, over } = event;
         setActiveId(null);
         setActiveTask(null);
-        const { active, over } = event;
 
         if (!over || !tasks) return;
 
@@ -95,13 +93,16 @@ export default function CalendarPage() {
         });
     };
 
-    const handleTaskClick = (task: Task) => {
-        setActiveTask(task);
-        setIsSheetOpen(true);
-    };
+    const sensors = useSensors(
+        useSensor(PointerSensor, {
+            activationConstraint: {
+                distance: 8,
+            },
+        })
+    );
 
     return (
-        <div className="p-4 h-full flex flex-col overflow-hidden">
+        <div className="p-6 h-full flex flex-col overflow-hidden">
             <Card className="p-4 mb-4 bg-[#232430] border-none">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div className="flex items-center">
@@ -133,6 +134,7 @@ export default function CalendarPage() {
 
             <Card className="flex-1 p-2 md:p-4 bg-[#232430] border-none overflow-hidden">
                 <DndContext
+                    sensors={sensors}
                     onDragStart={handleDragStart}
                     onDragEnd={handleDragEnd}
                 >
@@ -156,7 +158,6 @@ export default function CalendarPage() {
                                     isToday={isSameDay(day, new Date())}
                                     isCurrentMonth={isSameMonth(day, currentMonth)}
                                     onAddTask={handleAddTask}
-                                    setActiveTask={handleTaskClick}
                                 />
                             ))}
                         </div>
@@ -166,22 +167,12 @@ export default function CalendarPage() {
                             <div className="opacity-80">
                                 <CalendarTask
                                     task={activeTask}
-                                    setActiveTask={handleTaskClick}
                                 />
                             </div>
                         ) : null}
                     </DragOverlay>
                 </DndContext>
             </Card>
-
-            {activeTask && (
-                <TaskSheet
-                    open={isSheetOpen}
-                    onOpenChange={setIsSheetOpen}
-                    taskId={activeTask.id}
-                    task={activeTask}
-                />
-            )}
         </div>
     );
 }

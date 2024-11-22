@@ -1,75 +1,23 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDocumentStore } from '@/stores/documentStore';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Plus } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useSearchStore } from '@/stores/searchStore';
 
 const Documents = () => {
-    const { documents, createDocument } = useDocumentStore();
-    const navigate = useNavigate();
-    const [search, setSearch] = useState('');
-    const [statusFilter, setStatusFilter] = useState<string>('all');
+    const { documents } = useDocumentStore();
+    const { query, setQuery } = useSearchStore();
 
     const filteredDocuments = documents.filter((doc) => {
         const matchesSearch = doc.title
             .toLowerCase()
-            .includes(search.toLowerCase());
-        const matchesStatus =
-            statusFilter === 'all' || doc.status === statusFilter;
-        return matchesSearch && matchesStatus;
-    });
+            .includes(query.toLowerCase());
 
-    const handleNewDocument = () => {
-        const timestamp = Date.now().toString(16);
-        const newDoc = createDocument(`Document - ${timestamp}`, 'general');
-        navigate(`/documents/${newDoc.id}`, { replace: true });
-    }
+        return matchesSearch;
+    });
 
     return (
         <div className="p-6 space-y-6">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-
-                <Button className="bg-[#6775bc] hover:bg-[#7983c4] text-white w-full sm:w-auto"
-                    onClick={handleNewDocument}
-                >
-                    <Plus className="w-4 h-4 mr-2" />
-                    New Document
-                </Button>
-
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-4">
-                <div className="w-full sm:w-64">
-                    <Input
-                        placeholder="Search documents..."
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        className="bg-[#383844] border-[#4e4e59] text-white w-full"
-                    />
-                </div>
-                <Select value={statusFilter} onValueChange={setStatusFilter}>
-                    <SelectTrigger className="w-full sm:w-40 bg-[#383844] border-[#4e4e59] text-white">
-                        <SelectValue placeholder="Filter by status" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-[#383844] border-[#4e4e59]">
-                        <SelectItem value="all" className="text-white hover:bg-[#4e4e59]">All</SelectItem>
-                        <SelectItem value="draft" className="text-white hover:bg-[#4e4e59]">Draft</SelectItem>
-                        <SelectItem value="published" className="text-white hover:bg-[#4e4e59]">Published</SelectItem>
-                        <SelectItem value="archived" className="text-white hover:bg-[#4e4e59]">Archived</SelectItem>
-                    </SelectContent>
-                </Select>
-            </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
                 {filteredDocuments.map((doc) => (

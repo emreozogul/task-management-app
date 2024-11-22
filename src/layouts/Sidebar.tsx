@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Trello, Settings, ChevronLeft, ChevronRight, FileText, Gauge, Calendar } from 'lucide-react';
+import { LayoutDashboard, Trello, Settings, ChevronLeft, ChevronRight, FileText, Gauge, Calendar, ListTodo, GanttChart } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -16,14 +16,23 @@ const navItems: NavItem[] = [
         icon: <LayoutDashboard className="w-6 h-6" />,
     },
     {
+        path: '/tasks',
+        label: 'Tasks',
+        icon: <ListTodo className="w-6 h-6" />,
+    },
+    {
         path: '/boards',
-        label: 'Kanbans',
+        label: 'Boards',
         icon: <Trello className="w-6 h-6" />,
     },
     {
         path: '/calendar',
         label: 'Calendar',
         icon: <Calendar className="w-6 h-6" />,
+    }, {
+        path: '/gantt',
+        label: 'Timeline',
+        icon: <GanttChart className="w-6 h-6" />,
     },
     {
         path: '/widgets',
@@ -54,7 +63,7 @@ export const Sidebar = () => {
             )}
         >
 
-            <nav className="space-y-2 py-4 relative">
+            <nav className="space-y-2 py-4 relative mt-12">
                 {navItems.map((item) => (
                     <Link
                         key={item.path}
@@ -90,7 +99,7 @@ export const Sidebar = () => {
                 type="button"
                 title={isCollapsed ? 'Expand' : 'Collapse'}
                 onClick={() => setIsCollapsed(!isCollapsed)}
-                className="p-1.5 rounded-full bg-[#383844] hover:bg-[#4e4e59] transition-colors absolute right-0 top-1/2 transform -translate-y-1/2 -mr-4"
+                className="p-1 rounded-full bg-[#383844] hover:bg-[#4e4e59] transition-colors absolute right-0 top-5 transform -mr-2 z-30"
             >
                 {isCollapsed ? (
                     <ChevronRight className="w-6 h-6" />
