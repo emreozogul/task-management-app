@@ -11,7 +11,7 @@ import {
     JSONContent,
 } from "novel";
 import { ImageResizer, handleCommandNavigation } from "novel/extensions";
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { handleImageDrop, handleImagePaste } from "novel/plugins";
 import { ColorSelector } from "./selectors/color-selector";

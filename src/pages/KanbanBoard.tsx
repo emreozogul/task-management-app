@@ -3,18 +3,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Board } from '../components/kanban/Board';
 import { useKanbanStore } from '../stores/kanbanStore';
 import { Button } from '@/components/ui/button';
-import { Plus, MoreVertical, Trash2 } from 'lucide-react';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { Plus } from 'lucide-react';
+
 
 const KanbanBoard = () => {
     const { boardId } = useParams();
     const navigate = useNavigate();
-    const { boards, activeBoard, setActiveBoard, deleteBoard } = useKanbanStore();
+    const { boards, activeBoard, setActiveBoard } = useKanbanStore();
 
     useEffect(() => {
         const board = boards.find(b => b.id === boardId);
@@ -25,31 +20,6 @@ const KanbanBoard = () => {
         }
     }, [boardId, boards, setActiveBoard, navigate]);
 
-    const handleDeleteBoard = () => {
-        if (activeBoard) {
-            deleteBoard(activeBoard.id);
-            navigate('/boards');
-        }
-    };
-
-    const boardMenu = (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-[#383844]">
-                    <MoreVertical className="h-4 w-4" />
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="bg-[#232430] border-[#383844]">
-                <DropdownMenuItem
-                    className="text-red-500 hover:text-red-400 hover:bg-[#383844] cursor-pointer"
-                    onClick={handleDeleteBoard}
-                >
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    Delete Board
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
-    );
 
     if (!activeBoard) {
         return (
@@ -68,12 +38,7 @@ const KanbanBoard = () => {
 
     return (
         <div className="p-6">
-            <div className="flex items-center justify-between mb-6">
-                <h1 className="text-2xl font-bold text-white">
-                    {activeBoard?.title}
-                </h1>
-                {boardMenu}
-            </div>
+
             <Board />
         </div>
     );

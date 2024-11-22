@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useKanbanStore } from '@/stores/kanbanStore';
 import { Button } from '@/components/ui/button';
-import { Plus, ListTodo, Trash2, MoreVertical } from 'lucide-react';
+import { ListTodo, Trash2, MoreVertical } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 const BoardList = () => {
@@ -16,16 +16,6 @@ const BoardList = () => {
 
     return (
         <div className="p-6">
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-bold text-white">Kanban Boards</h1>
-                <Link to="/boards/new">
-                    <Button className="bg-[#6775bc] hover:bg-[#7983c4] text-white">
-                        <Plus className="w-4 h-4 mr-2" />
-                        New Board
-                    </Button>
-                </Link>
-            </div>
-
             <div className="grid grid-cols-2 xl:grid-cols-3 gap-4">
                 {activeBoards.map((board) => (
                     <Link

@@ -31,8 +31,10 @@ interface TaskStore {
     };
 }
 
-const initializeServices = (tasks: Task[] = []) => ({
-    notification: new TaskNotificationService(),
+// Create services outside of the store
+const notificationService = new TaskNotificationService();
+const createServices = (tasks: Task[] = []) => ({
+    notification: notificationService,
     analytics: new TaskAnalyticsService(tasks),
     scheduler: new TaskScheduler(tasks),
 });
@@ -41,7 +43,7 @@ export const useTaskStore = create<TaskStore>()(
     persist(
         (set, get) => ({
             tasks: [],
-            services: initializeServices(),
+            services: createServices(),
 
             createTask: (taskData) => {
                 const newTask: Task = {
@@ -51,6 +53,8 @@ export const useTaskStore = create<TaskStore>()(
                     priority: taskData.priority || TaskPriority.LOW,
                     completed: false,
                     labels: [],
+                    startDate: taskData.startDate || new Date().toISOString(),
+                    endDate: taskData.endDate || new Date().toISOString(),
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString(),
                     ...taskData,
@@ -58,14 +62,17 @@ export const useTaskStore = create<TaskStore>()(
 
                 set((state) => {
                     const newTasks = [...state.tasks, newTask];
-                    state.services.notification.notifyTaskUpdate(newTask, 'created');
+                    const newServices = createServices(newTasks);
+
+                    try {
+                        newServices.notification.notifyTaskUpdate(newTask, 'created');
+                    } catch (error) {
+                        console.error('Notification error:', error);
+                    }
+
                     return {
                         tasks: newTasks,
-                        services: {
-                            ...state.services,
-                            analytics: new TaskAnalyticsService(newTasks),
-                            scheduler: new TaskScheduler(newTasks),
-                        }
+                        services: newServices,
                     };
                 });
 
@@ -81,20 +88,22 @@ export const useTaskStore = create<TaskStore>()(
                     );
 
                     const updatedTask = updatedTasks.find(t => t.id === taskId);
+                    const newServices = createServices(updatedTasks);
+
                     if (updatedTask) {
-                        state.services.notification.notifyTaskUpdate(
-                            updatedTask,
-                            updates.completed !== undefined ? 'completed' : 'updated'
-                        );
+                        try {
+                            newServices.notification.notifyTaskUpdate(
+                                updatedTask,
+                                updates.completed !== undefined ? 'completed' : 'updated'
+                            );
+                        } catch (error) {
+                            console.error('Notification error:', error);
+                        }
                     }
 
                     return {
                         tasks: updatedTasks,
-                        services: {
-                            ...state.services,
-                            analytics: new TaskAnalyticsService(updatedTasks),
-                            scheduler: new TaskScheduler(updatedTasks),
-                        }
+                        services: newServices,
                     };
                 });
             },
@@ -103,21 +112,24 @@ export const useTaskStore = create<TaskStore>()(
                 set((state) => {
                     const task = state.tasks.find(t => t.id === taskId);
                     const updatedTasks = state.tasks.filter(t => t.id !== taskId);
+                    const newServices = createServices(updatedTasks);
 
                     if (task) {
-                        state.services.notification.notifyTaskUpdate(task, 'deleted');
+                        try {
+                            newServices.notification.notifyTaskUpdate(task, 'deleted');
+                        } catch (error) {
+                            console.error('Notification error:', error);
+                        }
                     }
 
                     return {
                         tasks: updatedTasks,
-                        services: {
-                            ...state.services,
-                            analytics: new TaskAnalyticsService(updatedTasks),
-                            scheduler: new TaskScheduler(updatedTasks),
-                        }
+                        services: newServices,
                     };
                 });
             },
+
+            // ... rest of the implementation remains the same
 
             getTaskById: (taskId) => {
                 return get().tasks.find(task => task.id === taskId);
@@ -132,7 +144,6 @@ export const useTaskStore = create<TaskStore>()(
                     if (!task.startDate || !task.endDate) return false;
                     const taskStart = new Date(task.startDate);
                     const taskEnd = new Date(task.endDate);
-
                     return !(taskEnd < startDate || taskStart > endDate);
                 });
             },
@@ -151,6 +162,9 @@ export const useTaskStore = create<TaskStore>()(
         }),
         {
             name: 'task-store',
+            partialize: (state) => ({
+                tasks: state.tasks,
+            }),
         }
     )
 );

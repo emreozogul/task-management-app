@@ -7,5 +7,6 @@ import KanbanBoard from './KanbanBoard';
 import NewBoard from './NewBoard';
 import Settings from './Settings';
 import Widgets from './Widgets';
+import TasksPage from './Tasks';
 
-export { BoardList, Calendar, Dashboard, Documents, DocumentEditor, KanbanBoard, NewBoard, Settings, Widgets };
+export { BoardList, Calendar, Dashboard, Documents, DocumentEditor, KanbanBoard, NewBoard, Settings, Widgets, TasksPage };

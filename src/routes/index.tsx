@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
-import { BoardList, Calendar, Dashboard, Documents, DocumentEditor, KanbanBoard, NewBoard, Settings, Widgets } from '@/pages';
+import { BoardList, Calendar, Dashboard, Documents, DocumentEditor, KanbanBoard, NewBoard, Settings, Widgets, TasksPage } from '@/pages';
+import GanttChart from '@/pages/Gantt';
 
 export const router = createBrowserRouter([
     {
@@ -44,6 +45,14 @@ export const router = createBrowserRouter([
                 path: 'calendar',
                 element: <Calendar />,
             },
+            {
+                path: 'tasks',
+                element: <TasksPage />,
+            },
+            {
+                path: 'gantt',
+                element: <GanttChart />,
+            }
         ],
     },
 ]);

@@ -51,7 +51,7 @@ export const TodaysTaskList = () => {
             };
         } else {
             return {
-                label: "In progress",
+                label: "Active",
                 className: "bg-green-500/20 text-green-400"
             };
         }
@@ -64,7 +64,7 @@ export const TodaysTaskList = () => {
             className="bg-[#232430] border-none shadow-lg h-full"
         >
             {todaysTasks.length > 0 ? (
-                <ScrollArea className="h-[300px] pr-5">
+                <ScrollArea className="h-[300px] pr-4">
                     <div className="space-y-3">
                         {todaysTasks.map(task => {
                             const status = getTaskStatus(task);

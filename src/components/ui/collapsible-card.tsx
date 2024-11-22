@@ -4,8 +4,8 @@ import { useState, useRef } from 'react'
 import { cn } from '@/lib/utils'
 
 interface CollapsibleCardProps {
-    title: string
-    icon: React.ReactNode
+    title?: string
+    icon?: React.ReactNode
     children: React.ReactNode
     defaultExpanded?: boolean
     headerContent?: React.ReactNode

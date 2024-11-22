@@ -184,16 +184,20 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, taskId
                     </div>
 
                     <div>
-                        <label className="text-sm font-medium mb-1 block">Linked Document</label>
+                        <label className="text-sm font-medium mb-1 block text-white">Linked Document</label>
                         <Select value={task.documentId || ''} onValueChange={handleDocumentChange}>
-                            <SelectTrigger>
+                            <SelectTrigger className="bg-[#383844] border-[#4e4e59] text-white">
                                 <SelectValue placeholder="Select a document" />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="bg-[#232430] border-[#383844]">
                                 {documents.map(doc => (
-                                    <SelectItem key={doc.id} value={doc.id}>
+                                    <SelectItem
+                                        key={doc.id}
+                                        value={doc.id}
+                                        className="text-white hover:bg-[#383844]"
+                                    >
                                         <div className="flex items-center">
-                                            <FileText className="w-4 h-4 mr-2" />
+                                            <FileText className="w-4 h-4 mr-2 text-[#6775bc]" />
                                             {doc.title}
                                         </div>
                                     </SelectItem>
