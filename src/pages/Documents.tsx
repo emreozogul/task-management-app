@@ -118,6 +118,7 @@ const Documents = () => {
                                         <h3 className="font-semibold text-white truncate pr-2">{doc.title}</h3>
 
                                     </div>
+                                    <p className="text-[#95959c] text-sm truncate">{doc.createdAt.toLocaleString()}</p>
                                 </Link>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>

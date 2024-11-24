@@ -14,6 +14,4 @@ export interface IDocument {
     content: JSONContent;
     createdAt: Date;
     updatedAt: Date;
-    tags: string[];
-    category: string;
 }

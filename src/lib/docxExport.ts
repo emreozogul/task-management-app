@@ -1,5 +1,5 @@
 import { Document, Packer, Paragraph, TextRun } from 'docx';
-import { IDocument } from '@/stores/documentStore';
+import { IDocument } from '@/types/document';
 import DOMPurify from 'dompurify';
 
 export const exportToDocx = async (doc: IDocument) => {

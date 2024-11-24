@@ -2,7 +2,7 @@ import { useDraggable } from '@dnd-kit/core';
 import { Badge } from '@/components/ui/badge';
 import { FileText } from 'lucide-react';
 import { Task, TaskPriority } from '@/types/task';
-import { TaskSheet } from '../kanban/TaskSheet';
+import { TaskSheet } from '../tasks/TaskSheet';
 import { useState } from 'react';
 
 interface CalendarTaskProps {

@@ -9,7 +9,7 @@ import {
     differenceInDays,
 } from 'date-fns';
 import { TaskNode } from '@/components/gantt/TaskNode';
-import { TaskSheet } from '@/components/kanban/TaskSheet';
+import { TaskSheet } from '@/components/tasks/TaskSheet';
 import { Task } from '@/types/task';
 
 export default function GanttChart() {

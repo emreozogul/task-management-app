@@ -5,7 +5,7 @@ import { Download, FileText } from 'lucide-react';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import DocumentPDF from '../document/DocumentPDF';
 import { IDocument } from '@/types/document';
-import { exportToDocx } from '@/utils/docxExport';
+import { exportToDocx } from '@/lib/docxExport';
 import {
     DropdownMenu,
     DropdownMenuContent,

@@ -13,7 +13,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { TaskSelector } from './TaskSelector';
+import { TaskSelector } from '../tasks/TaskSelector';
 
 interface ColumnProps {
     id: string;

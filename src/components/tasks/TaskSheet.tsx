@@ -5,8 +5,8 @@ import { useDocumentStore } from "@/stores/documentStore";
 import { useTaskStore } from "@/stores/taskStore";
 import { useKanbanStore } from "@/stores/kanbanStore";
 import { FileText, Trash } from "lucide-react";
-import { useState, useEffect, useCallback } from 'react';
-import { TagManager } from "@/components/TagManager";
+import { useState } from 'react';
+import { TagManager } from "@/components/tasks/TagManager";
 import DeadlineSelector from "./DeadlineSelector";
 import { Task, TaskPriority } from "@/types/task";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -29,30 +29,11 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, taskId
     const { updateTask, deleteTask } = useTaskStore();
     const { boards, removeTaskFromColumn } = useKanbanStore();
 
-    // Initialize states with empty/default values
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [completed, setCompleted] = useState(false);
-    const [dateRange, setDateRange] = useState<DateRange | null>(null);
     const [isTagDialogOpen, setIsTagDialogOpen] = useState(false);
     const [newTag, setNewTag] = useState('');
 
-    // Update all states when task changes
-    useEffect(() => {
-        setTitle(task.title);
-        setDescription(task.description || '');
-        setCompleted(task.completed);
-        if (task.startDate && task.endDate) {
-            setDateRange({
-                from: new Date(task.startDate),
-                to: new Date(task.endDate),
-            });
-        } else {
-            setDateRange(null);
-        }
-    }, [task]);
+    const [taskValues, setTaskValues] = useState(task);
 
-    // Find all boards and columns that contain this task
     const taskLocations = boards.reduce((acc, board) => {
         board.columns.forEach(column => {
             if (column.taskIds.includes(taskId)) {
@@ -62,14 +43,57 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, taskId
         return acc;
     }, [] as { boardId: string; boardTitle: string; columnId: string; columnTitle: string }[]);
 
+    const handleTaskUpdate = (field: keyof Task, value: any) => {
+        const updatedValues = { ...taskValues, [field]: value };
+        setTaskValues(updatedValues);
+        updateTask(taskId, { [field]: value });
+    };
+
+    const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        handleTaskUpdate('title', e.target.value.trim());
+    };
+
+    const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        handleTaskUpdate('description', e.target.value);
+    };
+
+    const handleCompletedChange = (checked: boolean) => {
+        handleTaskUpdate('completed', checked);
+    };
+
     const handlePriorityChange = (value: string) => {
         if (Object.values(TaskPriority).includes(value as TaskPriority)) {
-            updateTask(taskId, { priority: value as TaskPriority });
+            handleTaskUpdate('priority', value as TaskPriority);
+        }
+    };
+
+    const handleDateRangeChange = (range: DateRange | null) => {
+        if (range?.from && range?.to) {
+            const startDate = new Date(range.from);
+            const endDate = new Date(range.to);
+            endDate.setHours(23, 59, 59, 999);
+
+            handleTaskUpdate('startDate', startDate.toISOString());
+            handleTaskUpdate('endDate', endDate.toISOString());
         }
     };
 
     const handleDocumentChange = (documentId: string) => {
-        updateTask(taskId, { documentId });
+        handleTaskUpdate('documentId', documentId);
+    };
+
+    const handleAddTag = () => {
+        if (newTag.trim()) {
+            const currentLabels = taskValues.labels || [];
+            handleTaskUpdate('labels', [...currentLabels, newTag.trim()]);
+            setNewTag('');
+            setIsTagDialogOpen(false);
+        }
+    };
+
+    const handleRemoveTag = (tag: string) => {
+        const currentLabels = taskValues.labels || [];
+        handleTaskUpdate('labels', currentLabels.filter(t => t !== tag));
     };
 
     const handleDelete = () => {
@@ -82,55 +106,22 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, taskId
         onOpenChange(false);
     };
 
-    const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.target.value);
-    };
-
-    const handleTitleBlur = () => {
-        if (title.trim() !== task.title) {
-            updateTask(taskId, { title: title.trim() });
-        }
-    };
-
-    const handleDescriptionBlur = useCallback(() => {
-        if (description !== task.description) {
-            updateTask(taskId, { description });
-        }
-    }, [taskId, description, task.description, updateTask]);
-
-    const handleCompletedChange = (checked: boolean) => {
-        setCompleted(checked);
-        updateTask(taskId, { completed: checked });
-    };
-
-    const handleAddTag = () => {
-        if (newTag.trim()) {
-            const currentLabels = task.labels || [];
-            updateTask(taskId, {
-                labels: [...currentLabels, newTag.trim()]
-            });
-            setNewTag('');
-            setIsTagDialogOpen(false);
-        }
-    };
-
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
             <SheetContent className="bg-[#232430] border-l border-[#383844] sm:max-w-[500px]">
                 <SheetHeader className="space-y-4">
                     <div className="flex items-center gap-3">
                         <Checkbox
-                            checked={completed}
+                            checked={taskValues.completed}
                             onCheckedChange={handleCompletedChange}
                             className="border-[#6775bc] w-5 h-5 data-[state=checked]:bg-[#6775bc]"
                         />
                         <Input
-                            value={title}
+                            value={taskValues.title}
                             onChange={handleTitleChange}
-                            onBlur={handleTitleBlur}
                             className={cn(
                                 "flex-1 bg-[#383844] border-none text-white focus:ring-1 focus:ring-[#6775bc]",
-                                completed && "line-through opacity-60"
+                                taskValues.completed && "line-through opacity-60"
                             )}
                         />
                     </div>
@@ -139,10 +130,8 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, taskId
                         <div>
                             <Label className="text-[#95959c]">Description</Label>
                             <Textarea
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                                onBlur={handleDescriptionBlur}
-                                placeholder="Add a description..."
+                                value={taskValues.description}
+                                onChange={handleDescriptionChange}
                                 className="min-h-[100px] bg-[#383844] border-none text-white focus:ring-1 focus:ring-[#6775bc]"
                             />
                         </div>
@@ -150,28 +139,15 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, taskId
                         <div>
                             <label className="text-sm font-medium mb-1 block">Date Range</label>
                             <DeadlineSelector
-                                dateRange={dateRange}
-                                onDateRangeChange={(range) => {
-                                    setDateRange(range);
-                                    if (range?.from && range?.to) {
-                                        const startDate = new Date(range.from);
-                                        const endDate = new Date(range.to);
-                                        endDate.setHours(23, 59, 59, 999);
-
-                                        updateTask(taskId, {
-                                            ...task,
-                                            startDate: startDate.toISOString(),
-                                            endDate: endDate.toISOString(),
-                                        });
-                                    }
-                                }}
+                                dateRange={taskValues.startDate && taskValues.endDate ? { from: new Date(taskValues.startDate), to: new Date(taskValues.endDate) } : null}
+                                onDateRangeChange={handleDateRangeChange}
                             />
                         </div>
 
                         <div>
                             <label className="text-sm font-medium mb-1 block text-white">Priority</label>
                             <Select
-                                value={task.priority}
+                                value={taskValues.priority}
                                 onValueChange={handlePriorityChange}
                             >
                                 <SelectTrigger className="bg-[#383844] border-[#4e4e59] text-white">
@@ -202,7 +178,7 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, taskId
 
                         <div>
                             <label className="text-sm font-medium mb-1 block text-white">Linked Document</label>
-                            <Select value={task.documentId || ''} onValueChange={handleDocumentChange}>
+                            <Select value={taskValues.documentId || ''} onValueChange={handleDocumentChange}>
                                 <SelectTrigger className="bg-[#383844] border-[#4e4e59] text-white">
                                     <SelectValue placeholder="Select a document" />
                                 </SelectTrigger>
@@ -244,14 +220,9 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, taskId
                             <label className="text-sm font-medium mb-1 block">Tags</label>
                             <div className="space-y-2">
                                 <TagManager
-                                    tags={task.labels}
+                                    tags={taskValues.labels}
                                     onAddTag={() => setIsTagDialogOpen(true)}
-                                    onRemoveTag={(tag) => {
-                                        const currentLabels = task.labels || [];
-                                        updateTask(taskId, {
-                                            labels: currentLabels.filter(t => t !== tag)
-                                        });
-                                    }}
+                                    onRemoveTag={handleRemoveTag}
                                 />
                             </div>
 
