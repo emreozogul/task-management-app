@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Folder as FolderIcon, MoreVertical, FileText, Trash2 } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useState } from 'react';
+import { useDialogKeyboard } from '@/hooks/useDialogKeyboard';
 
 const Documents = () => {
     const { documents, folders, createFolder, addDocumentToFolder, removeDocumentFromFolder, deleteFolder } = useDocumentStore();
@@ -43,6 +44,23 @@ const Documents = () => {
         setSelectedDocument(null);
     };
 
+    const handleCancel = () => {
+        setNewFolderName('');
+        setIsCreateFolderOpen(false);
+    };
+
+    useDialogKeyboard({
+        isOpen: isCreateFolderOpen,
+        onClose: handleCancel,
+        onSubmit: () => {
+            if (newFolderName.trim()) {
+                createFolder(newFolderName.trim());
+                setNewFolderName('');
+                setIsCreateFolderOpen(false);
+            }
+        }
+    });
+
     return (
         <div className="p-6">
             <div className="grid grid-cols-[220px_1fr] gap-6">
@@ -52,7 +70,7 @@ const Documents = () => {
                         <Button
                             onClick={() => setIsCreateFolderOpen(true)}
                             variant="outline"
-                            className="w-full border-[#383844] text-white hover:bg-[#383844] hover:text-[#6775bc]"
+                            className="w-full border-border text-primary-foreground hover:bg-background-hover hover:text-primary"
                         >
                             <FolderIcon className="w-4 h-4 mr-2" />
                             New Folder
@@ -63,7 +81,7 @@ const Documents = () => {
                         onClick={() => setSelectedFolder(null)}
                         className={cn(
                             "flex items-center p-2 rounded-lg cursor-pointer",
-                            !selectedFolder ? "bg-[#383844] text-white" : "text-[#95959c] hover:bg-[#383844] hover:text-white"
+                            !selectedFolder ? "bg-background-hover text-primary-foreground" : "text-muted hover:bg-background-hover hover:text-primary-foreground"
                         )}
                     >
                         <FileText className="w-4 h-4 mr-2" />
@@ -76,8 +94,8 @@ const Documents = () => {
                             className={cn(
                                 "flex items-center justify-between p-2 rounded-lg cursor-pointer group",
                                 selectedFolder === folder.id
-                                    ? "bg-[#383844] text-white"
-                                    : "text-[#95959c] hover:bg-[#383844] hover:text-white"
+                                    ? "bg-background-hover text-primary-foreground"
+                                    : "text-muted hover:bg-background-hover hover:text-primary-foreground"
                             )}
                         >
                             <div
@@ -93,13 +111,13 @@ const Documents = () => {
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                className="opacity-0 group-hover:opacity-100 hover:bg-[#4e4e59]"
+                                className="opacity-0 group-hover:opacity-100 hover:bg-background-hover"
                                 onClick={() => {
                                     deleteFolder(folder.id);
                                     setSelectedFolder(null);
                                 }}
                             >
-                                <Trash2 className="w-4 h-4 text-[#95959c]" />
+                                <Trash2 className="w-4 h-4 text-muted" />
                             </Button>
                         </div>
                     ))}
@@ -112,13 +130,12 @@ const Documents = () => {
                             <div key={doc.id} className="group relative">
                                 <Link
                                     to={`/documents/${doc.id}`}
-                                    className="flex flex-col p-4 rounded-lg border border-[#383844] bg-[#232430] hover:bg-[#383844] transition-colors"
+                                    className="flex flex-col p-4 rounded-lg border border-border bg-background-secondary hover:bg-background-hover transition-colors"
                                 >
                                     <div className="flex items-center justify-between mb-2">
-                                        <h3 className="font-semibold text-white truncate pr-2">{doc.title}</h3>
-
+                                        <h3 className="font-semibold text-primary-foreground truncate pr-2">{doc.title}</h3>
                                     </div>
-                                    <p className="text-[#95959c] text-sm truncate">{doc.createdAt.toLocaleString()}</p>
+                                    <p className="text-muted text-sm truncate">{doc.createdAt.toLocaleString()}</p>
                                 </Link>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
@@ -127,12 +144,12 @@ const Documents = () => {
                                             size="sm"
                                             className="absolute top-2 right-2 h-8 w-8 p-0 opacity-0 group-hover:opacity-100"
                                         >
-                                            <MoreVertical className="h-4 w-4 text-white" />
+                                            <MoreVertical className="h-4 w-4 text-primary-foreground" />
                                         </Button>
                                     </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end" className="bg-[#232430] border-[#383844]">
+                                    <DropdownMenuContent align="end" className="bg-background-secondary border-border">
                                         <DropdownMenuItem
-                                            className="text-[#95959c] px-3 py-2 text-sm hover:bg-[#383844] cursor-pointer"
+                                            className="text-muted px-3 py-2 text-sm hover:bg-background-hover cursor-pointer"
                                             onClick={() => {
                                                 setSelectedDocument(doc.id);
                                                 setIsFolderSelectOpen(true);
@@ -150,7 +167,7 @@ const Documents = () => {
             </div>
 
             <Dialog open={isCreateFolderOpen} onOpenChange={setIsCreateFolderOpen}>
-                <DialogContent className="bg-[#232430] text-white">
+                <DialogContent className="bg-background-secondary text-primary-foreground">
                     <DialogHeader>
                         <DialogTitle>Create New Folder</DialogTitle>
                     </DialogHeader>
@@ -159,7 +176,7 @@ const Documents = () => {
                             value={newFolderName}
                             onChange={(e) => setNewFolderName(e.target.value)}
                             placeholder="Folder name"
-                            className="bg-[#383844] border-[#4e4e59] text-white"
+                            className="bg-background-hover border-border text-primary-foreground"
                         />
                     </div>
                     <DialogFooter>
@@ -171,7 +188,7 @@ const Documents = () => {
                                     setIsCreateFolderOpen(false);
                                 }
                             }}
-                            className="bg-[#6775bc] hover:bg-[#7983c4] text-white"
+                            className="bg-primary hover:bg-primary-hover text-primary-foreground"
                         >
                             Create
                         </Button>
@@ -181,7 +198,7 @@ const Documents = () => {
 
             {/* Folder Selection Dialog */}
             <Dialog open={isFolderSelectOpen} onOpenChange={setIsFolderSelectOpen}>
-                <DialogContent className="bg-[#232430] text-white sm:max-w-[425px]">
+                <DialogContent className="bg-background-secondary text-primary-foreground sm:max-w-[425px]">
                     <DialogHeader>
                         <DialogTitle>Select Folder</DialogTitle>
                     </DialogHeader>
@@ -190,20 +207,20 @@ const Documents = () => {
                             placeholder="Search folders..."
                             value={folderSearch}
                             onChange={(e) => setFolderSearch(e.target.value)}
-                            className="bg-[#383844] border-[#4e4e59] text-white"
+                            className="bg-background-hover border-border text-primary-foreground"
                         />
                         <div className="max-h-[300px] overflow-y-auto space-y-2">
                             {filteredFolders.map((folder) => (
                                 <div
                                     key={folder.id}
                                     onClick={() => selectedDocument && handleMoveToFolder(selectedDocument, folder.id)}
-                                    className="flex items-center justify-between p-2 rounded-lg cursor-pointer hover:bg-[#383844] group"
+                                    className="flex items-center justify-between p-2 rounded-lg cursor-pointer hover:bg-background-hover group"
                                 >
                                     <div className="flex items-center">
-                                        <FolderIcon className="w-4 h-4 mr-2 text-[#6775bc]" />
-                                        <span className="text-white">{folder.name}</span>
+                                        <FolderIcon className="w-4 h-4 mr-2 text-primary" />
+                                        <span className="text-primary-foreground">{folder.name}</span>
                                     </div>
-                                    <span className="text-xs text-[#95959c]">
+                                    <span className="text-xs text-muted">
                                         {folder.documentIds.length} documents
                                     </span>
                                 </div>

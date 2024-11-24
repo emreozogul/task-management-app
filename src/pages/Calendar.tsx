@@ -82,7 +82,8 @@ export default function CalendarPage() {
         const startDate = new Date(date);
         startDate.setHours(0, 0, 0, 0);
 
-        const endDate = new Date(date);
+        const endDate = new Date(startDate);
+        endDate.setDate(endDate.getDate() + 7);
         endDate.setHours(23, 59, 59, 999);
 
         createTask({
@@ -103,18 +104,18 @@ export default function CalendarPage() {
 
     return (
         <div className="p-6 h-full flex flex-col overflow-hidden">
-            <Card className="p-4 mb-4 bg-[#232430] border-none">
+            <Card className="p-4 mb-4 bg-background-secondary border-border">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div className="flex items-center">
-                        <CalendarIcon className="w-7 h-7 mr-3 text-[#6775bc]" />
-                        <h1 className="text-2xl md:text-3xl font-bold text-white">
+                        <CalendarIcon className="w-7 h-7 mr-3 text-primary" />
+                        <h1 className="text-2xl md:text-3xl font-bold text-primary-foreground">
                             {format(currentMonth, 'MMMM yyyy')}
                         </h1>
                     </div>
                     <div className="flex gap-3 w-full sm:w-auto">
                         <Button
                             onClick={() => setCurrentMonth(prev => new Date(prev.getFullYear(), prev.getMonth() - 1))}
-                            className="flex-1 sm:flex-none bg-[#383844] hover:bg-[#4e4e59] border-none"
+                            className="flex-1 sm:flex-none bg-background-hover hover:bg-background-hover-dark border-none"
                             size="lg"
                         >
                             <ChevronLeft className="w-5 h-5 mr-2" />
@@ -122,7 +123,7 @@ export default function CalendarPage() {
                         </Button>
                         <Button
                             onClick={() => setCurrentMonth(prev => new Date(prev.getFullYear(), prev.getMonth() + 1))}
-                            className="flex-1 sm:flex-none bg-[#383844] hover:bg-[#4e4e59] border-none"
+                            className="flex-1 sm:flex-none bg-background-hover hover:bg-background-hover-dark border-none"
                             size="lg"
                         >
                             Next
@@ -132,7 +133,7 @@ export default function CalendarPage() {
                 </div>
             </Card>
 
-            <Card className="flex-1 p-2 md:p-4 bg-[#232430] border-none overflow-hidden">
+            <Card className="flex-1 p-2 md:p-4 bg-background-secondary border-border overflow-hidden">
                 <DndContext
                     sensors={sensors}
                     onDragStart={handleDragStart}
@@ -142,7 +143,7 @@ export default function CalendarPage() {
                         {/* Calendar Header */}
                         <div className="grid grid-cols-7 mb-2">
                             {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
-                                <div key={day} className="text-center text-sm font-medium text-[#6775bc] py-2">
+                                <div key={day} className="text-center text-sm font-medium text-primary py-2">
                                     {day}
                                 </div>
                             ))}

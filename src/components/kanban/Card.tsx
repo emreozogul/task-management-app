@@ -17,9 +17,9 @@ interface CardProps {
 }
 
 const priorityColors = {
-    low: 'border-l-[#6775bc]',
-    medium: 'border-l-[#f59e0b]', // yellow-500
-    high: 'border-l-[#bc6767]'
+    low: 'border-l-primary',
+    medium: 'border-l-warning',
+    high: 'border-l-destructive'
 };
 
 export const Card = ({ task, onRemove }: CardProps) => {
@@ -109,8 +109,8 @@ export const Card = ({ task, onRemove }: CardProps) => {
             <div
                 ref={setNodeRef}
                 className={cn(
-                    "group bg-[#383844] rounded-lg shadow-sm cursor-move transition-all duration-200 w-[260px] shrink-0",
-                    "hover:bg-[#1a1b23]",
+                    "group bg-background-hover rounded-lg shadow-sm cursor-move transition-all duration-200 w-[260px] shrink-0",
+                    "hover:bg-background-hover-dark",
                     "border-[5px] border-transparent",
                     priorityColors[task.priority],
                     transform ? `translate-[${CSS.Transform.toString(transform)}]` : ''
@@ -127,7 +127,7 @@ export const Card = ({ task, onRemove }: CardProps) => {
                             <Checkbox
                                 checked={task.completed}
                                 onCheckedChange={handleCheckboxChange}
-                                className="border-[#6775bc] w-5 h-5 data-[state=checked]:bg-[#6775bc]"
+                                className="border-primary w-5 h-5 data-[state=checked]:bg-primary"
                             />
                         </div>
                         {isEditing ? (
@@ -138,13 +138,13 @@ export const Card = ({ task, onRemove }: CardProps) => {
                                 onBlur={handleTitleSubmit}
                                 onKeyDown={handleKeyDown}
                                 onClick={(e) => e.stopPropagation()}
-                                className="flex-1 min-w-0 text-white text-sm py-0 resize-none bg-transparent border-0 focus:ring-0 focus:ring-offset-0 outline-none shadow-none pr-16 focus-visible:ring-0 border-b-2 border-transparent"
+                                className="flex-1 min-w-0 text-primary-foreground text-sm py-0 resize-none bg-transparent border-0 focus:ring-0 focus:ring-offset-0 outline-none shadow-none pr-16 focus-visible:ring-0 border-b-2 border-transparent"
                                 autoFocus
                             />
                         ) : (
                             <span
                                 className={cn(
-                                    "text-white text-sm flex-1 min-w-0 break-words transition-opacity duration-200",
+                                    "text-primary-foreground text-sm flex-1 min-w-0 break-words transition-opacity duration-200",
                                     task.completed && "line-through opacity-60",
                                     "group-hover:opacity-10"
                                 )}
@@ -160,27 +160,27 @@ export const Card = ({ task, onRemove }: CardProps) => {
                             <Button
                                 variant="ghost"
                                 onClick={() => setIsSheetOpen(true)}
-                                className="w-8 h-8 opacity-0 translate-x-4 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-200 delay-100 rounded-full bg-[#2a2b38]"
+                                className="w-8 h-8 opacity-0 translate-x-4 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-200 delay-100 rounded-full bg-background-hover"
                             >
-                                <Info className="w-4 h-4 text-[#6775bc]" />
+                                <Info className="w-4 h-4 text-primary" />
                             </Button>
                             <Button
                                 variant="ghost"
                                 size="sm"
                                 onClick={handleDelete}
-                                className="w-8 h-8 opacity-0 translate-x-4 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-200 delay-75 rounded-full bg-[#2a2b38]"
+                                className="w-8 h-8 opacity-0 translate-x-4 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-200 delay-75 rounded-full bg-background-hover-dark"
                             >
-                                <Trash2 className="w-4 h-4 text-red-500" />
+                                <Trash2 className="w-4 h-4 text-destructive" />
                             </Button>
                         </div>
                     </div>
 
                     {(task.startDate || task.endDate) && (
                         <div className={cn(
-                            "flex items-center gap-2 mt-2 ml-7 text-xs text-gray-400 transition-opacity duration-200",
+                            "flex items-center gap-2 mt-2 ml-7 text-xs text-muted transition-opacity duration-200",
                             "group-hover:opacity-30"
                         )}>
-                            {task.documentId && <FileText className="w-3.5 h-3.5 text-[#6775bc]" />}
+                            {task.documentId && <FileText className="w-3.5 h-3.5 text-primary" />}
                             {task.startDate && task.endDate && (
                                 <div className="flex items-center gap-1">
                                     <Calendar className="w-3.5 h-3.5" />
@@ -188,10 +188,10 @@ export const Card = ({ task, onRemove }: CardProps) => {
                                         <div className={cn(
                                             "flex items-center gap-1 text-xs px-2 py-1 rounded-md",
                                             {
-                                                'bg-red-500/20 text-red-400': deadlineInfo.status === 'overdue',
+                                                'bg-destructive/20 text-destructive': deadlineInfo.status === 'overdue',
                                                 'bg-orange-500/20 text-orange-400': deadlineInfo.status === 'due-today',
-                                                'bg-yellow-500/20 text-yellow-400': deadlineInfo.status === 'upcoming',
-                                                'bg-[#4e4e59]/20 text-[#95959c]': deadlineInfo.status === 'normal',
+                                                'bg-warning/20 text-warning': deadlineInfo.status === 'upcoming',
+                                                'bg-muted/20 text-muted': deadlineInfo.status === 'normal',
                                             }
                                         )}>
                                             <Clock className="w-3 h-3" />

@@ -175,34 +175,34 @@ export default function TasksPage() {
         const status = getTaskStatus(task);
         switch (status) {
             case 'In Progress':
-                return { color: '#6775bc' };
+                return { color: 'var(--primary)' };
             case 'Upcoming':
-                return { color: '#95959c' };
+                return { color: 'var(--muted)' };
             case 'Overdue':
-                return { color: '#ef4444' };
+                return { color: 'var(--destructive)' };
             default:
                 return {};
         }
     };
 
     return (
-        <div className="p-6 min-h-screen bg-[#1a1b23]">
+        <div className="p-6 min-h-screen">
             <div className="max-w-7xl mx-auto space-y-6 relative">
-                {/* Search and Filters - All in one row */}
-                <div className="bg-[#232430] rounded-lg p-4 sticky top-0 z-10">
+                {/* Search and Filters */}
+                <div className="bg-background-secondary rounded-lg p-4 sticky top-0 z-10">
                     <div className="flex flex-col gap-4">
-                        {/* Search with fixed width */}
+                        {/* Search */}
                         <div className="relative w-1/2 flex-shrink-0">
-                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#6775bc] w-5 h-5" />
+                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary w-5 h-5" />
                             <Input
                                 placeholder="Search tasks by title, description, or tags..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="pl-10 bg-[#383844] border-[#4e4e59] text-white w-full"
+                                className="pl-10 bg-background-hover border-border text-primary-foreground w-full"
                             />
                         </div>
 
-                        {/* Filters Container - Allow this to wrap */}
+                        {/* Filters Container */}
                         <div className="flex flex-wrap items-center gap-2">
                             {/* Status filters */}
                             <Button
@@ -210,7 +210,7 @@ export default function TasksPage() {
                                 onClick={() => setSelectedStatus('all')}
                                 className={cn(
                                     "h-9",
-                                    selectedStatus === 'all' ? 'bg-[#6775bc]' : 'border-[#4e4e59]'
+                                    selectedStatus === 'all' ? 'bg-primary' : 'border-border'
                                 )}
                             >
                                 All
@@ -220,7 +220,7 @@ export default function TasksPage() {
                                 onClick={() => setSelectedStatus('in-progress')}
                                 className={cn(
                                     "h-9",
-                                    selectedStatus === 'in-progress' ? 'bg-[#6775bc]' : 'border-[#4e4e59]'
+                                    selectedStatus === 'in-progress' ? 'bg-primary' : 'border-border'
                                 )}
                             >
                                 <Calendar className="w-4 h-4 mr-2" />
@@ -231,7 +231,7 @@ export default function TasksPage() {
                                 onClick={() => setSelectedStatus('upcoming')}
                                 className={cn(
                                     "h-9",
-                                    selectedStatus === 'upcoming' ? 'bg-[#6775bc]' : 'border-[#4e4e59]'
+                                    selectedStatus === 'upcoming' ? 'bg-primary' : 'border-border'
                                 )}
                             >
                                 <Clock className="w-4 h-4 mr-2" />
@@ -242,7 +242,7 @@ export default function TasksPage() {
                                 onClick={() => setSelectedStatus('overdue')}
                                 className={cn(
                                     "h-9",
-                                    selectedStatus === 'overdue' ? 'bg-[#6775bc]' : 'border-[#4e4e59]'
+                                    selectedStatus === 'overdue' ? 'bg-primary' : 'border-border'
                                 )}
                             >
                                 <AlertCircle className="w-4 h-4 mr-2" />
@@ -253,7 +253,7 @@ export default function TasksPage() {
                                 onClick={() => setSelectedStatus('completed')}
                                 className={cn(
                                     "h-9",
-                                    selectedStatus === 'completed' ? 'bg-[#6775bc]' : 'border-[#4e4e59]'
+                                    selectedStatus === 'completed' ? 'bg-primary' : 'border-border'
                                 )}
                             >
                                 Completed
@@ -262,18 +262,18 @@ export default function TasksPage() {
                             {/* Priority Filter */}
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button variant="outline" className="h-9 border-[#4e4e59]">
+                                    <Button variant="outline" className="h-9 border-border">
                                         <Filter className="w-4 h-4 mr-2" />
                                         Priority
                                     </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent className="bg-[#232430] border-[#383844]">
+                                <DropdownMenuContent className="bg-background-secondary border-border">
                                     {Object.values(TaskPriority).map((priority) => (
                                         <DropdownMenuCheckboxItem
                                             key={priority}
                                             checked={selectedPriorities.includes(priority)}
                                             onCheckedChange={() => handlePriorityToggle(priority)}
-                                            className="text-white hover:bg-[#383844]"
+                                            className="text-primary-foreground hover:bg-background-hover"
                                         >
                                             <div className="flex items-center">
                                                 {getPriorityIcon(priority)}
@@ -288,18 +288,18 @@ export default function TasksPage() {
                             {allTags.length > 0 && (
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
-                                        <Button variant="outline" className="h-9 border-[#4e4e59]">
+                                        <Button variant="outline" className="h-9 border-border">
                                             <TagIcon className="w-4 h-4 mr-2" />
                                             Tags
                                         </Button>
                                     </DropdownMenuTrigger>
-                                    <DropdownMenuContent className="bg-[#232430] border-[#383844]">
+                                    <DropdownMenuContent className="bg-background-secondary border-border">
                                         {allTags.map((tag) => (
                                             <DropdownMenuCheckboxItem
                                                 key={tag}
                                                 checked={selectedTags.includes(tag)}
                                                 onCheckedChange={() => handleTagClick(tag)}
-                                                className="text-white hover:bg-[#383844]"
+                                                className="text-primary-foreground hover:bg-background-hover"
                                             >
                                                 {tag}
                                             </DropdownMenuCheckboxItem>
@@ -313,7 +313,7 @@ export default function TasksPage() {
                                 <Button
                                     variant="ghost"
                                     onClick={clearFilters}
-                                    className="h-9 text-[#95959c] hover:text-white"
+                                    className="h-9 text-muted hover:text-primary-foreground"
                                 >
                                     <X className="w-4 h-4 mr-2" />
                                     Clear
@@ -326,7 +326,7 @@ export default function TasksPage() {
                     {hasActiveFilters && (
                         <div className="flex flex-wrap gap-2 items-center mt-4">
                             {selectedStatus !== 'all' && (
-                                <Badge variant="default" className="bg-[#6775bc]">
+                                <Badge variant="default" className="bg-primary">
                                     Status: {selectedStatus}
                                 </Badge>
                             )}
@@ -334,17 +334,17 @@ export default function TasksPage() {
                                 <Badge
                                     key={priority}
                                     variant="default"
-                                    className={
-                                        priority === TaskPriority.HIGH ? 'bg-red-500' :
-                                            priority === TaskPriority.MEDIUM ? 'bg-yellow-500' :
-                                                'bg-blue-500'
-                                    }
+                                    className={cn({
+                                        'bg-destructive': priority === TaskPriority.HIGH,
+                                        'bg-warning': priority === TaskPriority.MEDIUM,
+                                        'bg-info': priority === TaskPriority.LOW,
+                                    })}
                                 >
                                     Priority: {priority}
                                 </Badge>
                             ))}
                             {selectedTags.map(tag => (
-                                <Badge key={tag} variant="default" className="bg-[#6775bc]">
+                                <Badge key={tag} variant="default" className="bg-primary">
                                     Tag: {tag}
                                 </Badge>
                             ))}
@@ -361,19 +361,19 @@ export default function TasksPage() {
                                 setActiveTask(task);
                                 setIsSheetOpen(true);
                             }}
-                            className="bg-[#232430] rounded-lg hover:bg-[#383844] transition-all cursor-pointer group border border-transparent hover:border-[#6775bc]"
+                            className="bg-background-secondary rounded-lg hover:bg-background-hover transition-all cursor-pointer group border border-transparent hover:border-primary"
                         >
                             <div className="p-4">
                                 {/* Header - Title and Priority */}
                                 <div className="flex items-center justify-between mb-3">
-                                    <h3 className="text-white font-medium truncate flex-1 mr-2">{task.title}</h3>
+                                    <h3 className="text-primary-foreground font-medium truncate flex-1 mr-2">{task.title}</h3>
                                     <Badge
                                         variant={task.priority === TaskPriority.HIGH ? 'destructive' : 'default'}
-                                        className={cn(
-                                            task.priority === TaskPriority.HIGH ? 'bg-red-500' :
-                                                task.priority === TaskPriority.MEDIUM ? 'bg-yellow-500' :
-                                                    'bg-blue-500'
-                                        )}
+                                        className={cn({
+                                            'bg-destructive': task.priority === TaskPriority.HIGH,
+                                            'bg-warning': task.priority === TaskPriority.MEDIUM,
+                                            'bg-info': task.priority === TaskPriority.LOW,
+                                        })}
                                     >
                                         <div className="flex items-center gap-1">
                                             {getPriorityIcon(task.priority)}
@@ -384,16 +384,16 @@ export default function TasksPage() {
 
                                 {/* Description */}
                                 {task.description && (
-                                    <p className="text-[#95959c] text-sm mb-3 line-clamp-2">
+                                    <p className="text-muted text-sm mb-3 line-clamp-2">
                                         {task.description}
                                     </p>
                                 )}
 
                                 {/* Meta Information */}
-                                <div className="flex flex-wrap items-center gap-3 text-sm text-[#95959c] mb-3">
+                                <div className="flex flex-wrap items-center gap-3 text-sm text-muted mb-3">
                                     {task.startDate && task.endDate && (
                                         <div className="flex items-center gap-1">
-                                            <Calendar className="w-4 h-4 text-[#6775bc]" />
+                                            <Calendar className="w-4 h-4 text-primary" />
                                             <span>
                                                 {format(new Date(task.startDate), 'MMM dd')} - {format(new Date(task.endDate), 'MMM dd')}
                                             </span>
@@ -401,7 +401,7 @@ export default function TasksPage() {
                                     )}
                                     {task.documentId && (
                                         <div className="flex items-center gap-1">
-                                            <FileText className="w-4 h-4 text-[#6775bc]" />
+                                            <FileText className="w-4 h-4 text-primary" />
                                             <span>Linked Doc</span>
                                         </div>
                                     )}
@@ -414,7 +414,7 @@ export default function TasksPage() {
                                             <Badge
                                                 key={tag}
                                                 variant="outline"
-                                                className="border-[#4e4e59] text-[#95959c] text-xs"
+                                                className="border-border text-muted text-xs"
                                             >
                                                 {tag}
                                             </Badge>
@@ -424,7 +424,7 @@ export default function TasksPage() {
 
                                 {/* Status Indicator */}
                                 {task.completed ? (
-                                    <div className="mt-3 flex items-center gap-1 text-green-400 text-sm">
+                                    <div className="mt-3 flex items-center gap-1 text-success text-sm">
                                         <CheckCircle className="w-4 h-4" />
                                         <span>Completed</span>
                                     </div>
@@ -439,7 +439,7 @@ export default function TasksPage() {
                     ))}
 
                     {filteredTasks.length === 0 && (
-                        <div className="flex flex-col items-center justify-center p-8 text-[#95959c]">
+                        <div className="flex flex-col items-center justify-center p-8 text-muted">
                             <SearchX className="w-12 h-12 mb-4" />
                             <h3 className="text-lg font-medium mb-2">No tasks found</h3>
                             <p className="text-sm text-center">
@@ -454,7 +454,7 @@ export default function TasksPage() {
                 {/* Task Sheet */}
                 {activeTask && (
                     <TaskSheet
-                        key={activeTask.id}  // Add this line
+                        key={activeTask.id}
                         open={isSheetOpen}
                         onOpenChange={setIsSheetOpen}
                         taskId={activeTask.id}

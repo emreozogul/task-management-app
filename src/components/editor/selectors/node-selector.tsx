@@ -103,7 +103,7 @@ export const NodeSelector = ({ open, onOpenChange }: NodeSelectorProps) => {
                 <PopoverContent
                     align="start"
                     side="bottom"
-                    className="w-48 z-[99999] p-0 border-[#383844] bg-[#232430] text-[#e0e0e0]"
+                    className="w-48 z-[99999] p-0 border-border bg-background-secondary text-primary-foreground"
                     sideOffset={0}
                     alignOffset={0}
                     forceMount
@@ -117,10 +117,10 @@ export const NodeSelector = ({ open, onOpenChange }: NodeSelectorProps) => {
                                 item.command(editor);
                                 onOpenChange(false);
                             }}
-                            className="flex cursor-pointer items-center justify-between rounded-sm px-2 py-1 text-sm hover:bg-accent"
+                            className="flex cursor-pointer items-center justify-between rounded-sm px-2 py-1 text-sm hover:bg-background-hover"
                         >
                             <div className="flex items-center space-x-2">
-                                <div className="rounded-sm border p-1">
+                                <div className="rounded-sm border border-border p-1">
                                     <item.icon className="h-3 w-3" />
                                 </div>
                                 <span>{item.name}</span>

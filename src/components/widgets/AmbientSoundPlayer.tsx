@@ -64,16 +64,16 @@ export const AmbientSoundPlayer = () => {
     };
 
     return (
-        <CollapsibleCard title="Sound Mixer" icon={<Volume2 className="w-5 h-5 mr-2 text-[#6775bc]" />}>
+        <CollapsibleCard title="Sound Mixer" icon={<Volume2 className="w-5 h-5 mr-2 text-primary" />}>
             <div className="p-4 sm:px-6 pt-0">
                 <div className="grid grid-cols-1 lg:grid-cols-[2fr,1fr] gap-6">
                     <div className="flex flex-col h-[400px]">
-                        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-[#383844]">
+                        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-border">
                             <Button
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => setActiveCategory('All')}
-                                className={`whitespace-nowrap ${activeCategory === 'All' ? 'bg-[#383844]' : ''}`}
+                                className={`whitespace-nowrap ${activeCategory === 'All' ? 'bg-background-hover' : ''}`}
                             >
                                 All Sounds
                             </Button>
@@ -83,14 +83,14 @@ export const AmbientSoundPlayer = () => {
                                     variant="ghost"
                                     size="sm"
                                     onClick={() => setActiveCategory(category)}
-                                    className={`whitespace-nowrap ${activeCategory === category ? 'bg-[#383844]' : ''}`}
+                                    className={`whitespace-nowrap ${activeCategory === category ? 'bg-background-hover' : ''}`}
                                 >
                                     {category}
                                 </Button>
                             ))}
                         </div>
 
-                        <div className="flex-1 overflow-y-auto p-2 space-y-2 scrollbar-thin scrollbar-thumb-[#383844] scrollbar-track-[#2a2b38]">
+                        <div className="flex-1 overflow-y-auto p-2 space-y-2 scrollbar-thin scrollbar-thumb-border scrollbar-track-background-hover">
                             <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4'>
                                 {filteredSounds.map((sound) => {
                                     const activeSound = activeSounds.find(s => s.id === sound.id);
@@ -98,23 +98,22 @@ export const AmbientSoundPlayer = () => {
                                         <div
                                             key={sound.id}
                                             onClick={() => handleToggleSound(sound.id, sound.path)}
-                                            className={`group flex items-center gap-4 rounded-lg bg-[#2a2b38] p-3 transition-all hover:bg-[#31323f] cursor-pointer ${activeSound?.isPlaying ? 'ring-2 ring-[#6775bc]' : ''
-                                                }`}
+                                            className={`group flex items-center gap-4 rounded-lg bg-background-hover p-3 transition-all hover:bg-background-secondary cursor-pointer ${activeSound?.isPlaying ? 'ring-2 ring-primary' : ''}`}
                                         >
-                                            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#383844] text-2xl">
+                                            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-background-hover text-2xl">
                                                 {sound.icon}
                                             </div>
 
                                             <div className="flex-1 min-w-0">
-                                                <h3 className="text-white font-medium truncate">
+                                                <h3 className="text-primary-foreground font-medium truncate">
                                                     {sound.name}
                                                 </h3>
-                                                <span className="text-xs text-[#95959c]">
+                                                <span className="text-xs text-muted">
                                                     {sound.category}
                                                 </span>
                                             </div>
                                             {activeSound?.isPlaying && (
-                                                <div className="w-2 h-2 rounded-full bg-[#6775bc] animate-pulse" />
+                                                <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
                                             )}
                                         </div>
                                     );
@@ -135,7 +134,7 @@ export const AmbientSoundPlayer = () => {
                                 onClick={togglePlayAll}
                                 variant="outline"
                                 size="sm"
-                                className="border-[#383844] text-white hover:bg-[#383844]"
+                                className="border-border text-primary-foreground hover:bg-background-hover"
                             >
                                 {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                             </Button>
@@ -143,7 +142,7 @@ export const AmbientSoundPlayer = () => {
                                 onClick={stopAll}
                                 variant="outline"
                                 size="sm"
-                                className="border-[#383844] text-white hover:bg-[#383844]"
+                                className="border-border text-primary-foreground hover:bg-background-hover"
                             >
                                 Stop
                             </Button>

@@ -10,45 +10,52 @@ export default {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			colors: {
-				background: 'hsl(var(--background))',
-				foreground: 'hsl(var(--foreground))',
-				card: {
-					DEFAULT: 'hsl(var(--card))',
-					foreground: 'hsl(var(--card-foreground))'
-				},
-				popover: {
-					DEFAULT: 'hsl(var(--popover))',
-					foreground: 'hsl(var(--popover-foreground))'
+				background: {
+					DEFAULT: '#1a1b23',
+					secondary: '#232430',
+					hover: '#383844',
+					'hover-dark': '#4e4e59'
 				},
 				primary: {
-					DEFAULT: 'hsl(var(--primary))',
-					foreground: 'hsl(var(--primary-foreground))'
+					DEFAULT: '#6775bc',
+					hover: '#7983c4',
+					foreground: '#ffffff'
 				},
-				secondary: {
-					DEFAULT: 'hsl(var(--secondary))',
-					foreground: 'hsl(var(--secondary-foreground))'
+				muted: '#95959c',
+				border: '#4e4e59',
+				destructive: '#ef4444',
+				warning: '#eab308',
+				info: '#3b82f6',
+				success: '#4ade80',
+				"high-priority": "#f59e0b",
+				status: {
+					active: {
+						bg: "rgb(22 163 74 / 0.2)",
+						text: "#4ade80"
+					},
+					due: {
+						bg: "rgb(245 158 11 / 0.2)",
+						text: "#f59e0b"
+					},
+					starts: {
+						bg: "#6775bc",
+						text: "#ffffff"
+					}
 				},
-				muted: {
-					DEFAULT: 'hsl(var(--muted))',
-					foreground: 'hsl(var(--muted-foreground))'
-				},
-				accent: {
-					DEFAULT: 'hsl(var(--accent))',
-					foreground: 'hsl(var(--accent-foreground))'
-				},
-				destructive: {
-					DEFAULT: 'hsl(var(--destructive))',
-					foreground: 'hsl(var(--destructive-foreground))'
-				},
-				border: 'hsl(var(--border))',
-				input: 'hsl(var(--input))',
-				ring: 'hsl(var(--ring))',
-				chart: {
-					'1': 'hsl(var(--chart-1))',
-					'2': 'hsl(var(--chart-2))',
-					'3': 'hsl(var(--chart-3))',
-					'4': 'hsl(var(--chart-4))',
-					'5': 'hsl(var(--chart-5))'
+				kanban: {
+					card: {
+						bg: "rgb(56, 56, 68)",
+						hover: "rgb(26, 27, 35)",
+					},
+					column: {
+						bg: "rgb(35, 36, 48)",
+						hover: "rgb(42, 43, 56)",
+					},
+					priority: {
+						low: "rgb(103, 117, 188)",
+						medium: "rgb(245, 158, 11)",
+						high: "rgb(188, 103, 103)"
+					}
 				}
 			},
 			keyframes: {

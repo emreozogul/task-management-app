@@ -5,7 +5,6 @@ import { useKanbanStore } from '../stores/kanbanStore';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 
-
 const KanbanBoard = () => {
     const { boardId } = useParams();
     const navigate = useNavigate();
@@ -20,14 +19,13 @@ const KanbanBoard = () => {
         }
     }, [boardId, boards, setActiveBoard, navigate]);
 
-
     if (!activeBoard) {
         return (
             <div className="p-4 text-center">
-                <p className="text-[#95959c] mb-4">No board selected</p>
+                <p className="text-muted mb-4">No board selected</p>
                 <Button
                     onClick={() => navigate('/boards/new')}
-                    className="bg-[#6775bc] hover:bg-[#7983c4] text-white"
+                    className="bg-primary hover:bg-primary-hover text-primary-foreground"
                 >
                     <Plus className="w-4 h-4 mr-2" />
                     Create New Board

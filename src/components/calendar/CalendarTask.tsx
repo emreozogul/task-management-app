@@ -27,15 +27,13 @@ export const CalendarTask = ({ task }: CalendarTaskProps) => {
                     opacity: isDragging ? 0.4 : 1,
                     transform: isDragging ? 'scale(1.05)' : undefined,
                 }}
-                className="bg-[#232430] rounded-md p-1.5 cursor-pointer hover:bg-[#383844] transition-all duration-200 relative group/task"
+                className="bg-background-secondary rounded-md p-1.5 cursor-pointer hover:bg-background-hover transition-all duration-200 relative group/task"
             >
-                {/* Drag Handle div */}
                 <div {...attributes} {...listeners} className="absolute inset-0 z-10" />
 
-                {/* Content div - clickable */}
                 <div onClick={handleTaskClick} className="relative z-20">
                     <div className="min-w-0 flex-1">
-                        <div className="text-[10px] text-white font-medium truncate">
+                        <div className="text-[10px] text-primary-foreground font-medium truncate">
                             {task.title}
                         </div>
                         <div className="flex items-center gap-1 mt-1">
@@ -49,7 +47,7 @@ export const CalendarTask = ({ task }: CalendarTaskProps) => {
                                 {task.priority}
                             </Badge>
                             {task.documentId && (
-                                <FileText className="w-2.5 h-2.5 text-[#6775bc]" />
+                                <FileText className="w-2.5 h-2.5 text-primary" />
                             )}
                         </div>
                     </div>
@@ -57,7 +55,7 @@ export const CalendarTask = ({ task }: CalendarTaskProps) => {
             </div>
 
             <TaskSheet
-                key={task.id}  // Add this line
+                key={task.id}
                 open={isSheetOpen}
                 onOpenChange={setIsSheetOpen}
                 taskId={task.id}

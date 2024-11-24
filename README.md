@@ -72,3 +72,18 @@ npm run tauri build
 - `/src/components` - Reusable React components
 - `/src/stores` - Zustand state management
 - `/src/styles` - Global styles and Tailwind configuration
+
+background colors
+
+#1a1b23 - Main background (very dark blue-gray)
+#232430 - Card/component background (dark blue-gray)
+#383844 - Secondary/hover background (medium blue-gray)
+#4e4e59 - Darker hover states (medium-dark blue-gray)
+
+Accent/Primary Colors:
+
+#6775bc - Primary accent color (indigo/blue)
+#7983c4 - Lighter primary accent (lighter indigo/blue)
+
+Text Colors:
+#95959c - Muted text (gray)

@@ -57,48 +57,48 @@ export const TasksStatistics = () => {
             title: "Total Tasks",
             value: totalTasks,
             subValue: `${completionRate.toFixed(0)}% completed`,
-            icon: <ListTodo className="w-5 h-5 text-[#6775bc]" />,
-            color: "text-[#6775bc]",
+            icon: <ListTodo className="w-5 h-5 text-primary" />,
+            color: "text-primary",
             progress: completionRate
         },
         {
             title: "Today's Tasks",
             value: todaysTasks,
             subValue: "active today",
-            icon: <Calendar className="w-5 h-5 text-blue-500" />,
-            color: "text-blue-500",
+            icon: <Calendar className="w-5 h-5 text-info" />,
+            color: "text-info",
             progress: totalActiveTasks > 0 ? (todaysTasks / totalActiveTasks) * 100 : 0
         },
         {
             title: "Upcoming",
             value: upcomingTasks,
             subValue: "next 7 days",
-            icon: <Clock className="w-5 h-5 text-yellow-500" />,
-            color: "text-yellow-500",
+            icon: <Clock className="w-5 h-5 text-warning" />,
+            color: "text-warning",
             progress: totalActiveTasks > 0 ? (upcomingTasks / totalActiveTasks) * 100 : 0
         },
         {
             title: "Overdue",
             value: overdueTasks,
             subValue: "tasks delayed",
-            icon: <AlertCircle className="w-5 h-5 text-red-500" />,
-            color: "text-red-500",
+            icon: <AlertCircle className="w-5 h-5 text-destructive" />,
+            color: "text-destructive",
             progress: totalActiveTasks > 0 ? (overdueTasks / totalActiveTasks) * 100 : 0
         },
         {
             title: "Completed",
             value: completedTasks,
             subValue: "tasks finished",
-            icon: <CheckCircle2 className="w-5 h-5 text-green-500" />,
-            color: "text-green-500",
+            icon: <CheckCircle2 className="w-5 h-5 text-success" />,
+            color: "text-success",
             progress: completionRate
         },
         {
             title: "High Priority",
             value: highPriorityTasks,
             subValue: "urgent tasks",
-            icon: <ArrowUpCircle className="w-5 h-5 text-orange-500" />,
-            color: "text-orange-500",
+            icon: <ArrowUpCircle className="w-5 h-5 text-high-priority" />,
+            color: "text-high-priority",
             progress: totalActiveTasks > 0 ? (highPriorityTasks / totalActiveTasks) * 100 : 0
         }
     ];
@@ -106,26 +106,26 @@ export const TasksStatistics = () => {
     return (
         <CollapsibleCard
             title="Statistics"
-            icon={<ListTodo className="w-6 h-6 text-[#6775bc] mr-2" />}
-            className="bg-[#232430] border-none shadow-lg"
+            icon={<ListTodo className="w-6 h-6 text-primary mr-2" />}
+            className="bg-background-secondary border-none shadow-lg"
         >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {statistics.map((stat) => (
                     <div
                         key={stat.title}
-                        className="flex flex-col p-4 bg-[#383844] rounded-lg hover:bg-[#4e4e59] transition-all"
+                        className="flex flex-col p-4 bg-background-hover rounded-lg hover:bg-background-hover-dark transition-all"
                     >
                         <div className="flex items-center justify-between mb-3">
                             <div className="flex items-center gap-3">
-                                <div className="p-2 bg-[#2a2b38] rounded-lg">
+                                <div className="p-2 bg-background rounded-lg">
                                     {stat.icon}
                                 </div>
                                 <div>
-                                    <p className="text-[#95959c] text-sm">{stat.title}</p>
+                                    <p className="text-muted text-sm">{stat.title}</p>
                                     <p className={cn("text-xl font-bold", stat.color)}>
                                         {stat.value}
                                     </p>
-                                    <p className="text-xs text-[#95959c]">
+                                    <p className="text-xs text-muted">
                                         {stat.subValue}
                                     </p>
                                 </div>
@@ -133,14 +133,14 @@ export const TasksStatistics = () => {
                         </div>
                         <Progress
                             value={stat.progress}
-                            className="h-1.5 bg-[#2a2b38]"
+                            className="h-1.5 bg-background"
                             indicatorClassName={cn(
-                                stat.title === "Total Tasks" && "bg-[#6775bc]",
-                                stat.title === "Today's Tasks" && "bg-blue-500",
-                                stat.title === "Upcoming" && "bg-yellow-500",
-                                stat.title === "Overdue" && "bg-red-500",
-                                stat.title === "Completed" && "bg-green-500",
-                                stat.title === "High Priority" && "bg-orange-500"
+                                stat.title === "Total Tasks" && "bg-primary",
+                                stat.title === "Today's Tasks" && "bg-info",
+                                stat.title === "Upcoming" && "bg-warning",
+                                stat.title === "Overdue" && "bg-destructive",
+                                stat.title === "Completed" && "bg-success",
+                                stat.title === "High Priority" && "bg-high-priority"
                             )}
                         />
                     </div>

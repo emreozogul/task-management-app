@@ -5,6 +5,7 @@ import { CollapsibleCard } from '../ui/collapsible-card';
 import { useTaskStore } from '@/stores/taskStore';
 import { format, isToday, isWithinInterval } from 'date-fns';
 import { Task } from '@/types/task';
+import { cn } from '@/lib/utils';
 export const TodaysTaskList = () => {
     const { getAllTasks } = useTaskStore();
 
@@ -42,17 +43,17 @@ export const TodaysTaskList = () => {
         if (isToday(startDate)) {
             return {
                 label: "Starts today",
-                className: "bg-[#6775bc] text-white"
+                className: "bg-status-starts-bg text-status-starts-text"
             };
         } else if (isToday(endDate)) {
             return {
                 label: "Due today",
-                className: "bg-orange-500/20 text-orange-400"
+                className: "bg-status-due-bg text-status-due-text"
             };
         } else {
             return {
                 label: "Active",
-                className: "bg-green-500/20 text-green-400"
+                className: "bg-status-active-bg text-status-active-text"
             };
         }
     };
@@ -60,8 +61,8 @@ export const TodaysTaskList = () => {
     return (
         <CollapsibleCard
             title="Today's Tasks"
-            icon={<CalendarIcon className="w-6 h-6 text-[#6775bc] mr-2" />}
-            className="bg-[#232430] border-none shadow-lg h-full"
+            icon={<CalendarIcon className="w-6 h-6 text-primary mr-2" />}
+            className="bg-background-secondary border-none shadow-lg h-full"
         >
             {todaysTasks.length > 0 ? (
                 <ScrollArea className="h-[300px] pr-4">
@@ -72,27 +73,28 @@ export const TodaysTaskList = () => {
                             return (
                                 <div
                                     key={task.id}
-                                    className="flex flex-col p-3 bg-[#383844] rounded-lg hover:bg-[#4e4e59] transition-all border border-transparent hover:border-[#6775bc]"
+                                    className="flex flex-col p-3 bg-background-hover hover:bg-background-hover-dark rounded-lg transition-all border border-transparent hover:border-primary"
                                 >
                                     <div className="flex items-center justify-between mb-2">
                                         <div className="flex items-center space-x-3">
                                             <Badge
-                                                variant={
-                                                    task.priority === 'high' ? 'destructive' :
-                                                        task.priority === 'medium' ? 'default' : 'secondary'
-                                                }
-                                                className="text-xs"
+                                                variant="secondary"
+                                                className={cn("text-xs", {
+                                                    "bg-destructive/20 text-destructive": task.priority === 'high',
+                                                    "bg-warning/20 text-warning": task.priority === 'medium',
+                                                    "bg-info/20 text-info": task.priority === 'low'
+                                                })}
                                             >
                                                 {task.priority}
                                             </Badge>
-                                            <span className="text-white font-medium">{task.title}</span>
+                                            <span className="text-primary-foreground font-medium">{task.title}</span>
                                         </div>
                                         <Badge className={status.className}>
                                             {status.label}
                                         </Badge>
                                     </div>
 
-                                    <div className="flex items-center justify-between text-xs text-[#95959c]">
+                                    <div className="flex items-center justify-between text-xs text-muted">
                                         <div className="flex items-center gap-2">
                                             <CalendarIcon className="w-3.5 h-3.5" />
                                             <span>
@@ -100,7 +102,7 @@ export const TodaysTaskList = () => {
                                             </span>
                                         </div>
                                         {task.completed && (
-                                            <Badge variant="secondary" className="bg-[#2a2b38] text-[#95959c]">
+                                            <Badge variant="secondary" className="bg-background text-muted">
                                                 Completed
                                             </Badge>
                                         )}
@@ -111,9 +113,9 @@ export const TodaysTaskList = () => {
                     </div>
                 </ScrollArea>
             ) : (
-                <div className="text-center py-6 bg-[#383844] rounded-lg">
-                    <CalendarIcon className="w-12 h-12 text-[#4e4e59] mx-auto mb-3" />
-                    <p className="text-[#95959c]">No tasks due today</p>
+                <div className="text-center py-6 bg-background-hover rounded-lg">
+                    <CalendarIcon className="w-12 h-12 text-border mx-auto mb-3" />
+                    <p className="text-muted">No tasks due today</p>
                 </div>
             )}
         </CollapsibleCard>

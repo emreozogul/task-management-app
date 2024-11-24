@@ -53,8 +53,8 @@ export default function GanttChart() {
 
     if (tasks.length === 0) {
         return (
-            <div className="p-6 h-screen bg-[#1a1b23] flex items-center justify-center">
-                <div className="text-[#95959c] text-center">
+            <div className="p-6 h-screen bg-background flex items-center justify-center">
+                <div className="text-muted text-center">
                     <p>No tasks with dates found.</p>
                     <p className="text-sm mt-2">Add tasks with start and end dates to view the timeline.</p>
                 </div>
@@ -63,24 +63,24 @@ export default function GanttChart() {
     }
 
     return (
-        <div className="p-6 h-[94vh] bg-[#1a1b23]">
-            <div className="h-full bg-[#232430] rounded-lg flex flex-col overflow-hidden">
+        <div className="p-6 h-[94vh] bg-background">
+            <div className="h-full bg-background-secondary rounded-lg flex flex-col overflow-hidden">
                 {/* Fixed header with dates */}
                 <div
                     id="gantt-header"
-                    className="bg-[#2a2b38] p-4 overflow-x-hidden"
+                    className="bg-background-hover p-4 overflow-x-hidden"
                 >
                     <div className="flex" style={{ width: dateRange.length * DAY_WIDTH }}>
                         {dateRange.map((date) => (
                             <div
                                 key={date.toISOString()}
-                                className="flex-shrink-0 text-center border-r border-[#383844] last:border-r-0"
+                                className="flex-shrink-0 text-center border-r border-border last:border-r-0"
                                 style={{ width: `${DAY_WIDTH}px` }}
                             >
-                                <div className="text-[#6775bc] font-medium">
+                                <div className="text-primary font-medium">
                                     {format(date, 'MMM dd')}
                                 </div>
-                                <div className="text-[#95959c] text-sm">
+                                <div className="text-muted text-sm">
                                     {format(date, 'EEE')}
                                 </div>
                             </div>
@@ -90,8 +90,6 @@ export default function GanttChart() {
 
                 {/* Task list and Gantt chart container */}
                 <div className="flex flex-1 overflow-hidden">
-
-
                     {/* Gantt chart area - scrollable */}
                     <div
                         className="flex-1 overflow-x-auto relative p-4"
@@ -109,7 +107,7 @@ export default function GanttChart() {
                                 tasks.map((_, rowIndex) => (
                                     <div
                                         key={`${colIndex}-${rowIndex}`}
-                                        className="border-r border-b border-[#383844]"
+                                        className="border-r border-b border-border"
                                     />
                                 ))
                             ))}
@@ -120,12 +118,8 @@ export default function GanttChart() {
                             {tasks.map((task, index) => {
                                 const startDate = new Date(task.startDate!);
                                 const endDate = new Date(task.endDate!);
-                                const firstDate = dateRange[0]; // First date in our range
-
-                                // Calculate offset from the first date in our range
+                                const firstDate = dateRange[0];
                                 const startOffset = differenceInDays(startDate, firstDate);
-
-                                // Calculate actual duration
                                 const duration = differenceInDays(endDate, startDate) + 1;
 
                                 return (
@@ -156,10 +150,9 @@ export default function GanttChart() {
                 </div>
             </div>
 
-            {/* Task Sheet */}
             {activeTask && (
                 <TaskSheet
-                    key={activeTask.id}  // Add this line
+                    key={activeTask.id}
                     open={isSheetOpen}
                     onOpenChange={setIsSheetOpen}
                     taskId={activeTask.id}

@@ -47,37 +47,37 @@ const NewBoard = () => {
 
     return (
         <div className="p-6 max-w-2xl mx-auto">
-            <Card className="p-6 bg-[#232430] border-none shadow-lg">
+            <Card className="p-6 bg-background-secondary border-none shadow-lg">
                 <div className="flex items-center gap-3 mb-6">
-                    <LayoutGrid className="w-6 h-6 text-[#6775bc]" />
-                    <h1 className="text-2xl font-bold text-white">Create New Board</h1>
+                    <LayoutGrid className="w-6 h-6 text-primary" />
+                    <h1 className="text-2xl font-bold text-primary-foreground">Create New Board</h1>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="space-y-2">
-                        <Label className="text-white">Board Title</Label>
+                        <Label className="text-primary-foreground">Board Title</Label>
                         <Input
                             type="text"
                             placeholder="Enter board title"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
-                            className="bg-[#383844] border-[#4e4e59] text-white focus:ring-[#6775bc] focus:border-[#6775bc]"
+                            className="bg-background-hover border-border text-primary-foreground focus:ring-primary focus:border-primary"
                         />
                     </div>
 
                     <div className="space-y-4">
-                        <Label className="text-white">Board Type</Label>
+                        <Label className="text-primary-foreground">Board Type</Label>
                         <RadioGroup value={boardType} onValueChange={setBoardType} className="space-y-4">
-                            <Card className="bg-[#383844] border-[#4e4e59] hover:border-[#6775bc] transition-colors cursor-pointer">
+                            <Card className="bg-background-hover border-border hover:border-primary transition-colors cursor-pointer">
                                 <label className="p-4 flex items-center space-x-2 cursor-pointer">
-                                    <RadioGroupItem value="default" id="default" className="border-[#6775bc] text-[#6775bc]" />
-                                    <span className="text-white">Default Board (Todo, In Progress, Done)</span>
+                                    <RadioGroupItem value="default" id="default" className="border-primary text-primary" />
+                                    <span className="text-primary-foreground">Default Board (Todo, In Progress, Done)</span>
                                 </label>
                             </Card>
-                            <Card className="bg-[#383844] border-[#4e4e59] hover:border-[#6775bc] transition-colors cursor-pointer">
+                            <Card className="bg-background-hover border-border hover:border-primary transition-colors cursor-pointer">
                                 <label className="p-4 flex items-center space-x-2 cursor-pointer">
-                                    <RadioGroupItem value="custom" id="custom" className="border-[#6775bc] text-[#6775bc]" />
-                                    <span className="text-white">Custom Board</span>
+                                    <RadioGroupItem value="custom" id="custom" className="border-primary text-primary" />
+                                    <span className="text-primary-foreground">Custom Board</span>
                                 </label>
                             </Card>
                         </RadioGroup>
@@ -85,7 +85,7 @@ const NewBoard = () => {
 
                     {boardType === 'custom' && (
                         <div className="space-y-4">
-                            <Label className="text-white">Custom Columns</Label>
+                            <Label className="text-primary-foreground">Custom Columns</Label>
                             <div className="space-y-3">
                                 {customColumns.map((column, index) => (
                                     <div key={index} className="flex gap-2">
@@ -93,14 +93,14 @@ const NewBoard = () => {
                                             value={column}
                                             onChange={(e) => handleColumnChange(index, e.target.value)}
                                             placeholder={`Column ${index + 1}`}
-                                            className="bg-[#383844] border-[#4e4e59] text-white focus:ring-[#6775bc] focus:border-[#6775bc]"
+                                            className="bg-background-hover border-border text-primary-foreground focus:ring-primary focus:border-primary"
                                         />
                                         {customColumns.length > 1 && (
                                             <Button
                                                 type="button"
                                                 variant="ghost"
                                                 onClick={() => handleRemoveColumn(index)}
-                                                className="text-red-500 hover:text-red-400 hover:bg-[#383844]"
+                                                className="text-destructive hover:text-destructive/90 hover:bg-background-hover"
                                             >
                                                 <X className="h-4 w-4" />
                                             </Button>
@@ -111,7 +111,7 @@ const NewBoard = () => {
                                     type="button"
                                     variant="outline"
                                     onClick={handleAddColumn}
-                                    className="w-full border-dashed border-[#4e4e59] hover:bg-[#383844] text-[#6775bc] hover:text-white"
+                                    className="w-full border-dashed border-border hover:bg-background-hover text-primary hover:text-primary-foreground"
                                 >
                                     <Plus className="h-4 w-4 mr-2" />
                                     Add Column
@@ -122,7 +122,7 @@ const NewBoard = () => {
 
                     <Button
                         type="submit"
-                        className="w-full bg-[#6775bc] hover:bg-[#7983c4] text-white"
+                        className="w-full bg-primary hover:bg-primary-hover text-primary-foreground"
                         disabled={!title.trim() || (boardType === 'custom' && !customColumns.some(col => col.trim()))}
                     >
                         Create Board

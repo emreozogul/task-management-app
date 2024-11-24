@@ -16,6 +16,8 @@ import { DateRange } from "react-day-picker";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { DocumentPreview } from "./DocumentPreview";
+import { useDialogKeyboard } from "@/hooks/useDialogKeyboard";
 
 interface TaskSheetProps {
     open: boolean;
@@ -106,21 +108,36 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, taskId
         onOpenChange(false);
     };
 
+    const handleTagDialogClose = () => {
+        setIsTagDialogOpen(false);
+        setNewTag('');
+    };
+
+    useDialogKeyboard({
+        isOpen: isTagDialogOpen,
+        onClose: handleTagDialogClose,
+        onSubmit: () => {
+            if (newTag.trim()) {
+                handleAddTag();
+            }
+        }
+    });
+
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
-            <SheetContent className="bg-[#232430] border-l border-[#383844] sm:max-w-[500px]">
+            <SheetContent className="bg-background-secondary border-l border-border sm:max-w-[500px]">
                 <SheetHeader className="space-y-4">
                     <div className="flex items-center gap-3">
                         <Checkbox
                             checked={taskValues.completed}
                             onCheckedChange={handleCompletedChange}
-                            className="border-[#6775bc] w-5 h-5 data-[state=checked]:bg-[#6775bc]"
+                            className="border-primary w-5 h-5 data-[state=checked]:bg-primary"
                         />
                         <Input
                             value={taskValues.title}
                             onChange={handleTitleChange}
                             className={cn(
-                                "flex-1 bg-[#383844] border-none text-white focus:ring-1 focus:ring-[#6775bc]",
+                                "flex-1 bg-background-hover border-none text-primary-foreground focus:ring-1 focus:ring-primary",
                                 taskValues.completed && "line-through opacity-60"
                             )}
                         />
@@ -128,11 +145,11 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, taskId
 
                     <div className="space-y-4 mt-4">
                         <div>
-                            <Label className="text-[#95959c]">Description</Label>
+                            <Label className="text-muted">Description</Label>
                             <Textarea
                                 value={taskValues.description}
                                 onChange={handleDescriptionChange}
-                                className="min-h-[100px] bg-[#383844] border-none text-white focus:ring-1 focus:ring-[#6775bc]"
+                                className="min-h-[100px] bg-background-hover border-none text-primary-foreground focus:ring-1 focus:ring-primary"
                             />
                         </div>
 
@@ -145,30 +162,30 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, taskId
                         </div>
 
                         <div>
-                            <label className="text-sm font-medium mb-1 block text-white">Priority</label>
+                            <label className="text-sm font-medium mb-1 block text-primary-foreground">Priority</label>
                             <Select
                                 value={taskValues.priority}
                                 onValueChange={handlePriorityChange}
                             >
-                                <SelectTrigger className="bg-[#383844] border-[#4e4e59] text-white">
+                                <SelectTrigger className="bg-background-hover border-border text-primary-foreground">
                                     <SelectValue />
                                 </SelectTrigger>
-                                <SelectContent className="bg-[#232430] border-[#383844]">
+                                <SelectContent className="bg-background-secondary border-border">
                                     <SelectItem
                                         value={TaskPriority.LOW}
-                                        className="text-white hover:bg-[#383844]"
+                                        className="text-primary-foreground hover:bg-background-hover"
                                     >
                                         Low
                                     </SelectItem>
                                     <SelectItem
                                         value={TaskPriority.MEDIUM}
-                                        className="text-white hover:bg-[#383844]"
+                                        className="text-primary-foreground hover:bg-background-hover"
                                     >
                                         Medium
                                     </SelectItem>
                                     <SelectItem
                                         value={TaskPriority.HIGH}
-                                        className="text-white hover:bg-[#383844]"
+                                        className="text-primary-foreground hover:bg-background-hover"
                                     >
                                         High
                                     </SelectItem>
@@ -177,20 +194,20 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, taskId
                         </div>
 
                         <div>
-                            <label className="text-sm font-medium mb-1 block text-white">Linked Document</label>
+                            <label className="text-sm font-medium mb-1 block text-primary-foreground">Linked Document</label>
                             <Select value={taskValues.documentId || ''} onValueChange={handleDocumentChange}>
-                                <SelectTrigger className="bg-[#383844] border-[#4e4e59] text-white">
+                                <SelectTrigger className="bg-background-hover border-border text-primary-foreground">
                                     <SelectValue placeholder="Select a document" />
                                 </SelectTrigger>
-                                <SelectContent className="bg-[#232430] border-[#383844]">
+                                <SelectContent className="bg-background-secondary border-border">
                                     {documents.map(doc => (
                                         <SelectItem
                                             key={doc.id}
                                             value={doc.id}
-                                            className="text-white hover:bg-[#383844]"
+                                            className="text-primary-foreground hover:bg-background-hover"
                                         >
                                             <div className="flex items-center">
-                                                <FileText className="w-4 h-4 mr-2 text-[#6775bc]" />
+                                                <FileText className="w-4 h-4 mr-2 text-primary" />
                                                 {doc.title}
                                             </div>
                                         </SelectItem>
@@ -199,6 +216,7 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, taskId
                             </Select>
                         </div>
 
+                        {taskValues.documentId && <DocumentPreview documentId={taskValues.documentId} />}
                         {taskLocations.length > 0 && (
                             <div>
                                 <label className="text-sm font-medium mb-1 block">Board Locations</label>
@@ -206,10 +224,10 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, taskId
                                     {taskLocations.map(({ boardId, boardTitle, columnTitle }) => (
                                         <div
                                             key={`${boardId}-${columnTitle}`}
-                                            className="flex items-center justify-between p-2 bg-[#383844] rounded-lg"
+                                            className="flex items-center justify-between p-2 bg-background-hover rounded-lg"
                                         >
-                                            <span className="text-sm text-white">{boardTitle}</span>
-                                            <span className="text-xs text-[#95959c]">{columnTitle}</span>
+                                            <span className="text-sm text-primary-foreground">{boardTitle}</span>
+                                            <span className="text-xs text-muted">{columnTitle}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -227,7 +245,7 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, taskId
                             </div>
 
                             <Dialog open={isTagDialogOpen} onOpenChange={setIsTagDialogOpen}>
-                                <DialogContent className="bg-[#232430] border-[#383844]">
+                                <DialogContent className="bg-background-secondary border-border">
                                     <DialogHeader>
                                         <DialogTitle>Add New Tag</DialogTitle>
                                     </DialogHeader>
@@ -236,7 +254,7 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, taskId
                                             value={newTag}
                                             onChange={(e) => setNewTag(e.target.value)}
                                             placeholder="Enter tag name"
-                                            className="bg-[#383844] border-[#4e4e59] text-white"
+                                            className="bg-background-hover border-border text-primary-foreground"
                                         />
                                     </div>
                                     <DialogFooter>
@@ -246,13 +264,13 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, taskId
                                                 setIsTagDialogOpen(false);
                                                 setNewTag('');
                                             }}
-                                            className="border-[#383844] text-white hover:bg-[#383844]"
+                                            className="border-border text-primary-foreground hover:bg-background-hover"
                                         >
                                             Cancel
                                         </Button>
                                         <Button
                                             onClick={handleAddTag}
-                                            className="bg-[#6775bc] hover:bg-[#7983c4] text-white"
+                                            className="bg-primary hover:bg-primary-hover text-primary-foreground"
                                             disabled={!newTag.trim()}
                                         >
                                             Add Tag

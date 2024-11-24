@@ -30,16 +30,16 @@ export const TaskSelector = ({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="bg-[#232430] border-[#383844]">
+            <DialogContent className="bg-background-secondary border-border">
                 <DialogHeader>
                     <DialogTitle>Add Existing Task</DialogTitle>
                 </DialogHeader>
 
                 <div className="relative">
-                    <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted" />
                     <Input
                         placeholder="Search tasks..."
-                        className="pl-8 bg-[#383844] border-[#4e4e59] text-white"
+                        className="pl-8 bg-background-hover border-border text-primary-foreground"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
@@ -54,11 +54,11 @@ export const TaskSelector = ({
                                     onTaskSelect(task.id);
                                     onOpenChange(false);
                                 }}
-                                className="flex flex-col p-3 rounded-lg hover:bg-[#383844] cursor-pointer"
+                                className="flex flex-col p-3 rounded-lg hover:bg-background-hover cursor-pointer"
                             >
-                                <div className="font-medium text-white">{task.title}</div>
+                                <div className="font-medium text-primary-foreground">{task.title}</div>
                                 {task.startDate && task.endDate && (
-                                    <div className="text-sm text-[#95959c]">
+                                    <div className="text-sm text-muted">
                                         Due: {format(new Date(task.startDate), 'MMM dd')} - {format(new Date(task.endDate), 'MMM dd')}
                                     </div>
                                 )}
