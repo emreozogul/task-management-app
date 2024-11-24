@@ -5,6 +5,7 @@ import { CollapsibleCard } from '../ui/collapsible-card';
 import { useTaskStore } from '@/stores/taskStore';
 import { format, isToday, isWithinInterval } from 'date-fns';
 import { Task } from '@/types/task';
+import { cn } from '@/lib/utils';
 export const TodaysTaskList = () => {
     const { getAllTasks } = useTaskStore();
 
@@ -77,11 +78,12 @@ export const TodaysTaskList = () => {
                                     <div className="flex items-center justify-between mb-2">
                                         <div className="flex items-center space-x-3">
                                             <Badge
-                                                variant={
-                                                    task.priority === 'high' ? 'destructive' :
-                                                        task.priority === 'medium' ? 'default' : 'secondary'
-                                                }
-                                                className="text-xs"
+                                                variant="secondary"
+                                                className={cn("text-xs", {
+                                                    "bg-red-500/20 text-red-400": task.priority === 'high',
+                                                    "bg-yellow-500/20 text-yellow-400": task.priority === 'medium',
+                                                    "bg-blue-500/20 text-blue-400": task.priority === 'low'
+                                                })}
                                             >
                                                 {task.priority}
                                             </Badge>

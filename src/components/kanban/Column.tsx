@@ -14,6 +14,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { TaskSelector } from '../tasks/TaskSelector';
+import { TaskPriority } from '@/types/task';
 
 interface ColumnProps {
     id: string;
@@ -46,8 +47,18 @@ export const Column = ({ id, boardId, title, taskIds }: ColumnProps) => {
     const handleAddTask = (e: React.FormEvent) => {
         e.preventDefault();
         if (newTaskTitle.trim()) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const endDate = new Date(today);
+            endDate.setDate(endDate.getDate() + 7);
+            endDate.setHours(23, 59, 59, 999);
+
             const newTask = createTask({
                 title: newTaskTitle.trim(),
+                priority: TaskPriority.LOW,
+                startDate: today.toISOString(),
+                endDate: endDate.toISOString(),
             });
             addTaskToColumn(boardId, id, newTask.id);
             setNewTaskTitle('');

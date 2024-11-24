@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
     Dialog,
     DialogContent,
@@ -6,6 +6,7 @@ import {
     DialogTitle,
     DialogDescription,
     DialogTrigger,
+    DialogFooter,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,17 +14,38 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Settings } from 'lucide-react';
 import { usePomodoroStore } from '@/stores/pomodoroStore';
+import { useDialogKeyboard } from '@/hooks/useDialogKeyboard';
 
 export const PomodoroSettings = () => {
     const { settings, updateSettings } = usePomodoroStore();
+    const [isOpen, setIsOpen] = useState(false);
     const [localSettings, setLocalSettings] = useState(settings);
+
+    // Reset local settings when dialog opens
+    useEffect(() => {
+        if (isOpen) {
+            setLocalSettings(settings);
+        }
+    }, [isOpen, settings]);
 
     const handleSave = () => {
         updateSettings(localSettings);
+        setIsOpen(false);
     };
 
+    const handleCancel = () => {
+        setLocalSettings(settings);
+        setIsOpen(false);
+    };
+
+    useDialogKeyboard({
+        isOpen,
+        onClose: handleCancel,
+        onSubmit: handleSave
+    });
+
     return (
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
                 <Button variant="outline" size="icon" className="border-[#383844] hover:bg-[#383844]">
                     <Settings className="h-4 w-4" />
@@ -121,14 +143,22 @@ export const PomodoroSettings = () => {
                             }
                         />
                     </div>
-
+                </div>
+                <DialogFooter className="mt-4">
+                    <Button
+                        variant="ghost"
+                        onClick={handleCancel}
+                        className="border-[#383844] text-white hover:bg-[#383844]"
+                    >
+                        Cancel
+                    </Button>
                     <Button
                         onClick={handleSave}
-                        className="w-full bg-[#6775bc] hover:bg-[#7983c4]"
+                        className="bg-[#6775bc] hover:bg-[#7983c4] text-white"
                     >
-                        Save Settings
+                        Save Changes
                     </Button>
-                </div>
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     );

@@ -17,6 +17,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { DocumentPreview } from "./DocumentPreview";
+import { useDialogKeyboard } from "@/hooks/useDialogKeyboard";
 
 interface TaskSheetProps {
     open: boolean;
@@ -106,6 +107,21 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, taskId
         deleteTask(taskId);
         onOpenChange(false);
     };
+
+    const handleTagDialogClose = () => {
+        setIsTagDialogOpen(false);
+        setNewTag('');
+    };
+
+    useDialogKeyboard({
+        isOpen: isTagDialogOpen,
+        onClose: handleTagDialogClose,
+        onSubmit: () => {
+            if (newTag.trim()) {
+                handleAddTag();
+            }
+        }
+    });
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>

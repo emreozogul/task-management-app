@@ -82,7 +82,8 @@ export default function CalendarPage() {
         const startDate = new Date(date);
         startDate.setHours(0, 0, 0, 0);
 
-        const endDate = new Date(date);
+        const endDate = new Date(startDate);
+        endDate.setDate(endDate.getDate() + 7);
         endDate.setHours(23, 59, 59, 999);
 
         createTask({

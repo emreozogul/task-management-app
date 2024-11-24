@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Folder as FolderIcon, MoreVertical, FileText, Trash2 } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useState } from 'react';
+import { useDialogKeyboard } from '@/hooks/useDialogKeyboard';
 
 const Documents = () => {
     const { documents, folders, createFolder, addDocumentToFolder, removeDocumentFromFolder, deleteFolder } = useDocumentStore();
@@ -42,6 +43,23 @@ const Documents = () => {
         setIsFolderSelectOpen(false);
         setSelectedDocument(null);
     };
+
+    const handleCancel = () => {
+        setNewFolderName('');
+        setIsCreateFolderOpen(false);
+    };
+
+    useDialogKeyboard({
+        isOpen: isCreateFolderOpen,
+        onClose: handleCancel,
+        onSubmit: () => {
+            if (newFolderName.trim()) {
+                createFolder(newFolderName.trim());
+                setNewFolderName('');
+                setIsCreateFolderOpen(false);
+            }
+        }
+    });
 
     return (
         <div className="p-6">
