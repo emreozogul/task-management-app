@@ -187,7 +187,7 @@ export default function TasksPage() {
 
     return (
         <div className="p-6 min-h-screen bg-[#1a1b23]">
-            <div className="max-w-7xl mx-auto space-y-6">
+            <div className="max-w-7xl mx-auto space-y-6 relative">
                 {/* Search and Filters - All in one row */}
                 <div className="bg-[#232430] rounded-lg p-4 sticky top-0 z-10">
                     <div className="flex flex-col gap-4">
@@ -454,10 +454,11 @@ export default function TasksPage() {
                 {/* Task Sheet */}
                 {activeTask && (
                     <TaskSheet
-                        task={activeTask}
+                        key={activeTask.id}  // Add this line
                         open={isSheetOpen}
                         onOpenChange={setIsSheetOpen}
                         taskId={activeTask.id}
+                        task={activeTask}
                     />
                 )}
             </div>

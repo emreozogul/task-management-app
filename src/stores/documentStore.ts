@@ -2,17 +2,8 @@ import { JSONContent } from '@tiptap/react';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import _ from 'lodash';
+import { IDocument, Folder } from '@/types/document';
 
-export interface IDocument {
-    id: string;
-    title: string;
-    content: JSONContent;
-    createdAt: Date;
-    updatedAt: Date;
-    tags: string[];
-    category: string;
-    status: 'draft' | 'published' | 'archived';
-}
 
 interface DocumentStore {
     documents: IDocument[];
@@ -23,6 +14,11 @@ interface DocumentStore {
     setActiveDocument: (document: IDocument | null) => void;
     getDocumentsByCategory: (category: string) => IDocument[];
     getDocumentsByTag: (tag: string) => IDocument[];
+    folders: Folder[];
+    createFolder: (name: string) => void;
+    addDocumentToFolder: (folderId: string, documentId: string) => void;
+    removeDocumentFromFolder: (folderId: string, documentId: string) => void;
+    deleteFolder: (id: string) => void;
 }
 
 // Deep clone helper
@@ -45,7 +41,7 @@ export const useDocumentStore = create<DocumentStore>()(
                         type: 'paragraph',
                         content: [{
                             type: 'text',
-                            text: '' // Start with empty content
+                            text: ''
                         }]
                     }],
                     documentId: id
@@ -59,7 +55,6 @@ export const useDocumentStore = create<DocumentStore>()(
                     updatedAt: new Date(),
                     tags: [],
                     category,
-                    status: 'draft',
                 };
 
                 set(state => ({
@@ -139,6 +134,47 @@ export const useDocumentStore = create<DocumentStore>()(
 
             getDocumentsByTag: (tag: string) => {
                 return get().documents.filter(doc => doc.tags.includes(tag));
+            },
+
+            folders: [],
+
+            createFolder: (name: string) => {
+                const newFolder: Folder = {
+                    id: crypto.randomUUID(),
+                    name,
+                    documentIds: [],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                };
+                set(state => ({
+                    folders: [...state.folders, newFolder]
+                }));
+            },
+
+            addDocumentToFolder: (folderId: string, documentId: string) => {
+                set(state => ({
+                    folders: state.folders.map(folder =>
+                        folder.id === folderId
+                            ? { ...folder, documentIds: [...folder.documentIds, documentId] }
+                            : folder
+                    )
+                }));
+            },
+
+            removeDocumentFromFolder: (folderId: string, documentId: string) => {
+                set(state => ({
+                    folders: state.folders.map(folder =>
+                        folder.id === folderId
+                            ? { ...folder, documentIds: folder.documentIds.filter(id => id !== documentId) }
+                            : folder
+                    )
+                }));
+            },
+
+            deleteFolder: (id: string) => {
+                set(state => ({
+                    folders: state.folders.filter(folder => folder.id !== id)
+                }));
             }
         }),
         {

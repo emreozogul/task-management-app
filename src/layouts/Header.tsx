@@ -61,7 +61,7 @@ export const Header = () => {
                 <div className="flex items-center space-x-4">
                     {/* Search Bar */}
                     {showSearchBar && (
-                        <div className="w-72">
+                        <div className="w-48 md:w-72 ">
                             <Input
                                 placeholder={searchPlaceholder}
                                 className="bg-[#383844] border-[#4e4e59] text-white"

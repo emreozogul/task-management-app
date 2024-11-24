@@ -23,7 +23,7 @@ const KanbanBoard = () => {
 
     if (!activeBoard) {
         return (
-            <div className="p-6 text-center">
+            <div className="p-4 text-center">
                 <p className="text-[#95959c] mb-4">No board selected</p>
                 <Button
                     onClick={() => navigate('/boards/new')}
@@ -37,8 +37,7 @@ const KanbanBoard = () => {
     }
 
     return (
-        <div className="p-6">
-
+        <div className="p-4">
             <Board />
         </div>
     );

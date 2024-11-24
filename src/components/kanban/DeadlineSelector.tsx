@@ -25,6 +25,7 @@ const DeadlineSelector: React.FC<DeadlineSelectorProps> = ({ dateRange, onDateRa
                     }
                 }}
                 initialDate={dateRange?.from}
+                endDate={dateRange?.to}
             />
 
             {dateRange && (

@@ -4,7 +4,6 @@ import { deepClone, useDocumentStore } from '@/stores/documentStore';
 import { DocumentHeader } from '@/components/editor/DocumentHeader';
 import Editor from '@/components/editor/Editor';
 import { JSONContent } from 'novel';
-import { DocumentStatus } from '@/components/editor/DocumentStatus';
 
 const DocumentEditor = () => {
     const { documentId } = useParams();
@@ -66,7 +65,6 @@ const DocumentEditor = () => {
             <DocumentHeader
                 titleInputRef={titleInputRef}
                 title={activeDocument.title}
-                status={activeDocument.status}
                 document={activeDocument}
                 onTitleChange={(e) => {
                     updateDocument(activeDocument.id, {
@@ -74,23 +72,6 @@ const DocumentEditor = () => {
                         updatedAt: new Date()
                     });
                 }}
-                onPublish={() => {
-                    updateDocument(activeDocument.id, {
-                        status: 'published',
-                        updatedAt: new Date()
-                    });
-                }}
-                onArchive={() => {
-                    updateDocument(activeDocument.id, {
-                        status: 'archived',
-                        updatedAt: new Date()
-                    });
-                    navigate('/documents');
-                }}
-            />
-            <DocumentStatus
-                status={activeDocument.status}
-                updatedAt={activeDocument.updatedAt}
             />
 
             <div className="prose-container bg-[#232430] rounded-lg w-full">

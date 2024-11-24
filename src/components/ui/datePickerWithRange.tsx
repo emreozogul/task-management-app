@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { addDays, format } from "date-fns"
+import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 import { DateRange } from "react-day-picker"
 
@@ -18,16 +18,35 @@ interface DatePickerWithRangeProps {
     onChange: (range: { from: Date; to: Date }) => void;
     className?: string;
     initialDate?: Date;
+    endDate?: Date;
 }
 
-const DatePickerWithRange: React.FC<DatePickerWithRangeProps> = ({ onChange, initialDate, ...props }) => {
-    const [date, setDate] = React.useState<DateRange | undefined>({
-        from: initialDate || new Date(),
-        to: addDays(initialDate || new Date(), 7),
-    })
+export function DatePickerWithRange({
+    className,
+    onChange,
+    initialDate,
+    endDate,
+}: DatePickerWithRangeProps) {
+    const [date, setDate] = React.useState<DateRange | undefined>(
+        initialDate && endDate
+            ? {
+                from: initialDate,
+                to: endDate,
+            }
+            : undefined
+    );
+
+    React.useEffect(() => {
+        if (initialDate && endDate) {
+            setDate({
+                from: initialDate,
+                to: endDate,
+            });
+        }
+    }, [initialDate, endDate]);
 
     return (
-        <div className={cn("grid gap-2", props.className)}>
+        <div className={cn("grid gap-2", className)}>
             <Popover>
                 <PopoverTrigger asChild>
                     <Button

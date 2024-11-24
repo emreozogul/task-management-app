@@ -15,13 +15,8 @@
         "title": "tma",
         "width": 1024,
         "height": 768,
-        "resizable": true,
-        "fullscreen": false,
-        "minWidth": 1024,
+        "minWidth": 760,
         "minHeight": 700,
-        "center": true,
-        "decorations": true,
-        "transparent": false,
         "dragDropEnabled": false
       }
     ],

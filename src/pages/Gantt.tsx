@@ -159,6 +159,7 @@ export default function GanttChart() {
             {/* Task Sheet */}
             {activeTask && (
                 <TaskSheet
+                    key={activeTask.id}  // Add this line
                     open={isSheetOpen}
                     onOpenChange={setIsSheetOpen}
                     taskId={activeTask.id}
