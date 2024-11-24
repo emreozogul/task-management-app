@@ -20,16 +20,20 @@ const Dashboard = () => {
                 </div>
                 <div className="xl:col-span-3 space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="md:col-span-1">
+                        <div className="md:col-span-2">
                             <TodaysTaskList />
                         </div>
+
+                    </div>
+                    <TasksStatistics />
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="md:col-span-1">
                             <ActiveBoards />
                         </div>
-                    </div>
-                    <TasksStatistics />
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <RecentDocuments />
+                        <div className="md:col-span-1">
+                            <RecentDocuments />
+                        </div>
                     </div>
                 </div>
 

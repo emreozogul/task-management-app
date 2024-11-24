@@ -79,7 +79,7 @@ export const Column = ({ id, boardId, title, taskIds }: ColumnProps) => {
     );
 
     return (
-        <div className="bg-[#232430] p-4 rounded-lg w-80 min-w-[300px] flex flex-col h-[calc(100vh-150px)]">
+        <div className="bg-[#232430] p-4 rounded-lg w-80 min-w-[300px] flex flex-col h-[calc(100vh-120px)]">
             <div className="flex items-center justify-between mb-4">
                 <h2 className="font-bold text-white">{title}</h2>
                 {columnMenu}

@@ -57,6 +57,7 @@ export const CalendarTask = ({ task }: CalendarTaskProps) => {
             </div>
 
             <TaskSheet
+                key={task.id}  // Add this line
                 open={isSheetOpen}
                 onOpenChange={setIsSheetOpen}
                 taskId={task.id}

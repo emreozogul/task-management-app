@@ -17,8 +17,8 @@ interface CardProps {
 }
 
 const priorityColors = {
-    low: 'border-l-white',
-    medium: 'border-l-[#6775bc]',
+    low: 'border-l-[#6775bc]',
+    medium: 'border-l-[#f59e0b]', // yellow-500
     high: 'border-l-[#bc6767]'
 };
 
