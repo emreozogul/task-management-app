@@ -11,23 +11,51 @@ export default {
 			},
 			colors: {
 				background: {
-					DEFAULT: 'var(--background)',
-					secondary: 'var(--background-secondary)',
-					hover: 'var(--background-hover)',
-					'hover-dark': 'var(--background-hover-dark)'
+					DEFAULT: '#1a1b23',
+					secondary: '#232430',
+					hover: '#383844',
+					'hover-dark': '#4e4e59'
 				},
 				primary: {
-					DEFAULT: 'var(--primary)',
-					hover: 'var(--primary-hover)',
-					foreground: 'var(--primary-foreground)'
+					DEFAULT: '#6775bc',
+					hover: '#7983c4',
+					foreground: '#ffffff'
 				},
-				muted: {
-					DEFAULT: 'var(--muted)',
-					foreground: 'var(--muted-foreground)'
+				muted: '#95959c',
+				border: '#4e4e59',
+				destructive: '#ef4444',
+				warning: '#eab308',
+				info: '#3b82f6',
+				success: '#4ade80',
+				"high-priority": "#f59e0b",
+				status: {
+					active: {
+						bg: "rgb(22 163 74 / 0.2)",
+						text: "#4ade80"
+					},
+					due: {
+						bg: "rgb(245 158 11 / 0.2)",
+						text: "#f59e0b"
+					},
+					starts: {
+						bg: "#6775bc",
+						text: "#ffffff"
+					}
 				},
-				border: {
-					DEFAULT: 'var(--border)',
-					hover: 'var(--border-hover)'
+				kanban: {
+					card: {
+						bg: "rgb(56, 56, 68)",
+						hover: "rgb(26, 27, 35)",
+					},
+					column: {
+						bg: "rgb(35, 36, 48)",
+						hover: "rgb(42, 43, 56)",
+					},
+					priority: {
+						low: "rgb(103, 117, 188)",
+						medium: "rgb(245, 158, 11)",
+						high: "rgb(188, 103, 103)"
+					}
 				}
 			},
 			keyframes: {

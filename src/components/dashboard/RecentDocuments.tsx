@@ -12,21 +12,21 @@ export const RecentDocuments = () => {
 
     return (
         <CollapsibleCard title="Recent Documents" headerContent={
-            <Link to="/documents" className="text-[#6775bc] hover:text-[#7983c4] text-sm font-medium">
+            <Link to="/documents" className="text-primary hover:text-primary-hover text-sm font-medium">
                 View All
             </Link>
-        } icon={<FileText className="w-6 h-6 text-[#6775bc] mr-2" />} className="md:col-span-2 bg-[#232430] border-none shadow-lg">
+        } icon={<FileText className="w-6 h-6 text-primary mr-2" />} className="md:col-span-2 bg-background-secondary border-none shadow-lg">
 
             <div className="space-y-3">
                 {recentDocuments.map((doc) => (
                     <Link
                         key={doc.id}
                         to={`/documents/${doc.id}`}
-                        className="flex items-center justify-between p-4 bg-[#383844] hover:bg-[#4e4e59] rounded-lg transition-all group border border-transparent hover:border-[#6775bc]"
+                        className="flex items-center justify-between p-4 bg-background-hover hover:bg-background-hover-dark rounded-lg transition-all group border border-transparent hover:border-primary"
                     >
                         <div className="flex items-center w-full space-x-4">
-                            <FileText className="w-5 h-5 text-[#6775bc] group-hover:text-white transition-colors" />
-                            <span className="text-white font-medium truncate">{doc.title}</span>
+                            <FileText className="w-5 h-5 text-primary group-hover:text-primary-foreground transition-colors" />
+                            <span className="text-primary-foreground font-medium truncate">{doc.title}</span>
                         </div>
                     </Link>
                 ))}

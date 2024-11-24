@@ -25,13 +25,13 @@ export const AppearanceSettings = ({ settings, onChange }: AppearanceSettingsPro
                     value={settings.theme}
                     onValueChange={(value) => onChange({ ...settings, theme: value })}
                 >
-                    <SelectTrigger className="w-[180px] bg-secondary border-border">
+                    <SelectTrigger className="w-[180px] bg-background-hover border-border text-primary-foreground">
                         <SelectValue placeholder="Select theme" />
                     </SelectTrigger>
-                    <SelectContent className="bg-secondary border-border">
-                        <SelectItem value="light" className="text-foreground hover:bg-muted">Light</SelectItem>
-                        <SelectItem value="dark" className="text-foreground hover:bg-muted">Dark</SelectItem>
-                        <SelectItem value="system" className="text-foreground hover:bg-muted">System</SelectItem>
+                    <SelectContent className="bg-background-secondary border-border">
+                        <SelectItem value="light" className="text-primary-foreground hover:bg-background-hover">Light</SelectItem>
+                        <SelectItem value="dark" className="text-primary-foreground hover:bg-background-hover">Dark</SelectItem>
+                        <SelectItem value="system" className="text-primary-foreground hover:bg-background-hover">System</SelectItem>
                     </SelectContent>
                 </Select>
             </div>

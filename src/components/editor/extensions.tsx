@@ -53,7 +53,7 @@ const tiptapImage = TiptapImage.extend({
 
 const updatedImage = UpdatedImage.configure({
     HTMLAttributes: {
-        class: cx("rounded-lg border border-muted"),
+        class: cx("rounded-lg border border-border"),
     },
 });
 
@@ -71,7 +71,7 @@ const taskItem = TaskItem.configure({
 
 const horizontalRule = HorizontalRule.configure({
     HTMLAttributes: {
-        class: cx("mt-4 mb-6 border-t border-muted-foreground"),
+        class: cx("mt-4 mb-6 border-t border-border"),
     },
 });
 
@@ -98,12 +98,12 @@ const starterKit = StarterKit.configure({
     },
     codeBlock: {
         HTMLAttributes: {
-            class: cx("rounded-md bg-muted text-muted-foreground border p-5 font-mono font-medium"),
+            class: cx("rounded-md bg-background-hover text-primary-foreground border-border p-5 font-mono font-medium"),
         },
     },
     code: {
         HTMLAttributes: {
-            class: cx("rounded-md bg-muted  px-1.5 py-1 font-mono font-medium"),
+            class: cx("rounded-md bg-background-hover text-primary-foreground px-1.5 py-1 font-mono font-medium"),
             spellcheck: "false",
         },
     },

@@ -25,7 +25,7 @@ export const PomodoroSettings = ({ settings, onChange }: PomodoroSettingsProps) 
                                 ...settings,
                                 workDuration: parseInt(e.target.value)
                             })}
-                            className="bg-[#383844] border-[#4e4e59]"
+                            className="bg-background-hover border-border text-primary-foreground"
                         />
                     </div>
                     <div className="space-y-2">
@@ -37,7 +37,7 @@ export const PomodoroSettings = ({ settings, onChange }: PomodoroSettingsProps) 
                                 ...settings,
                                 breakDuration: parseInt(e.target.value)
                             })}
-                            className="bg-[#383844] border-[#4e4e59]"
+                            className="bg-background-hover border-border text-primary-foreground"
                         />
                     </div>
                 </div>
@@ -51,7 +51,7 @@ export const PomodoroSettings = ({ settings, onChange }: PomodoroSettingsProps) 
                             ...settings,
                             longBreakDuration: parseInt(e.target.value)
                         })}
-                        className="bg-[#383844] border-[#4e4e59]"
+                        className="bg-background-hover border-border text-primary-foreground"
                     />
                 </div>
 

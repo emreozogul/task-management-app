@@ -53,8 +53,8 @@ export function DatePickerWithRange({
                         id="date"
                         variant={"outline"}
                         className={cn(
-                            "w-[300px] justify-start text-left font-normal bg-[#383844] border-[#4e4e59] text-white",
-                            !date && "text-muted-foreground"
+                            "w-[300px] justify-start text-left font-normal bg-background-hover border-border text-primary-foreground",
+                            !date && "text-muted"
                         )}
                     >
                         <CalendarIcon className="mr-2 h-4 w-4" />
@@ -73,7 +73,7 @@ export function DatePickerWithRange({
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent
-                    className="w-auto p-0 bg-[#232430] border-[#383844]"
+                    className="w-auto p-0 bg-background-secondary border-border"
                     align="start"
                 >
                     <Calendar
@@ -88,7 +88,7 @@ export function DatePickerWithRange({
                             }
                         }}
                         numberOfMonths={2}
-                        className="text-white"
+                        className="text-primary-foreground"
                     />
                 </PopoverContent>
             </Popover>

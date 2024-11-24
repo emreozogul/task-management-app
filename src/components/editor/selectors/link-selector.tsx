@@ -46,7 +46,7 @@ export const LinkSelector = ({ open, onOpenChange }: LinkSelectorProps) => {
                 <PopoverContent
                     align="start"
                     side="bottom"
-                    className="w-72 z-[99999] p-0 border border-[#383844] bg-[#232430] text-[#e0e0e0]"
+                    className="w-72 z-[99999] p-0 border-border bg-background-secondary text-primary-foreground"
                     sideOffset={0}
                     alignOffset={0}
                     forceMount
@@ -76,7 +76,7 @@ export const LinkSelector = ({ open, onOpenChange }: LinkSelectorProps) => {
                             ref={inputRef}
                             type="text"
                             placeholder="Paste a link"
-                            className="flex-1 bg-[#2a2b38] rounded-md px-2 py-1 text-sm outline-none border-0 placeholder:text-[#6c7086]"
+                            className="flex-1 bg-background-hover rounded-md px-2 py-1 text-sm outline-none border-0 placeholder:text-muted"
                             defaultValue={editor.getAttributes("link").href || ""}
                             autoFocus
                         />
@@ -85,7 +85,7 @@ export const LinkSelector = ({ open, onOpenChange }: LinkSelectorProps) => {
                                 size="sm"
                                 variant="ghost"
                                 type="button"
-                                className="h-7 px-2 text-red-600 hover:text-red-500 hover:bg-[#2a2b38]"
+                                className="h-7 px-2 text-destructive hover:text-destructive/90 hover:bg-background-hover"
                                 onClick={() => {
                                     editor.chain().focus().unsetLink().run();
                                     if (inputRef.current) inputRef.current.value = "";
@@ -98,7 +98,7 @@ export const LinkSelector = ({ open, onOpenChange }: LinkSelectorProps) => {
                             <Button
                                 size="sm"
                                 variant="ghost"
-                                className="h-7 px-2 hover:bg-[#2a2b38]"
+                                className="h-7 px-2 hover:bg-background-hover"
                             >
                                 <Check className="h-4 w-4" />
                             </Button>

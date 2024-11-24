@@ -35,11 +35,11 @@ const Settings = () => {
     return (
         <div className="container mx-auto p-6 space-y-6">
             <div className="flex justify-between items-center mb-8">
-                <h1 className="text-2xl font-semibold text-white">Settings</h1>
+                <h1 className="text-2xl font-semibold text-primary-foreground">Settings</h1>
                 <Button
                     onClick={handleSave}
                     disabled={!hasChanges}
-                    className="bg-[#6775bc] hover:bg-[#7983c4] text-white"
+                    className="bg-primary hover:bg-primary-hover text-primary-foreground"
                 >
                     Save Changes
                 </Button>

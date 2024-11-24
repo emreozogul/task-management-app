@@ -47,14 +47,14 @@ export const PomodoroSettings = () => {
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline" size="icon" className="border-[#383844] hover:bg-[#383844]">
+                <Button variant="outline" size="icon" className="border-border hover:bg-background-hover">
                     <Settings className="h-4 w-4" />
                 </Button>
             </DialogTrigger>
-            <DialogContent className="bg-[#232430] border-[#383844] text-white">
+            <DialogContent className="bg-background-secondary border-border text-primary-foreground">
                 <DialogHeader>
-                    <DialogTitle className="text-lg font-semibold text-white">Timer Settings</DialogTitle>
-                    <DialogDescription className="text-sm text-gray-400">
+                    <DialogTitle className="text-lg font-semibold text-primary-foreground">Timer Settings</DialogTitle>
+                    <DialogDescription className="text-sm text-muted">
                         Customize your Pomodoro timer settings.
                     </DialogDescription>
                 </DialogHeader>
@@ -71,7 +71,7 @@ export const PomodoroSettings = () => {
                                         workDuration: parseInt(e.target.value),
                                     })
                                 }
-                                className="bg-[#383844] border-[#4e4e59]"
+                                className="bg-background-hover border-border"
                             />
                         </div>
                         <div className="space-y-2">
@@ -85,7 +85,7 @@ export const PomodoroSettings = () => {
                                         breakDuration: parseInt(e.target.value),
                                     })
                                 }
-                                className="bg-[#383844] border-[#4e4e59]"
+                                className="bg-background-hover border-border"
                             />
                         </div>
                     </div>
@@ -101,7 +101,7 @@ export const PomodoroSettings = () => {
                                     longBreakDuration: parseInt(e.target.value),
                                 })
                             }
-                            className="bg-[#383844] border-[#4e4e59]"
+                            className="bg-background-hover border-border"
                         />
                     </div>
 
@@ -148,13 +148,13 @@ export const PomodoroSettings = () => {
                     <Button
                         variant="ghost"
                         onClick={handleCancel}
-                        className="border-[#383844] text-white hover:bg-[#383844]"
+                        className="border-border text-primary-foreground hover:bg-background-hover"
                     >
                         Cancel
                     </Button>
                     <Button
                         onClick={handleSave}
-                        className="bg-[#6775bc] hover:bg-[#7983c4] text-white"
+                        className="bg-primary hover:bg-primary-hover text-primary-foreground"
                     >
                         Save Changes
                     </Button>

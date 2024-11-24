@@ -21,15 +21,14 @@ export const Header = () => {
     if (!shouldShowHeader) return null;
 
     return (
-        <header className="bg-[#232430] border-b border-[#383844] sticky top-0 z-20">
+        <header className="bg-background-secondary border-b border-border sticky top-0 z-20">
             <div className="px-6 h-16 flex items-center justify-between">
-                {/* Breadcrumb */}
                 <nav className="flex items-center space-x-2">
                     <Link
                         to="/"
                         className={cn(
-                            "flex items-center text-[#95959c] hover:text-white transition-colors",
-                            pathSegments.length === 0 && "text-white"
+                            "flex items-center text-muted hover:text-primary-foreground transition-colors",
+                            pathSegments.length === 0 && "text-primary-foreground"
                         )}
                     >
                         <Home className="w-4 h-4" />
@@ -42,12 +41,12 @@ export const Header = () => {
 
                         return (
                             <div key={path} className="flex items-center">
-                                <ChevronRight className="w-4 h-4 text-[#95959c]" />
+                                <ChevronRight className="w-4 h-4 text-muted" />
                                 <Link
                                     to={`/${path}`}
                                     className={cn(
                                         "ml-2 text-sm font-medium",
-                                        isLast ? "text-white" : "text-[#95959c] hover:text-white transition-colors"
+                                        isLast ? "text-primary-foreground" : "text-muted hover:text-primary-foreground transition-colors"
                                     )}
                                 >
                                     {getPageTitle(segment)}
@@ -57,26 +56,23 @@ export const Header = () => {
                     })}
                 </nav>
 
-                {/* Right Section */}
                 <div className="flex items-center space-x-4">
-                    {/* Search Bar */}
                     {showSearchBar && (
-                        <div className="w-48 md:w-72 ">
+                        <div className="w-48 md:w-72">
                             <Input
                                 placeholder={searchPlaceholder}
-                                className="bg-[#383844] border-[#4e4e59] text-white"
+                                className="bg-background-hover border-border text-primary-foreground"
                                 value={searchQuery}
                                 onChange={(e) => handleSearch(e.target.value)}
                             />
                         </div>
                     )}
 
-                    {/* Actions */}
                     {headerActions.map((action, index) => (
                         <Button
                             key={index}
                             onClick={action.onClick}
-                            className="bg-[#6775bc] hover:bg-[#7983c4] text-white"
+                            className="bg-primary hover:bg-primary-hover text-primary-foreground"
                         >
                             {action.icon}
                             {action.label}

@@ -116,19 +116,19 @@ export const Board = () => {
 
                 <div className="w-80 min-w-[240px] shrink-0">
                     {isAddingColumn ? (
-                        <form onSubmit={handleAddColumn} className="bg-[#232430] p-4 rounded-lg space-y-2">
+                        <form onSubmit={handleAddColumn} className="bg-background-secondary p-4 rounded-lg space-y-2">
                             <Input
                                 type="text"
                                 value={newColumnTitle}
                                 onChange={(e) => setNewColumnTitle(e.target.value)}
                                 placeholder="Enter column title..."
-                                className="bg-[#383844] border-[#4e4e59] text-white"
+                                className="bg-background-hover border-border text-primary-foreground"
                                 autoFocus
                             />
                             <div className="flex gap-2">
                                 <Button
                                     type="submit"
-                                    className="bg-[#6775bc] hover:bg-[#7983c4] text-white flex-1"
+                                    className="bg-primary hover:bg-primary-hover text-primary-foreground flex-1"
                                     disabled={!newColumnTitle.trim()}
                                 >
                                     Add
@@ -140,7 +140,7 @@ export const Board = () => {
                                         setIsAddingColumn(false);
                                         setNewColumnTitle('');
                                     }}
-                                    className="text-white hover:bg-[#383844]"
+                                    className="text-primary-foreground hover:bg-background-hover"
                                 >
                                     <X className="h-4 w-4" />
                                 </Button>
@@ -150,7 +150,7 @@ export const Board = () => {
                         <Button
                             onClick={() => setIsAddingColumn(true)}
                             variant="ghost"
-                            className="w-full h-[calc(100vh-120px)] bg-[#232430] hover:bg-[#383844] text-[#95959c] hover:text-white"
+                            className="w-full h-[calc(100vh-120px)] bg-background-secondary hover:bg-background-hover text-muted hover:text-primary-foreground"
                         >
                             <Plus className="h-4 w-4 mr-2" />
                             Add Column
@@ -160,7 +160,7 @@ export const Board = () => {
             </div>
             <DragOverlay>
                 {activeId && activeTask ? (
-                    <div className="bg-[#383844] p-4 rounded-lg shadow mb-2 cursor-move text-white opacity-80">
+                    <div className="bg-background-hover p-4 rounded-lg shadow mb-2 cursor-move text-primary-foreground opacity-80">
                         {activeTask.title}
                     </div>
                 ) : null}

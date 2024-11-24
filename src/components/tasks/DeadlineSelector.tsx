@@ -15,7 +15,6 @@ const DeadlineSelector: React.FC<DeadlineSelectorProps> = ({ dateRange, onDateRa
             <DatePickerWithRange
                 onChange={(range) => {
                     if (range.from && range.to) {
-                        // Set time to end of day for the end date
                         const endDate = new Date(range.to);
                         endDate.setHours(23, 59, 59, 999);
                         onDateRangeChange({
@@ -33,7 +32,7 @@ const DeadlineSelector: React.FC<DeadlineSelectorProps> = ({ dateRange, onDateRa
                     variant="ghost"
                     size="icon"
                     onClick={() => onDateRangeChange(null)}
-                    className="h-8 w-8 p-0 hover:bg-[#383844]"
+                    className="h-8 w-8 p-0 hover:bg-background-hover"
                 >
                     <X className="h-4 w-4" />
                 </Button>

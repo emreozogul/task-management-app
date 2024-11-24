@@ -58,7 +58,7 @@ export const Sidebar = () => {
     return (
         <aside
             className={cn(
-                "h-full bg-[#232430] text-white transition-all duration-500 relative",
+                "h-full bg-background-secondary text-primary-foreground transition-all duration-500 relative",
                 isCollapsed ? "w-16" : "w-48"
             )}
         >
@@ -71,8 +71,8 @@ export const Sidebar = () => {
                         className={cn(
                             "flex items-center gap-3 p-3 px-6 border-r-2 border-transparent transition-colors",
                             location.pathname === item.path
-                                ? "border-r-white text-white"
-                                : "text-gray-300 hover:bg-[#383844] hover:text-white",
+                                ? "border-r-primary-foreground text-primary-foreground"
+                                : "text-muted hover:bg-background-hover hover:text-primary-foreground",
                             isCollapsed && "justify-center"
                         )}
                         title={isCollapsed ? item.label : undefined}
@@ -99,7 +99,7 @@ export const Sidebar = () => {
                 type="button"
                 title={isCollapsed ? 'Expand' : 'Collapse'}
                 onClick={() => setIsCollapsed(!isCollapsed)}
-                className="p-1 rounded-full bg-[#383844] hover:bg-[#4e4e59] transition-colors absolute right-0 top-5 transform -mr-2 z-30"
+                className="p-1 rounded-full bg-background-hover hover:bg-background-hover-dark transition-colors absolute right-0 top-5 transform -mr-2 z-30"
             >
                 {isCollapsed ? (
                     <ChevronRight className="w-6 h-6" />

@@ -3,6 +3,7 @@ import { useDocumentStore } from "@/stores/documentStore";
 import { Button } from "@/components/ui/button";
 import { JSONContent } from "@tiptap/react";
 import { Link } from "react-router-dom";
+
 interface DocumentPreviewProps {
     documentId: string | undefined;
 }
@@ -31,24 +32,23 @@ export const DocumentPreview = ({ documentId }: DocumentPreviewProps) => {
     const plainText = getPlainText(document.content);
 
     return (
-        <div className="bg-[#383844] rounded-lg p-3">
+        <div className="bg-background-hover rounded-lg p-3">
             <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-[#6775bc]" />
-                    <span className="text-sm font-medium text-white">{document.title}</span>
+                    <FileText className="w-4 h-4 text-primary" />
+                    <span className="text-sm font-medium text-primary-foreground">{document.title}</span>
                 </div>
                 <Link to={`/documents/${document.id}`}>
                     <Button
                         variant="ghost"
                         size="sm"
-                        className="h-8 w-8 p-0 hover:bg-[#232430]"
-                        onClick={() => {/* Add navigation to document */ }}
+                        className="h-8 w-8 p-0 hover:bg-background-secondary"
                     >
-                        <ExternalLink className="h-4 w-4 text-[#6775bc]" />
+                        <ExternalLink className="h-4 w-4 text-primary" />
                     </Button>
                 </Link>
             </div>
-            <p className="text-sm text-[#95959c] line-clamp-3">
+            <p className="text-sm text-muted line-clamp-3">
                 {plainText}
             </p>
         </div>

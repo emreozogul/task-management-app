@@ -8,10 +8,10 @@ interface SettingsCardProps {
 
 export const SettingsCard = ({ title, description, children }: SettingsCardProps) => {
     return (
-        <div className="bg-[#232430] p-6 rounded-lg shadow">
-            <h2 className="text-xl font-semibold mb-2 text-white">{title}</h2>
+        <div className="bg-background-secondary p-6 rounded-lg shadow">
+            <h2 className="text-xl font-semibold mb-2 text-primary-foreground">{title}</h2>
             {description && (
-                <p className="text-sm text-[#95959c] mb-4">{description}</p>
+                <p className="text-sm text-muted mb-4">{description}</p>
             )}
             <div className="space-y-4">
                 {children}

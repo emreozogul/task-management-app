@@ -105,9 +105,9 @@ const createRouteConfigs = (
                                 <MoreVertical className="h-4 w-4" />
                             </div>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="bg-[#232430] border-[#383844]">
+                        <DropdownMenuContent align="end" className="bg-background-secondary border-border">
                             <DropdownMenuItem
-                                className="text-red-500 hover:text-red-400 hover:bg-[#383844] cursor-pointer"
+                                className="text-destructive hover:text-destructive/90 hover:bg-background-hover cursor-pointer"
                                 onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();

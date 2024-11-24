@@ -17,7 +17,7 @@ export const ViewSettings = ({ settings, onChange }: ViewSettingsProps) => {
                 <div className="flex items-center justify-between">
                     <div className="space-y-1">
                         <Label>Compact View</Label>
-                        <p className="text-sm text-[#95959c]">Use compact layout for tasks</p>
+                        <p className="text-sm text-muted">Use compact layout for tasks</p>
                     </div>
                     <Switch
                         checked={settings.compactView}
@@ -28,7 +28,7 @@ export const ViewSettings = ({ settings, onChange }: ViewSettingsProps) => {
                 <div className="flex items-center justify-between">
                     <div className="space-y-1">
                         <Label>Show Task Count</Label>
-                        <p className="text-sm text-[#95959c]">Display number of tasks in each view</p>
+                        <p className="text-sm text-muted">Display number of tasks in each view</p>
                     </div>
                     <Switch
                         checked={settings.showTaskCount}
@@ -39,7 +39,7 @@ export const ViewSettings = ({ settings, onChange }: ViewSettingsProps) => {
                 <div className="flex items-center justify-between">
                     <div className="space-y-1">
                         <Label>Quick Add</Label>
-                        <p className="text-sm text-[#95959c]">Enable quick task creation</p>
+                        <p className="text-sm text-muted">Enable quick task creation</p>
                     </div>
                     <Switch
                         checked={settings.enableQuickAdd}

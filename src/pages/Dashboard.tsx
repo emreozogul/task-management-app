@@ -8,7 +8,7 @@ import { TimeTracker } from '@/components/widgets/TimeTracker';
 
 const Dashboard = () => {
     return (
-        <div className="p-6 min-h-screen bg-[#1a1b23]">
+        <div className="p-6 min-h-screen ">
             <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
                 <div className="xl:col-span-1 space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-1 gap-6">

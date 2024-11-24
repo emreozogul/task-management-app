@@ -24,19 +24,19 @@ export const ProjectSettings = ({ settings, onChange }: ProjectSettingsProps) =>
                 <div className="flex items-center justify-between">
                     <div className="space-y-1">
                         <Label>Default View</Label>
-                        <p className="text-sm text-[#95959c]">Choose default project view</p>
+                        <p className="text-sm text-muted">Choose default project view</p>
                     </div>
                     <Select
                         value={settings.defaultView}
                         onValueChange={(value) => onChange({ ...settings, defaultView: value })}
                     >
-                        <SelectTrigger className="w-[180px] bg-[#383844] border-[#4e4e59]">
+                        <SelectTrigger className="w-[180px] bg-background-hover border-border">
                             <SelectValue placeholder="Select view" />
                         </SelectTrigger>
-                        <SelectContent className="bg-[#383844] border-[#4e4e59]">
-                            <SelectItem value="board" className="text-white hover:bg-[#4e4e59]">Board</SelectItem>
-                            <SelectItem value="calendar" className="text-white hover:bg-[#4e4e59]">Calendar</SelectItem>
-                            <SelectItem value="list" className="text-white hover:bg-[#4e4e59]">List</SelectItem>
+                        <SelectContent className="bg-background-secondary border-border">
+                            <SelectItem value="board" className="text-primary-foreground hover:bg-background-hover">Board</SelectItem>
+                            <SelectItem value="calendar" className="text-primary-foreground hover:bg-background-hover">Calendar</SelectItem>
+                            <SelectItem value="list" className="text-primary-foreground hover:bg-background-hover">List</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
@@ -44,7 +44,7 @@ export const ProjectSettings = ({ settings, onChange }: ProjectSettingsProps) =>
                 <div className="flex items-center justify-between">
                     <div className="space-y-1">
                         <Label>Show Completed Tasks</Label>
-                        <p className="text-sm text-muted-foreground">Display completed tasks in views</p>
+                        <p className="text-sm text-muted">Display completed tasks in views</p>
                     </div>
                     <Switch
                         checked={settings.showCompletedTasks}

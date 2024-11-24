@@ -31,29 +31,29 @@ export const DocumentHeader = ({
             ref={titleInputRef}
             value={title}
             onChange={onTitleChange}
-            className="text-2xl font-bold w-full sm:w-1/2 bg-[#383844] border-[#4e4e59] text-white"
+            className="text-2xl font-bold w-full sm:w-1/2 bg-background-hover border-border text-primary-foreground"
             placeholder="Document Title"
         />
         <div className="flex items-center gap-2 w-full sm:w-auto">
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button variant="outline" className="border-[#383844] text-white hover:bg-[#383844]">
+                    <Button variant="outline" className="border-border text-primary-foreground hover:bg-background-hover">
                         <Download className="w-4 h-4 mr-2" />
                         Export
                     </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-[#232430] border-[#383844]">
+                <DropdownMenuContent className="bg-background-secondary border-border">
                     <PDFDownloadLink
                         document={<DocumentPDF document={document} />}
                         fileName={`${document.title}.pdf`}
                     >
-                        <DropdownMenuItem className="text-white hover:bg-[#383844] cursor-pointer">
+                        <DropdownMenuItem className="text-primary-foreground hover:bg-background-hover cursor-pointer">
                             <FileText className="w-4 h-4 mr-2" />
                             Export as PDF
                         </DropdownMenuItem>
                     </PDFDownloadLink>
                     <DropdownMenuItem
-                        className="text-white hover:bg-[#383844] cursor-pointer"
+                        className="text-primary-foreground hover:bg-background-hover cursor-pointer"
                         onClick={() => exportToDocx(document)}
                     >
                         <FileText className="w-4 h-4 mr-2" />

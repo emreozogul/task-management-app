@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { TaskSelector } from '../tasks/TaskSelector';
 import { TaskPriority } from '@/types/task';
+import { cn } from '@/lib/utils';
 
 interface ColumnProps {
     id: string;
@@ -73,13 +74,13 @@ export const Column = ({ id, boardId, title, taskIds }: ColumnProps) => {
     const columnMenu = (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-[#383844]">
+                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-background-hover">
                     <MoreVertical className="h-4 w-4" />
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="bg-[#232430] border-[#383844]">
+            <DropdownMenuContent align="end" className="bg-background-secondary border-border">
                 <DropdownMenuItem
-                    className="text-red-500 hover:text-red-400 hover:bg-[#383844] cursor-pointer"
+                    className="text-destructive hover:text-destructive/90 hover:bg-background-hover cursor-pointer"
                     onClick={() => deleteColumn(boardId, id)}
                 >
                     <Trash2 className="mr-2 h-4 w-4" />
@@ -90,16 +91,18 @@ export const Column = ({ id, boardId, title, taskIds }: ColumnProps) => {
     );
 
     return (
-        <div className="bg-[#232430] p-4 rounded-lg w-80 min-w-[300px] flex flex-col h-[calc(100vh-120px)]">
+        <div className="bg-background-secondary p-4 rounded-lg w-80 min-w-[300px] flex flex-col h-[calc(100vh-120px)]">
             <div className="flex items-center justify-between mb-4">
-                <h2 className="font-bold text-white">{title}</h2>
+                <h2 className="font-bold text-primary-foreground">{title}</h2>
                 {columnMenu}
             </div>
 
             <div
                 ref={setNodeRef}
-                className={`flex-1 overflow-y-auto min-h-0 space-y-3 rounded-lg transition-colors ${isOver ? 'bg-[#2a2b38]' : ''
-                    }`}
+                className={cn(
+                    "flex-1 overflow-y-auto min-h-0 space-y-3 rounded-lg transition-colors",
+                    isOver && "bg-background-hover-dark"
+                )}
             >
                 <SortableContext
                     items={taskIds}
@@ -112,7 +115,7 @@ export const Column = ({ id, boardId, title, taskIds }: ColumnProps) => {
                             onRemove={handleRemoveTask}
                         />
                     )) : (
-                        <div className="h-20 rounded-lg border-2 border-dashed border-[#383844] bg-[#232430] transition-colors" />
+                        <div className="h-20 rounded-lg border-2 border-dashed border-border bg-background-secondary transition-colors" />
                     )}
                 </SortableContext>
             </div>
@@ -125,13 +128,13 @@ export const Column = ({ id, boardId, title, taskIds }: ColumnProps) => {
                             value={newTaskTitle}
                             onChange={(e) => setNewTaskTitle(e.target.value)}
                             placeholder="Enter task title..."
-                            className="bg-[#383844] border-[#4e4e59] text-white"
+                            className="bg-background-hover border-border text-primary-foreground"
                             autoFocus
                         />
                         <div className="flex gap-2">
                             <Button
                                 type="submit"
-                                className="bg-[#6775bc] hover:bg-[#7983c4] text-white flex-1"
+                                className="bg-primary hover:bg-primary-hover text-primary-foreground flex-1"
                                 disabled={!newTaskTitle.trim()}
                             >
                                 Add
@@ -143,7 +146,7 @@ export const Column = ({ id, boardId, title, taskIds }: ColumnProps) => {
                                     setIsAddingTask(false);
                                     setNewTaskTitle('');
                                 }}
-                                className="text-white hover:bg-[#383844]"
+                                className="text-primary-foreground hover:bg-background-hover"
                             >
                                 <X className="h-4 w-4" />
                             </Button>
@@ -154,7 +157,7 @@ export const Column = ({ id, boardId, title, taskIds }: ColumnProps) => {
                         <Button
                             onClick={() => setIsAddingTask(true)}
                             variant="ghost"
-                            className="w-full text-[#95959c] hover:text-white hover:bg-[#383844]"
+                            className="w-full text-muted hover:text-primary-foreground hover:bg-background-hover"
                         >
                             <Plus className="h-4 h-4 mr-2" />
                             Add Task
@@ -162,7 +165,7 @@ export const Column = ({ id, boardId, title, taskIds }: ColumnProps) => {
                         <Button
                             onClick={() => setIsTaskSelectorOpen(true)}
                             variant="ghost"
-                            className="w-full text-[#95959c] hover:text-white hover:bg-[#383844]"
+                            className="w-full text-muted hover:text-primary-foreground hover:bg-background-hover"
                         >
                             <Plus className="h-4 h-4 mr-2" />
                             Add Existing Task

@@ -16,7 +16,7 @@ export const EditorSettings = ({ settings, onChange }: EditorSettingsProps) => {
             <div className="flex items-center justify-between">
                 <div className="space-y-1">
                     <Label>Auto-save</Label>
-                    <p className="text-sm text-[#95959c]">Automatically save changes while editing</p>
+                    <p className="text-sm text-muted">Automatically save changes while editing</p>
                 </div>
                 <Switch
                     checked={settings.autoSave}

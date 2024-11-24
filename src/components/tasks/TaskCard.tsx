@@ -25,15 +25,15 @@ export default function TaskCard({ task, onUpdate }: TaskCardProps) {
     };
 
     return (
-        <div className="bg-[#232430] p-3 rounded-lg shadow-sm">
+        <div className="bg-background-secondary p-3 rounded-lg shadow-sm">
             <div className="flex items-center gap-2 mb-2">
                 <Checkbox
                     id={`task-${task.id}`}
                     checked={task.completed}
                     onCheckedChange={handleCheckboxChange}
-                    className="border-[#6775bc]"
+                    className="border-primary"
                 />
-                <h3 className={`text-white font-medium flex-1 ${task.completed ? 'line-through opacity-60' : ''}`}>
+                <h3 className={`text-primary-foreground font-medium flex-1 ${task.completed ? 'line-through opacity-60' : ''}`}>
                     {task.title}
                 </h3>
                 <DropdownMenu>
@@ -57,7 +57,7 @@ export default function TaskCard({ task, onUpdate }: TaskCardProps) {
                         <Badge
                             key={label}
                             variant="secondary"
-                            className="bg-[#383844] text-white text-xs"
+                            className="bg-background-hover text-primary-foreground text-xs"
                         >
                             {label}
                         </Badge>
@@ -66,7 +66,7 @@ export default function TaskCard({ task, onUpdate }: TaskCardProps) {
             )}
 
             {linkedDocument && (
-                <div className="flex items-center text-sm text-[#6775bc] hover:text-[#7983c4] mt-2">
+                <div className="flex items-center text-sm text-primary hover:text-primary-hover mt-2">
                     <FileText className="w-4 h-4 mr-1" />
                     {linkedDocument.title}
                 </div>

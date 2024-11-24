@@ -116,7 +116,7 @@ export const ColorSelector = ({ open, onOpenChange }: ColorSelectorProps) => {
             <PopoverContent
                 align="start"
                 side="bottom"
-                className="w-48 z-[99999] p-0 border-[#383844] bg-[#232430] text-[#e0e0e0]"
+                className="w-48 z-[99999] p-0 border-border bg-background-secondary text-primary-foreground"
                 sideOffset={0}
                 alignOffset={0}
                 forceMount
@@ -124,7 +124,7 @@ export const ColorSelector = ({ open, onOpenChange }: ColorSelectorProps) => {
                 avoidCollisions={false}
             >
                 <div className="flex flex-col">
-                    <div className="my-1 px-2 text-sm font-semibold text-[#6c7086]">Color</div>
+                    <div className="my-1 px-2 text-sm font-semibold text-muted">Color</div>
                     {TEXT_COLORS.map(({ name, color }) => (
                         <EditorBubbleItem
                             key={name}
@@ -138,7 +138,7 @@ export const ColorSelector = ({ open, onOpenChange }: ColorSelectorProps) => {
                                         .run();
                                 onOpenChange(false);
                             }}
-                            className="flex cursor-pointer items-center justify-between px-2 py-1 text-sm hover:bg-[#2a2b38]"
+                            className="flex cursor-pointer items-center justify-between px-2 py-1 text-sm hover:bg-background-hover"
                         >
                             <div className="flex items-center gap-2">
                                 <div className={`rounded-sm border px-2 py-px font-medium ${color}`}>
@@ -150,7 +150,7 @@ export const ColorSelector = ({ open, onOpenChange }: ColorSelectorProps) => {
                     ))}
                 </div>
                 <div>
-                    <div className="my-1 px-2 text-sm font-semibold text-[#6c7086]">Background</div>
+                    <div className="my-1 px-2 text-sm font-semibold text-muted">Background</div>
                     {HIGHLIGHT_COLORS.map(({ name, color }) => (
                         <EditorBubbleItem
                             key={name}
@@ -159,7 +159,7 @@ export const ColorSelector = ({ open, onOpenChange }: ColorSelectorProps) => {
                                 name !== "Default" && editor.chain().focus().setHighlight({ color }).run();
                                 onOpenChange(false);
                             }}
-                            className="flex cursor-pointer items-center justify-between px-2 py-1 text-sm hover:bg-[#2a2b38]"
+                            className="flex cursor-pointer items-center justify-between px-2 py-1 text-sm hover:bg-background-hover"
                         >
                             <div className="flex items-center gap-2">
                                 <div className={`rounded-sm border px-2 py-px font-medium ${color}`}>
