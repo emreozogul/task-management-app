@@ -16,6 +16,7 @@ import { DateRange } from "react-day-picker";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { DocumentPreview } from "./DocumentPreview";
 
 interface TaskSheetProps {
     open: boolean;
@@ -199,6 +200,7 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, taskId
                             </Select>
                         </div>
 
+                        {taskValues.documentId && <DocumentPreview documentId={taskValues.documentId} />}
                         {taskLocations.length > 0 && (
                             <div>
                                 <label className="text-sm font-medium mb-1 block">Board Locations</label>
