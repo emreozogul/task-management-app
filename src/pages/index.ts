@@ -8,5 +8,6 @@ import NewBoard from './NewBoard';
 import Settings from './Settings';
 import Widgets from './Widgets';
 import TasksPage from './Tasks';
+import Gantt from './Gantt';
 
-export { BoardList, Calendar, Dashboard, Documents, DocumentEditor, KanbanBoard, NewBoard, Settings, Widgets, TasksPage };
+export { BoardList, Calendar, Dashboard, Documents, DocumentEditor, KanbanBoard, NewBoard, Settings, Widgets, TasksPage, Gantt };

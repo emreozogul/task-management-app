@@ -1,7 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
-import { BoardList, Calendar, Dashboard, Documents, DocumentEditor, KanbanBoard, NewBoard, Settings, Widgets, TasksPage } from '@/pages';
-import GanttChart from '@/pages/Gantt';
+import * as Pages from '@/pages';
 
 export const router = createBrowserRouter([
     {
@@ -10,48 +9,48 @@ export const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <Dashboard />,
+                element: <Pages.Dashboard />,
             },
             {
                 path: 'boards',
-                element: <BoardList />,
+                element: <Pages.BoardList />,
             },
             {
                 path: 'boards/new',
-                element: <NewBoard />,
+                element: <Pages.NewBoard />,
             },
             {
                 path: 'boards/:boardId',
-                element: <KanbanBoard />,
+                element: <Pages.KanbanBoard />,
             },
             {
                 path: 'documents',
-                element: <Documents />,
+                element: <Pages.Documents />,
             },
             {
                 path: 'documents/:documentId',
-                element: <DocumentEditor />,
+                element: <Pages.DocumentEditor />,
             },
 
             {
                 path: 'widgets',
-                element: <Widgets />,
+                element: <Pages.Widgets />,
             },
             {
                 path: 'settings',
-                element: <Settings />,
+                element: <Pages.Settings />,
             },
             {
                 path: 'calendar',
-                element: <Calendar />,
+                element: <Pages.Calendar />,
             },
             {
                 path: 'tasks',
-                element: <TasksPage />,
+                element: <Pages.TasksPage />,
             },
             {
                 path: 'gantt',
-                element: <GanttChart />,
+                element: <Pages.Gantt />,
             }
         ],
     },

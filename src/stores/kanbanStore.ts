@@ -31,14 +31,14 @@ interface KanbanStore {
     deleteColumn: (boardId: string, columnId: string) => void;
 
     // Task management in boards
-    addTaskToColumn: (boardId: string, columnId: string, taskId: string) => void;
+    addTaskToColumn: (boardId: string, columnId: string, taskId: string) => boolean;
     removeTaskFromColumn: (boardId: string, columnId: string, taskId: string) => void;
     moveTask: (taskId: string, sourceBoardId: string, sourceColumnId: string, targetColumnId: string) => void;
 }
 
 export const useKanbanStore = create<KanbanStore>()(
     persist(
-        (set, _) => ({
+        (set, get) => ({
             boards: [],
             activeBoard: null,
 
@@ -179,7 +179,22 @@ export const useKanbanStore = create<KanbanStore>()(
                 }));
             },
 
-            addTaskToColumn: (boardId, columnId, taskId) => {
+            addTaskToColumn: (boardId: string, columnId: string, taskId: string) => {
+                const boards = get().boards;
+
+                // Check if task exists in any column of any board
+                const taskExists = boards.some(board =>
+                    board.columns.some(column =>
+                        column.taskIds.includes(taskId)
+                    )
+                );
+
+                // If task already exists in any column, don't add it
+                if (taskExists) {
+                    return false;
+                }
+
+                // If task doesn't exist anywhere, proceed with adding it
                 set((state) => ({
                     boards: state.boards.map((board) =>
                         board.id === boardId
@@ -213,6 +228,8 @@ export const useKanbanStore = create<KanbanStore>()(
                             }
                             : state.activeBoard,
                 }));
+
+                return true;
             },
 
             removeTaskFromColumn: (boardId, columnId, taskId) => {

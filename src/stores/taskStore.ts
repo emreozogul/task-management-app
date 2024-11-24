@@ -1,17 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Task, TaskPriority } from '@/types/task';
-import { TaskNotificationService } from '@/services/taskNotification';
-import { TaskAnalyticsService } from '@/services/taskAnalytics';
-import { TaskScheduler } from '@/services/taskScheduler';
 
 interface TaskStore {
     tasks: Task[];
-    services: {
-        notification: TaskNotificationService;
-        analytics: TaskAnalyticsService;
-        scheduler: TaskScheduler;
-    };
 
     // Task CRUD operations
     createTask: (taskData: Partial<Task>) => Task;
@@ -24,26 +16,12 @@ interface TaskStore {
     getTasksByIds: (taskIds: string[]) => Task[];
     getAllTasks: () => Task[];
 
-    // Analytics
-    getTaskAnalytics: () => {
-        completionMetrics: ReturnType<TaskAnalyticsService['getCompletionMetrics']>;
-        priorityDistribution: ReturnType<TaskAnalyticsService['getTaskDistributionByPriority']>;
-    };
 }
-
-// Create services outside of the store
-const notificationService = new TaskNotificationService();
-const createServices = (tasks: Task[] = []) => ({
-    notification: notificationService,
-    analytics: new TaskAnalyticsService(tasks),
-    scheduler: new TaskScheduler(tasks),
-});
 
 export const useTaskStore = create<TaskStore>()(
     persist(
         (set, get) => ({
             tasks: [],
-            services: createServices(),
 
             createTask: (taskData) => {
                 const newTask: Task = {
@@ -62,17 +40,9 @@ export const useTaskStore = create<TaskStore>()(
 
                 set((state) => {
                     const newTasks = [...state.tasks, newTask];
-                    const newServices = createServices(newTasks);
-
-                    try {
-                        newServices.notification.notifyTaskUpdate(newTask, 'created');
-                    } catch (error) {
-                        console.error('Notification error:', error);
-                    }
 
                     return {
                         tasks: newTasks,
-                        services: newServices,
                     };
                 });
 
@@ -87,44 +57,18 @@ export const useTaskStore = create<TaskStore>()(
                             : task
                     );
 
-                    const updatedTask = updatedTasks.find(t => t.id === taskId);
-                    const newServices = createServices(updatedTasks);
-
-                    if (updatedTask) {
-                        try {
-                            newServices.notification.notifyTaskUpdate(
-                                updatedTask,
-                                updates.completed !== undefined ? 'completed' : 'updated'
-                            );
-                        } catch (error) {
-                            console.error('Notification error:', error);
-                        }
-                    }
-
                     return {
                         tasks: updatedTasks,
-                        services: newServices,
                     };
                 });
             },
 
             deleteTask: (taskId) => {
                 set((state) => {
-                    const task = state.tasks.find(t => t.id === taskId);
                     const updatedTasks = state.tasks.filter(t => t.id !== taskId);
-                    const newServices = createServices(updatedTasks);
-
-                    if (task) {
-                        try {
-                            newServices.notification.notifyTaskUpdate(task, 'deleted');
-                        } catch (error) {
-                            console.error('Notification error:', error);
-                        }
-                    }
 
                     return {
                         tasks: updatedTasks,
-                        services: newServices,
                     };
                 });
             },
@@ -152,13 +96,7 @@ export const useTaskStore = create<TaskStore>()(
                 return get().tasks;
             },
 
-            getTaskAnalytics: () => {
-                const { analytics } = get().services;
-                return {
-                    completionMetrics: analytics.getCompletionMetrics(),
-                    priorityDistribution: analytics.getTaskDistributionByPriority(),
-                };
-            },
+
         }),
         {
             name: 'task-store',

@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { FileText, Trash2, Calendar, Info, Clock } from 'lucide-react';
-import { TaskSheet } from './TaskSheet';
+import { TaskSheet } from '../tasks/TaskSheet';
 import { cn } from '@/lib/utils';
 import { useTaskStore } from '@/stores/taskStore';
 import { Button } from '@/components/ui/button';

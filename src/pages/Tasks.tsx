@@ -3,7 +3,7 @@ import { useTaskStore } from '@/stores/taskStore';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { TaskSheet } from '@/components/kanban/TaskSheet';
+import { TaskSheet } from '@/components/tasks/TaskSheet';
 import {
     Clock,
     AlertCircle,

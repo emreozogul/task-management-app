@@ -12,8 +12,6 @@ interface DocumentStore {
     updateDocument: (id: string, updates: Partial<IDocument>) => void;
     deleteDocument: (id: string) => void;
     setActiveDocument: (document: IDocument | null) => void;
-    getDocumentsByCategory: (category: string) => IDocument[];
-    getDocumentsByTag: (tag: string) => IDocument[];
     folders: Folder[];
     createFolder: (name: string) => void;
     addDocumentToFolder: (folderId: string, documentId: string) => void;
@@ -28,11 +26,11 @@ export { deepClone };
 
 export const useDocumentStore = create<DocumentStore>()(
     persist(
-        (set, get) => ({
+        (set, _) => ({
             documents: [],
             activeDocument: null,
 
-            createDocument: (title: string, category: string) => {
+            createDocument: (title: string) => {
                 const id = crypto.randomUUID();
 
                 const initialContent: JSONContent = {
@@ -53,8 +51,6 @@ export const useDocumentStore = create<DocumentStore>()(
                     content: deepClone(initialContent),
                     createdAt: new Date(),
                     updatedAt: new Date(),
-                    tags: [],
-                    category,
                 };
 
                 set(state => ({
@@ -126,14 +122,6 @@ export const useDocumentStore = create<DocumentStore>()(
                     documents: state.documents.filter(doc => doc.id !== id),
                     activeDocument: state.activeDocument?.id === id ? null : state.activeDocument
                 }));
-            },
-
-            getDocumentsByCategory: (category: string) => {
-                return get().documents.filter(doc => doc.category === category);
-            },
-
-            getDocumentsByTag: (tag: string) => {
-                return get().documents.filter(doc => doc.tags.includes(tag));
             },
 
             folders: [],

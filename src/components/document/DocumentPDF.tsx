@@ -1,5 +1,5 @@
 import { Document, Page, Text, View, StyleSheet, Image, Font } from '@react-pdf/renderer';
-import { IDocument } from '@/stores/documentStore';
+import { IDocument } from '@/types/document';
 
 // Register fonts
 Font.register({
@@ -198,15 +198,7 @@ const DocumentPDF = ({ document }: DocumentPDFProps) => {
             <Page size="A4" style={styles.page}>
                 <View style={styles.header}>
                     <Text style={styles.title}>{document.title}</Text>
-                    {document.tags && document.tags.length > 0 && (
-                        <View style={styles.tags}>
-                            {document.tags.map((tag, index) => (
-                                <Text key={index} style={styles.tag}>
-                                    {tag}
-                                </Text>
-                            ))}
-                        </View>
-                    )}
+                    <Text style={styles.metadata}>{document.createdAt.toLocaleString()}</Text>
                 </View>
                 <View style={styles.content}>
                     {renderContent(document.content)}
