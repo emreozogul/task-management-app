@@ -61,83 +61,97 @@ body {
 
 @layer base {
     :root {
-        --background: #ffffff;
+        /* Border Radius */
+        --radius: 0.5rem;
+        --radius-sm: 0.3rem;
+        --radius-md: 0.425rem;
+        --radius-lg: 0.5rem;
+        --radius-full: 9999px;
+
+        /* Light theme colors */
+        --background: #e8e7e7;
         --background-secondary: #f5f5f7;
         --background-hover: #ebebed;
         --background-hover-dark: #dedee0;
+
         --primary: #6775bc;
         --primary-hover: #7983c4;
-        --primary-foreground: #ffffff;
+        --primary-foreground: #1a1b23;
+
         --muted: #95959c;
         --muted-foreground: #6c6c74;
+
         --border: #e5e5e7;
         --border-hover: #d1d1d3;
-        --card: 0 0% 100%;
-        --card-foreground: 0 0% 3.9%;
-        --popover: 0 0% 100%;
-        --popover-foreground: 0 0% 3.9%;
-        --secondary: 0 0% 96.1%;
-        --secondary-foreground: 0 0% 9%;
-        --accent: 0 0% 96.1%;
-        --accent-foreground: 0 0% 9%;
-        --destructive: 0 84.2% 60.2%;
-        --destructive-foreground: 0 0% 98%;
-        --input: 0 0% 89.8%;
-        --ring: 0 0% 3.9%;
-        --chart-1: 12 76% 61%;
-        --chart-2: 173 58% 39%;
-        --chart-3: 197 37% 24%;
-        --chart-4: 43 74% 66%;
-        --chart-5: 27 87% 67%;
-        --radius: 0.5rem;
-        --novel-highlight-default: #ffffff;
-        --novel-highlight-purple: #f6f3f8;
-        --novel-highlight-red: #fdebeb;
-        --novel-highlight-yellow: #fbf4a2;
-        --novel-highlight-blue: #c1ecf9;
-        --novel-highlight-green: #acf79f;
-        --novel-highlight-orange: #faebdd;
-        --novel-highlight-pink: #faf1f5;
-        --novel-highlight-gray: #f1f1ef;
+
+        --destructive: #ef4444;
+        --warning: #eab308;
+        --info: #3b82f6;
+        --success: #4ade80;
+        --high-priority: #f59e0b;
+
+        --status-active-bg: rgba(22, 163, 74, 0.2);
+        --status-active-text: #4ade80;
+        --status-due-bg: rgba(245, 158, 11, 0.2);
+        --status-due-text: #f59e0b;
+        --status-starts-bg: #6775bc;
+        --status-starts-text: #ffffff;
+
+        --kanban-card-bg: rgb(245, 245, 247);
+        --kanban-card-hover: rgb(255, 255, 255);
+        --kanban-column-bg: rgb(235, 235, 237);
+        --kanban-column-hover: rgb(222, 222, 224);
+        --kanban-priority-low: rgb(103, 117, 188);
+        --kanban-priority-medium: rgb(245, 158, 11);
+        --kanban-priority-high: rgb(188, 103, 103);
+
+        /* Add foreground colors for colored backgrounds */
+        --destructive-foreground: #ffffff;
+        --warning-foreground: #000000;
+        /* Dark text for light warning background */
     }
 
     .dark {
+        /* Your existing dark theme colors */
         --background: #1a1b23;
         --background-secondary: #232430;
         --background-hover: #383844;
         --background-hover-dark: #4e4e59;
+
         --primary: #6775bc;
         --primary-hover: #7983c4;
         --primary-foreground: #ffffff;
+
         --muted: #95959c;
         --muted-foreground: #a5a5ac;
+
         --border: #383844;
         --border-hover: #4e4e59;
-        --card: 232 15% 24%;
-        --card-foreground: 0 0% 98%;
-        --popover: 232 15% 24%;
-        --popover-foreground: 0 0% 98%;
-        --secondary: 231 33% 67%;
-        --secondary-foreground: 0 0% 98%;
-        --accent: 232 15% 24%;
-        --accent-foreground: 0 0% 98%;
-        --destructive: 0 62.8% 30.6%;
-        --destructive-foreground: 0 0% 98%;
-        --input: 232 15% 24%;
-        --ring: 231 36% 57%;
-        --chart-1: 231 36% 57%;
-        --chart-2: 231 33% 63%;
-        --chart-3: 231 31% 69%;
-        --chart-4: 231 29% 75%;
-        --chart-5: 231 27% 81%;
-        --novel-highlight-default: #121212;
-        --novel-highlight-purple: #232430;
-        --novel-highlight-red: #383844;
-        --novel-highlight-yellow: #4e4e59;
-        --novel-highlight-blue: #65656e;
-        --novel-highlight-green: #7c7d85;
-        --novel-highlight-orange: #95959c;
-        --novel-highlight-pink: #3f3f3f;
-        --novel-highlight-gray: #575757;
+
+        --destructive: #ef4444;
+        --warning: #eab308;
+        --info: #3b82f6;
+        --success: #4ade80;
+        --high-priority: #f59e0b;
+
+        --status-active-bg: rgba(22, 163, 74, 0.2);
+        --status-active-text: #4ade80;
+        --status-due-bg: rgba(245, 158, 11, 0.2);
+        --status-due-text: #f59e0b;
+        --status-starts-bg: #6775bc;
+        --status-starts-text: #ffffff;
+
+        --kanban-card-bg: rgb(56, 56, 68);
+        --kanban-card-hover: rgb(26, 27, 35);
+        --kanban-column-bg: rgb(35, 36, 48);
+        --kanban-column-hover: rgb(42, 43, 56);
+        --kanban-priority-low: rgb(103, 117, 188);
+        --kanban-priority-medium: rgb(245, 158, 11);
+        --kanban-priority-high: rgb(188, 103, 103);
+
+        /* Add foreground colors for colored backgrounds */
+        --destructive-foreground: #ffffff;
+        --warning-foreground: #000000;
+        /* Dark text for light warning background */
     }
 }

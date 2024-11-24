@@ -14,10 +14,10 @@ export const PomodoroSettings = ({ settings, onChange }: PomodoroSettingsProps) 
             title="Pomodoro Timer"
             description="Customize your Pomodoro timer settings"
         >
-            <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-4 text-primary-foreground">
+                <div className="grid grid-cols-2 gap-4 ">
                     <div className="space-y-2">
-                        <Label>Work Duration (minutes)</Label>
+                        <Label >Work Duration (minutes)</Label>
                         <Input
                             type="number"
                             value={settings.workDuration}

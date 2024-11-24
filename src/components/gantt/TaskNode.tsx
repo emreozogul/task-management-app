@@ -1,15 +1,16 @@
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
 import { memo } from 'react';
-import { Task } from '@/types/task';
+import { Task, TaskPriority } from '@/types/task';
 import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
 
 interface TaskNodeProps {
     data: {
         label: string;
         startOffset: number;
         duration: number;
-        priority: string;
+        priority: TaskPriority;
         task: Task;
         dayWidth: number;
     };
@@ -23,33 +24,27 @@ export const TaskNode = memo(({ data }: TaskNodeProps) => {
     const startX = data.startOffset * data.dayWidth;
     const width = data.duration * data.dayWidth;
 
-    const getPriorityColor = (priority: string) => {
+    const getPriorityStyles = (priority: TaskPriority) => {
         switch (priority) {
-            case 'high':
+            case TaskPriority.HIGH:
                 return {
-                    background: 'bg-destructive/10',
-                    border: 'border-destructive/20',
-                    text: 'text-destructive',
-                    hover: 'hover:border-destructive/50'
+                    base: 'bg-destructive',
+                    hover: 'hover:bg-[#ff5555]',
                 };
-            case 'medium':
+            case TaskPriority.MEDIUM:
                 return {
-                    background: 'bg-warning/10',
-                    border: 'border-warning/20',
-                    text: 'text-warning',
-                    hover: 'hover:border-warning/50'
+                    base: 'bg-warning',
+                    hover: 'hover:bg-[#fbbf24]',
                 };
             default:
                 return {
-                    background: 'bg-primary/10',
-                    border: 'border-primary/20',
-                    text: 'text-primary',
-                    hover: 'hover:border-primary/50'
+                    base: 'bg-primary',
+                    hover: 'hover:bg-primary-hover',
                 };
         }
     };
 
-    const colors = getPriorityColor(data.priority);
+    const styles = getPriorityStyles(data.priority);
 
     return (
         <div
@@ -63,19 +58,22 @@ export const TaskNode = memo(({ data }: TaskNodeProps) => {
             }}
         >
             <div
-                className={`h-8 rounded-lg flex items-center px-3 cursor-pointer
-                          transition-all duration-200 border
-                          ${colors.background} ${colors.border} ${colors.hover}
-                          hover:shadow-lg hover:shadow-black/5`}
+                className={cn(
+                    "h-8 rounded-lg flex items-center px-3 cursor-pointer",
+                    "transition-all duration-200",
+                    "hover:shadow-lg hover:shadow-black/5",
+                    styles.base,
+                    styles.hover,
+                    "text-white"
+                )}
                 style={{ width: `${width}px` }}
             >
                 <div className="flex items-center gap-2 min-w-0 w-full">
-                    <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${colors.text}`} />
-                    <span className="text-sm font-medium truncate text-primary-foreground/90">
+                    <span className="text-sm font-medium truncate">
                         {data.label}
                     </span>
                     {data.duration > 1 && (
-                        <span className="text-xs text-muted flex-shrink-0">
+                        <span className="text-xs opacity-80 flex-shrink-0">
                             {data.duration}d
                         </span>
                     )}
@@ -85,7 +83,7 @@ export const TaskNode = memo(({ data }: TaskNodeProps) => {
                             opacity-0 group-hover:opacity-100 transition-opacity duration-200
                             pointer-events-none z-50 w-72 border border-border shadow-xl shadow-black/20">
                     <div className="flex items-center gap-2 mb-2">
-                        <div className={`w-2 h-2 rounded-full ${colors.text}`} />
+                        <div className={cn("w-full h-1 rounded-full", styles.base)} />
                         <h4 className="font-medium text-primary-foreground">{data.task.title}</h4>
                     </div>
 

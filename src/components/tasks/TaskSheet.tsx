@@ -125,7 +125,7 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, taskId
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
-            <SheetContent className="bg-background-secondary border-l border-border sm:max-w-[500px]">
+            <SheetContent className="bg-background-secondary border-l border-border sm:max-w-[500px] text-primary-foreground">
                 <SheetHeader className="space-y-4">
                     <div className="flex items-center gap-3">
                         <Checkbox

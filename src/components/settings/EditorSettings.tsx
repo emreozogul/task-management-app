@@ -13,7 +13,7 @@ export const EditorSettings = ({ settings, onChange }: EditorSettingsProps) => {
             title="Editor"
             description="Configure your editing preferences"
         >
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between text-primary-foreground">
                 <div className="space-y-1">
                     <Label>Auto-save</Label>
                     <p className="text-sm text-muted">Automatically save changes while editing</p>

@@ -1,10 +1,21 @@
-import { createContext, useContext, useEffect } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useThemeStore } from '@/stores/themeStore';
 
-const ThemeProviderContext = createContext({});
+type Theme = 'dark' | 'light' | 'system';
+
+interface ThemeProviderContext {
+    theme: Theme;
+    setTheme: (theme: Theme) => void;
+}
+
+const ThemeProviderContext = createContext<ThemeProviderContext>({
+    theme: 'system',
+    setTheme: () => null,
+});
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-    const { theme } = useThemeStore();
+    const { theme, setTheme } = useThemeStore();
+    const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
         const root = window.document.documentElement;
@@ -25,17 +36,26 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         }
     }, [theme]);
 
+    // Prevent flash of incorrect theme
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    if (!mounted) {
+        return null;
+    }
+
     return (
-        <ThemeProviderContext.Provider value={{}}>
+        <ThemeProviderContext.Provider value={{ theme, setTheme }}>
             {children}
         </ThemeProviderContext.Provider>
     );
 }
 
-
 export const useTheme = () => {
-    if (typeof window === 'undefined') {
+    const context = useContext(ThemeProviderContext);
+    if (context === undefined) {
         throw new Error('useTheme must be used within a ThemeProvider');
     }
-    return useContext(ThemeProviderContext);
+    return context;
 };

@@ -63,7 +63,7 @@ export default function GanttChart() {
     }
 
     return (
-        <div className="p-6 h-[94vh] bg-background">
+        <div className="p-6 h-[94vh]">
             <div className="h-full bg-background-secondary rounded-lg flex flex-col overflow-hidden">
                 {/* Fixed header with dates */}
                 <div

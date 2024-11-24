@@ -13,7 +13,7 @@ export const ViewSettings = ({ settings, onChange }: ViewSettingsProps) => {
             title="View Settings"
             description="Customize how your tasks and projects are displayed"
         >
-            <div className="space-y-4">
+            <div className="space-y-4 text-primary-foreground">
                 <div className="flex items-center justify-between">
                     <div className="space-y-1">
                         <Label>Compact View</Label>

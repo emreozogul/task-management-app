@@ -47,7 +47,7 @@ const Settings = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-6">
-                    <AppearanceSettings settings={localSettings} onChange={setLocalSettings} />
+                    <AppearanceSettings />
                     <EditorSettings settings={localSettings} onChange={setLocalSettings} />
                     <ProjectSettings settings={localSettings} onChange={setLocalSettings} />
                 </div>
