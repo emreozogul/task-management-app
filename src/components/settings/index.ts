@@ -2,6 +2,6 @@ import { AppearanceSettings } from './AppearanceSettings';
 import { EditorSettings } from './EditorSettings';
 import { ProjectSettings } from './ProjectSettings';
 import { PomodoroSettings } from './PomodoroSettings';
-import { ViewSettings } from './ViewSettings';
+import ResetData from './ResetData';
 
-export { AppearanceSettings, EditorSettings, ProjectSettings, PomodoroSettings, ViewSettings };
+export { AppearanceSettings, EditorSettings, ProjectSettings, PomodoroSettings, ResetData };
