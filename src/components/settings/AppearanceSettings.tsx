@@ -1,3 +1,4 @@
+import { useTheme } from '@/components/providers/ThemeProvider';
 import { SettingsCard } from './SettingsCard';
 import { Label } from '@/components/ui/label';
 import {
@@ -8,22 +9,20 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 
-interface AppearanceSettingsProps {
-    settings: any;
-    onChange: (settings: any) => void;
-}
 
-export const AppearanceSettings = ({ settings, onChange }: AppearanceSettingsProps) => {
+export const AppearanceSettings = () => {
+    const { theme, setTheme } = useTheme();
+
     return (
         <SettingsCard
             title="Appearance"
             description="Customize the look and feel of your workspace"
         >
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between text-primary-foreground">
                 <Label>Theme</Label>
                 <Select
-                    value={settings.theme}
-                    onValueChange={(value) => onChange({ ...settings, theme: value })}
+                    value={theme}
+                    onValueChange={(value: 'light' | 'dark' | 'system') => setTheme(value)}
                 >
                     <SelectTrigger className="w-[180px] bg-background-hover border-border text-primary-foreground">
                         <SelectValue placeholder="Select theme" />

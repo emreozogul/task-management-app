@@ -11,7 +11,7 @@ import { useState } from 'react';
 import { useDialogKeyboard } from '@/hooks/useDialogKeyboard';
 
 const Documents = () => {
-    const { documents, folders, createFolder, addDocumentToFolder, removeDocumentFromFolder, deleteFolder } = useDocumentStore();
+    const { documents, deleteDocument, folders, createFolder, addDocumentToFolder, removeDocumentFromFolder, deleteFolder } = useDocumentStore();
     const { query } = useSearchStore();
     const [isCreateFolderOpen, setIsCreateFolderOpen] = useState(false);
     const [isFolderSelectOpen, setIsFolderSelectOpen] = useState(false);
@@ -157,6 +157,15 @@ const Documents = () => {
                                         >
                                             <FolderIcon className="w-4 h-4 mr-2" />
                                             Move to Folder
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            className="text-muted px-3 py-2 text-sm hover:bg-background-hover hover:text-destructive cursor-pointer"
+                                            onClick={() => {
+                                                deleteDocument(doc.id);
+                                            }}
+                                        >
+                                            <Trash2 className="w-4 h-4 mr-2" />
+                                            Delete
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>

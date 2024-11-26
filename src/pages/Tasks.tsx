@@ -30,7 +30,7 @@ import {
 import { Task } from '@/types/task';
 import { cn } from '@/lib/utils';
 
-type TaskStatus = 'all' | 'in-progress' | 'upcoming' | 'overdue' | 'completed';
+type TaskStatus = 'all' | 'in-progress' | 'upcoming' | 'overdue' | 'completed' | 'not-completed';
 
 export default function TasksPage() {
     const { getAllTasks } = useTaskStore();
@@ -99,6 +99,8 @@ export default function TasksPage() {
                         return isBefore(endDate, todayStart);
                     case 'completed':
                         return task.completed;
+                    case 'not-completed':
+                        return !task.completed;
                     default:
                         return true;
                 }
@@ -257,6 +259,16 @@ export default function TasksPage() {
                                 )}
                             >
                                 Completed
+                            </Button>
+                            <Button
+                                variant={selectedStatus === 'not-completed' ? 'default' : 'outline'}
+                                onClick={() => setSelectedStatus('not-completed')}
+                                className={cn(
+                                    "h-9",
+                                    selectedStatus === 'not-completed' ? 'bg-primary' : 'border-border'
+                                )}
+                            >
+                                Not Completed
                             </Button>
 
                             {/* Priority Filter */}

@@ -11,50 +11,50 @@ export default {
 			},
 			colors: {
 				background: {
-					DEFAULT: '#1a1b23',
-					secondary: '#232430',
-					hover: '#383844',
-					'hover-dark': '#4e4e59'
+					DEFAULT: 'var(--background)',
+					secondary: 'var(--background-secondary)',
+					hover: 'var(--background-hover)',
+					'hover-dark': 'var(--background-hover-dark)'
 				},
 				primary: {
-					DEFAULT: '#6775bc',
-					hover: '#7983c4',
-					foreground: '#ffffff'
+					DEFAULT: 'var(--primary)',
+					hover: 'var(--primary-hover)',
+					foreground: 'var(--primary-foreground)'
 				},
-				muted: '#95959c',
-				border: '#4e4e59',
-				destructive: '#ef4444',
-				warning: '#eab308',
-				info: '#3b82f6',
-				success: '#4ade80',
-				"high-priority": "#f59e0b",
+				muted: 'var(--muted)',
+				border: 'var(--border)',
+				destructive: 'var(--destructive)',
+				warning: 'var(--warning)',
+				info: 'var(--info)',
+				success: 'var(--success)',
+				"high-priority": "var(--high-priority)",
 				status: {
 					active: {
-						bg: "rgb(22 163 74 / 0.2)",
-						text: "#4ade80"
+						bg: "var(--status-active-bg)",
+						text: "var(--status-active-text)"
 					},
 					due: {
-						bg: "rgb(245 158 11 / 0.2)",
-						text: "#f59e0b"
+						bg: "var(--status-due-bg)",
+						text: "var(--status-due-text)"
 					},
 					starts: {
-						bg: "#6775bc",
-						text: "#ffffff"
+						bg: "var(--status-starts-bg)",
+						text: "var(--status-starts-text)"
 					}
 				},
 				kanban: {
 					card: {
-						bg: "rgb(56, 56, 68)",
-						hover: "rgb(26, 27, 35)",
+						bg: "var(--kanban-card-bg)",
+						hover: "var(--kanban-card-hover)",
 					},
 					column: {
-						bg: "rgb(35, 36, 48)",
-						hover: "rgb(42, 43, 56)",
+						bg: "var(--kanban-column-bg)",
+						hover: "var(--kanban-column-hover)",
 					},
 					priority: {
-						low: "rgb(103, 117, 188)",
-						medium: "rgb(245, 158, 11)",
-						high: "rgb(188, 103, 103)"
+						low: "var(--kanban-priority-low)",
+						medium: "var(--kanban-priority-medium)",
+						high: "var(--kanban-priority-high)"
 					}
 				}
 			},

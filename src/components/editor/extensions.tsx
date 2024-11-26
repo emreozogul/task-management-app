@@ -11,17 +11,12 @@ import {
     TaskItem,
     TaskList,
     TextStyle,
-    TiptapImage,
     TiptapLink,
     TiptapUnderline,
-    Twitter,
-    UpdatedImage,
-    Youtube,
     Mathematics,
 } from "novel/extensions";
 import GlobalDragHandle from 'tiptap-extension-global-drag-handle'
 import AutoJoiner from 'tiptap-extension-auto-joiner'
-import { UploadImagesPlugin } from "novel/plugins";
 
 import { cx } from "class-variance-authority";
 import { common, createLowlight } from "lowlight";
@@ -36,26 +31,6 @@ const tiptapLink = TiptapLink.configure({
     },
 });
 
-const tiptapImage = TiptapImage.extend({
-    addProseMirrorPlugins() {
-        return [
-            UploadImagesPlugin({
-                imageClass: cx("opacity-40 rounded-lg border border-stone-200"),
-            }),
-        ];
-    },
-}).configure({
-    allowBase64: true,
-    HTMLAttributes: {
-        class: cx("rounded-lg border border-muted"),
-    },
-});
-
-const updatedImage = UpdatedImage.configure({
-    HTMLAttributes: {
-        class: cx("rounded-lg border border-border"),
-    },
-});
 
 const taskList = TaskList.configure({
     HTMLAttributes: {
@@ -116,24 +91,9 @@ const starterKit = StarterKit.configure({
 });
 
 const codeBlockLowlight = CodeBlockLowlight.configure({
-    // configure lowlight: common /  all / use highlightJS in case there is a need to specify certain language grammars only
-    // common: covers 37 language grammars which should be good enough in most cases
     lowlight: createLowlight(common),
 });
 
-const youtube = Youtube.configure({
-    HTMLAttributes: {
-        class: cx("rounded-lg border border-muted"),
-    },
-    inline: false,
-});
-
-const twitter = Twitter.configure({
-    HTMLAttributes: {
-        class: cx("not-prose"),
-    },
-    inline: false,
-});
 
 const mathematics = Mathematics.configure({
     HTMLAttributes: {
@@ -170,14 +130,10 @@ export const defaultExtensions = [
     starterKit,
     placeholder,
     tiptapLink,
-    tiptapImage,
-    updatedImage,
     taskList,
     taskItem,
     horizontalRule,
     codeBlockLowlight,
-    youtube,
-    twitter,
     mathematics,
     characterCount,
     TiptapUnderline,

@@ -93,7 +93,7 @@ export const NodeSelector = ({ open, onOpenChange }: NodeSelectorProps) => {
     const activeItem = items.find(({ isActive }) => isActive(editor));
     return (
         <EditorBubbleItem>
-            <Popover modal={false} open={open} onOpenChange={onOpenChange}>
+            <Popover open={open} onOpenChange={onOpenChange}>
                 <PopoverTrigger asChild>
                     <Button size="sm" variant="ghost" className="gap-2 rounded-lg">
                         <span className="whitespace-nowrap">{activeItem?.name || 'Multiple'}</span>
@@ -106,7 +106,6 @@ export const NodeSelector = ({ open, onOpenChange }: NodeSelectorProps) => {
                     className="w-48 z-[99999] p-0 border-border bg-background-secondary text-primary-foreground"
                     sideOffset={0}
                     alignOffset={0}
-                    forceMount
                     onOpenAutoFocus={(e) => e.preventDefault()}
                     avoidCollisions={false}
                 >

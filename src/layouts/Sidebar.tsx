@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { LayoutDashboard, Trello, Settings, ChevronLeft, ChevronRight, FileText, Gauge, Calendar, ListTodo, GanttChart } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 interface NavItem {
     path: string;
@@ -58,12 +59,11 @@ export const Sidebar = () => {
     return (
         <aside
             className={cn(
-                "h-full bg-background-secondary text-primary-foreground transition-all duration-500 relative",
+                "h-full bg-background-secondary text-primary-foreground transition-all duration-500 relative flex flex-col",
                 isCollapsed ? "w-16" : "w-48"
             )}
         >
-
-            <nav className="space-y-2 py-4 relative mt-12">
+            <nav className="space-y-2 py-4 relative mt-12 flex-1">
                 {navItems.map((item) => (
                     <Link
                         key={item.path}
@@ -95,6 +95,14 @@ export const Sidebar = () => {
                     </Link>
                 ))}
             </nav>
+
+            <div className={cn(
+                "p-4 border-t border-border flex items-center",
+                isCollapsed ? "justify-center" : "justify-start"
+            )}>
+                <ThemeToggle />
+            </div>
+
             <button
                 type="button"
                 title={isCollapsed ? 'Expand' : 'Collapse'}

@@ -20,7 +20,7 @@ export const ProjectSettings = ({ settings, onChange }: ProjectSettingsProps) =>
             title="Project Settings"
             description="Configure project-wide preferences"
         >
-            <div className="space-y-4">
+            <div className="space-y-4 text-primary-foreground">
                 <div className="flex items-center justify-between">
                     <div className="space-y-1">
                         <Label>Default View</Label>

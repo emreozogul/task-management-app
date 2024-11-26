@@ -1,11 +1,24 @@
 import { createBrowserRouter } from 'react-router-dom';
+import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import MainLayout from '../layouts/MainLayout';
 import * as Pages from '@/pages';
+
+const AppWrapper = ({ children }: { children: React.ReactNode }) => {
+    return (
+        <ThemeProvider>
+            {children}
+        </ThemeProvider>
+    );
+};
 
 export const router = createBrowserRouter([
     {
         path: '/',
-        element: <MainLayout />,
+        element: (
+            <AppWrapper>
+                <MainLayout />
+            </AppWrapper>
+        ),
         children: [
             {
                 index: true,

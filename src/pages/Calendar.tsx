@@ -13,17 +13,12 @@ import {
 } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, useSensor, useSensors, PointerSensor } from '@dnd-kit/core';
 import { CalendarCell } from '@/components/calendar/CalendarCell';
-import { CalendarTask } from '@/components/calendar/CalendarTask';
-import { Task, TaskPriority } from '@/types/task';
-import { toast } from 'sonner';
+import { TaskPriority } from '@/types/task';
 
 export default function CalendarPage() {
     const [currentMonth, setCurrentMonth] = useState(new Date());
-    const { tasks, updateTask, createTask } = useTaskStore();
-    const [activeId, setActiveId] = useState<string | null>(null);
-    const [activeTask, setActiveTask] = useState<Task | null>(null);
+    const { tasks, createTask } = useTaskStore();
 
     const calendarDays = useMemo(() => {
         const start = startOfWeek(startOfMonth(currentMonth), { weekStartsOn: 1 });
@@ -37,45 +32,6 @@ export default function CalendarPage() {
             const taskDate = new Date(task.startDate);
             return isSameDay(taskDate, date);
         });
-    };
-
-    const handleDragStart = (event: DragStartEvent) => {
-        const { active } = event;
-        setActiveId(active.id as string);
-
-        const draggedTask = tasks.find(task => task.id === active.id);
-        setActiveTask(draggedTask || null);
-    };
-
-    const handleDragEnd = (event: DragEndEvent) => {
-        const { active, over } = event;
-        setActiveId(null);
-        setActiveTask(null);
-
-        if (!over || !tasks) return;
-
-        const taskId = active.id as string;
-        const newDate = new Date(over.id);
-        const task = tasks.find(task => task.id === taskId);
-
-        if (task) {
-            const originalStart = task.startDate ? new Date(task.startDate) : new Date();
-            const originalEnd = task.endDate ? new Date(task.endDate) : new Date();
-            const duration = originalEnd.getTime() - originalStart.getTime();
-
-            const newStartDate = new Date(newDate);
-            newStartDate.setHours(0, 0, 0, 0);
-
-            const newEndDate = new Date(newStartDate.getTime() + duration);
-            newEndDate.setHours(23, 59, 59, 999);
-
-            updateTask(taskId, {
-                startDate: newStartDate.toISOString(),
-                endDate: newEndDate.toISOString()
-            });
-
-            toast.success(`Task "${task.title}" moved to ${format(newDate, 'MMM dd')}`);
-        }
     };
 
     const handleAddTask = (date: Date) => {
@@ -94,13 +50,6 @@ export default function CalendarPage() {
         });
     };
 
-    const sensors = useSensors(
-        useSensor(PointerSensor, {
-            activationConstraint: {
-                distance: 8,
-            },
-        })
-    );
 
     return (
         <div className="p-6 h-full flex flex-col overflow-hidden">
@@ -134,45 +83,32 @@ export default function CalendarPage() {
             </Card>
 
             <Card className="flex-1 p-2 md:p-4 bg-background-secondary border-border overflow-hidden">
-                <DndContext
-                    sensors={sensors}
-                    onDragStart={handleDragStart}
-                    onDragEnd={handleDragEnd}
-                >
-                    <div className="h-full flex flex-col overflow-hidden">
-                        {/* Calendar Header */}
-                        <div className="grid grid-cols-7 mb-2">
-                            {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
-                                <div key={day} className="text-center text-sm font-medium text-primary py-2">
-                                    {day}
-                                </div>
-                            ))}
-                        </div>
 
-                        {/* Calendar Grid */}
-                        <div className="flex-1 grid grid-cols-7 gap-2 pt-2 overflow-y-auto min-h-0">
-                            {calendarDays.map((day) => (
-                                <CalendarCell
-                                    key={day.toISOString()}
-                                    day={day}
-                                    tasks={getTasksForDate(day)}
-                                    isToday={isSameDay(day, new Date())}
-                                    isCurrentMonth={isSameMonth(day, currentMonth)}
-                                    onAddTask={handleAddTask}
-                                />
-                            ))}
-                        </div>
-                    </div>
-                    <DragOverlay>
-                        {activeId && activeTask ? (
-                            <div className="opacity-80">
-                                <CalendarTask
-                                    task={activeTask}
-                                />
+                <div className="h-full flex flex-col overflow-hidden p-2">
+                    {/* Calendar Header */}
+                    <div className="grid grid-cols-7 mb-2">
+                        {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
+                            <div key={day} className="text-center text-sm font-medium text-primary py-2">
+                                {day}
                             </div>
-                        ) : null}
-                    </DragOverlay>
-                </DndContext>
+                        ))}
+                    </div>
+
+                    {/* Calendar Grid */}
+                    <div className="flex-1 grid grid-cols-7 gap-2 p-2 overflow-y-auto min-h-0">
+                        {calendarDays.map((day) => (
+                            <CalendarCell
+                                key={day.toISOString()}
+                                day={day}
+                                tasks={getTasksForDate(day)}
+                                isToday={isSameDay(day, new Date())}
+                                isCurrentMonth={isSameMonth(day, currentMonth)}
+                                onAddTask={handleAddTask}
+                            />
+                        ))}
+                    </div>
+                </div>
+
             </Card>
         </div>
     );

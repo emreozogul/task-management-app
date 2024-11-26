@@ -15,7 +15,7 @@
         "title": "tma",
         "width": 1024,
         "height": 768,
-        "minWidth": 760,
+        "minWidth": 800,
         "minHeight": 700,
         "dragDropEnabled": false
       }

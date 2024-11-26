@@ -11,10 +11,8 @@ import {
     JSONContent,
 } from "novel";
 import { ImageResizer, handleCommandNavigation } from "novel/extensions";
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useDebouncedCallback } from "use-debounce";
-import { ColorSelector } from "./selectors/color-selector";
-import { LinkSelector } from "./selectors/link-selector";
 import { MathSelector } from "./selectors/math-selector";
 import { NodeSelector } from "./selectors/node-selector";
 import { TextButtons } from "./selectors/text-buttons";
@@ -33,10 +31,26 @@ interface EditorProps {
 const Editor = ({ onUpdate, initialContent, documentId }: EditorProps) => {
     const [saveStatus, setSaveStatus] = useState("Saved");
     const [charsCount, setCharsCount] = useState();
-
     const [openNode, setOpenNode] = useState(false);
-    const [openColor, setOpenColor] = useState(false);
-    const [openLink, setOpenLink] = useState(false);
+
+    const closeAllSelectors = useCallback(() => {
+        setOpenNode(false);
+    }, []);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            const target = event.target as HTMLElement;
+            const isEditorBubble = target.closest('.ProseMirror-selectednode');
+            if (!isEditorBubble) {
+                closeAllSelectors();
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [closeAllSelectors]);
 
     const debouncedUpdates = useDebouncedCallback(async (editor: EditorInstance) => {
         const json = editor.getJSON();
@@ -97,8 +111,8 @@ const Editor = ({ onUpdate, initialContent, documentId }: EditorProps) => {
                             }
                         },
                         attributes: {
-                            class: "prose prose-lg prose-invert prose-headings:font-title font-default focus:outline-none max-w-full leading-relaxed px-4",
-                            style: " line-height: 1.3;"
+                            class: "prose prose-lg text-primary-foreground dark:prose-invert prose-stone prose-headings:font-title font-default focus:outline-none max-w-full leading-relaxed px-4",
+                            style: "line-height: 1.3; "
                         },
                     }}
                     onUpdate={({ editor }) => {
@@ -113,16 +127,15 @@ const Editor = ({ onUpdate, initialContent, documentId }: EditorProps) => {
                             placement: 'top',
                             offset: [0, 10],
                             zIndex: 50,
-                            maxWidth: 'none'
+                            maxWidth: 'none',
+                            onHide: closeAllSelectors
                         }}
                         className="flex items-center p-1 shadow-lg whitespace-nowrap"
                     >
                         <div className="flex items-center min-w-fit p-1 border border-border bg-background-secondary rounded-lg">
                             <NodeSelector open={openNode} onOpenChange={setOpenNode} />
-                            <LinkSelector open={openLink} onOpenChange={setOpenLink} />
                             <MathSelector />
                             <TextButtons />
-                            <ColorSelector open={openColor} onOpenChange={setOpenColor} />
                         </div>
                     </EditorBubble>
 
@@ -133,7 +146,7 @@ const Editor = ({ onUpdate, initialContent, documentId }: EditorProps) => {
                                 <EditorCommandItem
                                     value={item.title}
                                     onCommand={(val) => item.command?.(val)}
-                                    className="flex w-full items-center space-x-2 rounded-md px-2 py-1 text-left text-sm hover:bg-background-hover aria-selected:bg-background-hover"
+                                    className="flex w-full items-center space-x-2 text-primary-foreground rounded-md px-2 py-1 text-left text-sm hover:bg-background-hover aria-selected:bg-background-hover"
                                     key={item.title}
                                 >
                                     <div className="flex h-10 w-10 items-center justify-center rounded-md border border-border bg-background-hover">

@@ -5,7 +5,7 @@ import { useDocumentStore } from "@/stores/documentStore";
 import { useTaskStore } from "@/stores/taskStore";
 import { useKanbanStore } from "@/stores/kanbanStore";
 import { FileText, Trash } from "lucide-react";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { TagManager } from "@/components/tasks/TagManager";
 import DeadlineSelector from "./DeadlineSelector";
 import { Task, TaskPriority } from "@/types/task";
@@ -35,6 +35,10 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, taskId
     const [newTag, setNewTag] = useState('');
 
     const [taskValues, setTaskValues] = useState(task);
+
+    useEffect(() => {
+        setTaskValues(task);
+    }, [task]);
 
     const taskLocations = boards.reduce((acc, board) => {
         board.columns.forEach(column => {
@@ -75,8 +79,13 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, taskId
             const endDate = new Date(range.to);
             endDate.setHours(23, 59, 59, 999);
 
-            handleTaskUpdate('startDate', startDate.toISOString());
-            handleTaskUpdate('endDate', endDate.toISOString());
+            const dateUpdates = {
+                startDate: startDate.toISOString(),
+                endDate: endDate.toISOString()
+            };
+
+            setTaskValues(prev => ({ ...prev, ...dateUpdates }));
+            updateTask(taskId, dateUpdates);
         }
     };
 
@@ -85,12 +94,11 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, taskId
     };
 
     const handleAddTag = () => {
-        if (newTag.trim()) {
-            const currentLabels = taskValues.labels || [];
-            handleTaskUpdate('labels', [...currentLabels, newTag.trim()]);
-            setNewTag('');
-            setIsTagDialogOpen(false);
-        }
+
+        const currentLabels = taskValues.labels || [];
+        handleTaskUpdate('labels', [...currentLabels, newTag.trim()]);
+        setNewTag('');
+        setIsTagDialogOpen(false);
     };
 
     const handleRemoveTag = (tag: string) => {
@@ -108,24 +116,24 @@ export const TaskSheet: React.FC<TaskSheetProps> = ({ open, onOpenChange, taskId
         onOpenChange(false);
     };
 
-    const handleTagDialogClose = () => {
-        setIsTagDialogOpen(false);
-        setNewTag('');
+    const handleTagDialogSubmit = () => {
+        if (newTag.trim()) {
+            handleAddTag();
+        }
     };
 
     useDialogKeyboard({
         isOpen: isTagDialogOpen,
-        onClose: handleTagDialogClose,
-        onSubmit: () => {
-            if (newTag.trim()) {
-                handleAddTag();
-            }
-        }
+        onClose: () => {
+            setIsTagDialogOpen(false);
+            setNewTag('');
+        },
+        onSubmit: handleTagDialogSubmit
     });
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
-            <SheetContent className="bg-background-secondary border-l border-border sm:max-w-[500px]">
+            <SheetContent className="bg-background-secondary border-l border-border sm:max-w-[500px] text-primary-foreground overflow-y-auto">
                 <SheetHeader className="space-y-4">
                     <div className="flex items-center gap-3">
                         <Checkbox
