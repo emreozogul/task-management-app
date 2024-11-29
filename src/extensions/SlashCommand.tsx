@@ -1,7 +1,5 @@
 import { Extension } from '@tiptap/core';
 import Suggestion from '@tiptap/suggestion';
-import { ReactRenderer } from '@tiptap/react';
-import tippy from 'tippy.js';
 import { Editor } from '@tiptap/core';
 import {
     Heading1,
@@ -248,7 +246,6 @@ export default Extension.create({
                 editor: this.editor,
                 ...this.options.suggestion,
                 render: () => {
-                    let component: ReactRenderer | null = null;
                     let popup: any = null;
 
                     return {
