@@ -1,89 +1,94 @@
-# Document Editor with Pomodoro Timer
+# Document Editor with Task Management
 
-A modern document management and productivity application built with Tauri, React, and TypeScript.
+A modern document and task management application built with Tauri, React, and TypeScript. Combines rich text editing with powerful task management features.
 
-## Features
+## Core Features
 
 ### Document Management
-- Rich text editor powered by TipTap/Novel
-- Real-time auto-saving
-- Document status management (draft, published, archived)
-- Tag and category organization
-- Word count tracking
-- Global drag and drop functionality for content blocks
+- Rich text editor powered by TipTap with real-time autosaving
+- Support for markdown, math equations, and code blocks
+- Document organization with folders and tags
+- Export to PDF and DOCX formats
+- Global drag and drop for content blocks
 
-### Editor Capabilities
-- Text formatting (bold, italic, underline)
-- Headings and lists
-- Code blocks with syntax highlighting
-- Image upload and management
-- YouTube and Twitter embeds
-- Mathematical equations support
-- Custom slash commands
-- Color selection for text
-- Link management
-- Task lists and checkboxes
+### Task Management
+- Multiple task views: Kanban boards, Calendar, Timeline (Gantt)
+- Task prioritization and deadline tracking
+- Task linking with documents
+- Custom tags and labels
+- Progress tracking and statistics
 
-### Pomodoro Timer
-- Configurable work and break durations
-- Session tracking and statistics
-- Visual and audio notifications
-- Session type indication (work/break)
+### Productivity Tools
+- Pomodoro timer with customizable work/break intervals
+- Time tracking for tasks
+- Ambient sound mixer for focus
+- Quick notes widget
+- Dashboard with task overview and statistics
 
-## Technical Stack
+## Technical Implementation
 
-- **Frontend Framework**: React with TypeScript
-- **Desktop Framework**: Tauri (Rust)
-- **Editor Framework**: TipTap/Novel
-- **Styling**: Tailwind CSS + shadcn/ui
-- **State Management**: Zustand
-- **Database**: SQLite (via Rusqlite)
+### Frontend Architecture
+- React with TypeScript for UI components
+- Zustand for state management
+- TipTap/Novel for rich text editing
+- DND Kit for drag-and-drop functionality
+- Tailwind CSS + shadcn/ui for styling
+- React Router for navigation
 
-## Getting Started
+### Backend Features
+- Tauri (Rust) for desktop integration
+- SQLite database for data persistence
+- File system operations for document management
+- Cross-platform compatibility
 
-1. Clone the repository
-2. Install dependencies:
+### Key Components
+- Document Editor with real-time collaboration features
+- Kanban Board with customizable columns
+- Calendar view with task scheduling
+- Gantt chart for project timeline visualization
+- Dashboard with task statistics and quick actions
+
+## Development Setup
+
+1. Install dependencies:
    ```bash
    npm install
    ```
-3. Run the development server:
+
+2. Run in development mode:
    ```bash
    npm run tauri dev
    ```
 
-## Building for Production
+3. Build for production:
+   ```bash
+   npm run tauri build
+   ```
 
-To create a production build:
-```bash
-npm run tauri build
-```
+## Project Structure
+
+src/
+├── components/ # Reusable React components
+│ ├── editor/ # Text editor components
+│ ├── kanban/ # Kanban board components
+│ ├── tasks/ # Task management components
+│ └── widgets/ # Dashboard widgets
+├── stores/ # Zustand state management
+├── pages/ # Main application pages
+├── layouts/ # Layout components
+└── styles/ # Global styles and themes
+src-tauri/ # Rust backend code
 
 
-## Development Requirements
-
+## System Requirements
 - Node.js 18+
 - Rust toolchain
 - Tauri system dependencies
 
-## Project Structure
+## Theme Support
+- Dark and light mode
+- System theme detection
+- Customizable color schemes
 
-- `/src` - React frontend code
-- `/src-tauri` - Rust backend code
-- `/src/components` - Reusable React components
-- `/src/stores` - Zustand state management
-- `/src/styles` - Global styles and Tailwind configuration
-
-background colors
-
-#1a1b23 - Main background (very dark blue-gray)
-#232430 - Card/component background (dark blue-gray)
-#383844 - Secondary/hover background (medium blue-gray)
-#4e4e59 - Darker hover states (medium-dark blue-gray)
-
-Accent/Primary Colors:
-
-#6775bc - Primary accent color (indigo/blue)
-#7983c4 - Lighter primary accent (lighter indigo/blue)
-
-Text Colors:
-#95959c - Muted text (gray)
+## License
+[Add your license information here]
