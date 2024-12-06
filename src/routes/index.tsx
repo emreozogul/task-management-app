@@ -54,17 +54,9 @@ export const router = createBrowserRouter([
                 element: <Pages.Settings />,
             },
             {
-                path: 'calendar',
-                element: <Pages.Calendar />,
-            },
-            {
                 path: 'tasks',
                 element: <Pages.TasksPage />,
             },
-            {
-                path: 'gantt',
-                element: <Pages.Gantt />,
-            }
         ],
     },
 ]);

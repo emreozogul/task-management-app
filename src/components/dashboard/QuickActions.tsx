@@ -18,7 +18,7 @@ export const QuickActions = () => {
         <CollapsibleCard
             title="Quick Actions"
             icon={<ListTodo className="w-6 h-6 text-primary mr-2" />}
-            className="bg-background-secondary border-none shadow-lg h-[400px]"
+            className="bg-background-secondary border-none shadow-lg h-full"
         >
             <div className="grid grid-cols-1 gap-4 flex-1">
                 <Button

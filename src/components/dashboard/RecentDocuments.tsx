@@ -15,9 +15,9 @@ export const RecentDocuments = () => {
             <Link to="/documents" className="text-primary hover:text-primary-hover text-sm font-medium">
                 View All
             </Link>
-        } icon={<FileText className="w-6 h-6 text-primary mr-2" />} className="md:col-span-2 bg-background-secondary border-none shadow-lg">
+        } icon={<FileText className="w-6 h-6 text-primary mr-2" />} className="bg-background-secondary border-none shadow-lg h-full w-full">
 
-            <div className="space-y-3">
+            <div className="space-y-3 h-full w-full">
                 {recentDocuments.map((doc) => (
                     <Link
                         key={doc.id}

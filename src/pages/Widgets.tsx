@@ -6,12 +6,15 @@ const Widgets = () => {
     return (
         <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <PomodoroTimer />
-                <QuickNotes />
+                <div className="col-span-2">
+                    <PomodoroTimer />
+                </div>
+
                 <div className="col-span-2">
                     <AmbientSoundPlayer />
                 </div>
                 <TimeTracker />
+                <QuickNotes />
             </div>
         </div>
     );

@@ -8,35 +8,42 @@ import { TimeTracker } from '@/components/widgets/TimeTracker';
 
 const Dashboard = () => {
     return (
-        <div className="p-6 min-h-screen ">
-            <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
-                <div className="xl:col-span-1 space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-1 gap-6">
-                        <QuickActions />
+        <div className="p-6 min-h-screen">
+            <div className="space-y-6">
+                <div className="grid grid-cols-1 gap-6">
+                    <TodaysTaskList />
+                </div>
+                {/* Top row - Pomodoro Timer */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="lg:col-span-2">
                         <PomodoroTimer />
-                        <TimeTracker />
-
                     </div>
+                    <TimeTracker />
                 </div>
-                <div className="xl:col-span-3 space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="md:col-span-2">
-                            <TodaysTaskList />
-                        </div>
 
+                {/* Second row - Quick Actions and Time Tracker */}
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                    <div className="lg:col-span-2 h-full">
+                        <QuickActions />
                     </div>
-                    <TasksStatistics />
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="md:col-span-1">
-                            <ActiveBoards />
-                        </div>
-                        <div className="md:col-span-1">
-                            <RecentDocuments />
-                        </div>
+                    <div className="lg:col-span-3">
+                        <ActiveBoards />
                     </div>
                 </div>
 
+
+
+
+                {/* Bottom row - Active Boards and Recent Documents */}
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                    <div className="lg:col-span-3">
+                        <TasksStatistics />
+                    </div>
+                    <div className="lg:col-span-2 h-full w-full">
+                        <RecentDocuments />
+                    </div>
+                </div>
             </div>
         </div>
     );

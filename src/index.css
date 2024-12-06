@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --primary: 103, 117, 188;
+    --accent: 245, 158, 11;
+    --background: #1a1a1a;
+    --foreground: #ffffff;
+    --background-hover: rgba(255, 255, 255, 0.1);
+    --border: rgba(255, 255, 255, 0.1);
+    --muted: rgba(255, 255, 255, 0.5);
+}
+
+.light {
+    --background: #ffffff;
+    --foreground: #1a1a1a;
+    --background-hover: rgba(0, 0, 0, 0.05);
+    --border: rgba(0, 0, 0, 0.1);
+    --muted: rgba(0, 0, 0, 0.5);
+}
+
+body {
+    background-color: var(--background);
+    color: var(--foreground);
+}
+
+.text-primary {
+    color: rgb(var(--primary));
+}
+
+.bg-primary {
+    background-color: rgb(var(--primary));
+}
+
+.border-primary {
+    border-color: rgb(var(--primary));
+}
+
+.text-accent {
+    color: rgb(var(--accent));
+}
+
+.bg-accent {
+    background-color: rgb(var(--accent));
+}
+
+.border-accent {
+    border-color: rgb(var(--accent));
+}
+
+.text-muted-foreground {
+    color: var(--muted);
+}
+
+.bg-background {
+    background-color: var(--background);
+}
+
+.bg-background-hover {
+    background-color: var(--background-hover);
+}
+
+.border-border {
+    border-color: var(--border);
+}
+
+/* Transitions */
+* {
+    transition-property: color, background-color, border-color;
+    transition-duration: 200ms;
+    transition-timing-function: ease-in-out;
+}

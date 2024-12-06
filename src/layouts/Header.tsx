@@ -22,7 +22,7 @@ export const Header = () => {
 
     return (
         <header className="bg-background-secondary border-b border-border sticky top-0 z-20">
-            <div className="px-6 h-16 flex items-center justify-between">
+            <div className="px-6 h-12 flex items-center justify-between">
                 <nav className="flex items-center space-x-2">
                     <Link
                         to="/"

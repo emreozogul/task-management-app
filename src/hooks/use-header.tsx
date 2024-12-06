@@ -20,7 +20,7 @@ const routeNames: { [key: string]: string } = {
     settings: 'Settings'
 };
 
-const hiddenHeaderRoutes = ['/', '/calendar'];
+const hiddenHeaderRoutes = ['/', '/calendar', '/tasks'];
 
 interface HeaderAction {
     path: string;

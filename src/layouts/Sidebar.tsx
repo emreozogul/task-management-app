@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Trello, Settings, ChevronLeft, ChevronRight, FileText, Gauge, Calendar, ListTodo, GanttChart } from 'lucide-react';
+import { LayoutDashboard, Trello, Settings, ChevronLeft, ChevronRight, FileText, Gauge, ListTodo } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -25,15 +25,6 @@ const navItems: NavItem[] = [
         path: '/boards',
         label: 'Boards',
         icon: <Trello className="w-6 h-6" />,
-    },
-    {
-        path: '/calendar',
-        label: 'Calendar',
-        icon: <Calendar className="w-6 h-6" />,
-    }, {
-        path: '/gantt',
-        label: 'Timeline',
-        icon: <GanttChart className="w-6 h-6" />,
     },
     {
         path: '/widgets',

@@ -39,7 +39,7 @@ export const CalendarCell = ({
                         ${isOver ? 'bg-background-hover transition-colors duration-200' : ''}
                     `}
         >
-            <div className={`text-right text-sm font-medium mb-1 absolute top-0 right-0 rounded-full w-7 h-7 flex items-center justify-center -mr-1.5 border-2 -mt-1 flex-shrink-0 z-10
+            <div className={`text-right text-sm font-medium mb-1 absolute top-0 right-0 rounded-full w-7 h-7 flex items-center justify-center -mr-1.5 border-2 -mt-1 flex-shrink-0
                         ${isToday ? 'text-primary border-primary bg-background text-primary' : 'bg-background-hover text-primary-foreground border-border'}`}>
                 {format(day, 'd')}
             </div>

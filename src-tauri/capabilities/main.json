@@ -7,29 +7,11 @@
     ],
     "permissions": [
         "fs:default",
-        {
-            "identifier": "fs:scope-document-recursive",
-            "allow": [
-                {
-                    "path": "$DOCUMENT/**"
-                }
-            ]
-        },
-        {
-            "identifier": "fs:allow-document-read",
-            "allow": [
-                {
-                    "path": "$DOCUMENT/*"
-                }
-            ]
-        },
-        {
-            "identifier": "fs:allow-document-write",
-            "allow": [
-                {
-                    "path": "$DOCUMENT/*"
-                }
-            ]
-        }
+        "core:default",
+        "fs:allow-download-write",
+        "fs:allow-download-read",
+        "fs:scope-download",
+        "fs:allow-write-file",
+        "fs:allow-read-file"
     ]
 }

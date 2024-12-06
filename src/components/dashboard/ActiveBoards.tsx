@@ -20,7 +20,7 @@ export const ActiveBoards = () => {
                     New Board
                 </Button>
             </Link>
-        } icon={<ListTodo className="w-6 h-6 text-primary mr-2" />} className="md:col-span-2 bg-background-secondary border-none shadow-lg">
+        } icon={<ListTodo className="w-6 h-6 text-primary mr-2" />} className="bg-background-secondary border-none shadow-lg">
 
             <ScrollArea className="h-[300px] pr-5">
                 <div className="space-y-3">
